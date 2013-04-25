@@ -25,17 +25,8 @@ public class ProcessTestMyProcess {
 	@Test
 	public void startProcess() throws Exception {
 		
-		ProcessEngineConfiguration config = ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
-		
-		config.setDatabaseType("mssql");
-		config.setJdbcDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		config.setJdbcUrl("jdbc:sqlserver://www.wi.fh-kufstein.ac.at:60903;DatabaseName=activiti");
-		config.setJdbcUsername("evit");
-		config.setJdbcPassword("1.admin");
-		config.setDatabaseSchemaUpdate("false");
-		
-		ProcessEngine processEngine = config.buildProcessEngine();
-		
+		ProcessEngine processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault().buildProcessEngine();
+		 
 		RepositoryService repositoryService = processEngine.getRepositoryService();
 		repositoryService.createDeployment().addInputStream("myProcess.bpmn20.xml",
 				new FileInputStream(filename)).deploy();
