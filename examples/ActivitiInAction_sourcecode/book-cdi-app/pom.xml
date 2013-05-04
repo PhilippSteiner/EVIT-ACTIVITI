@@ -12,6 +12,7 @@
 		<activiti-version>5.9</activiti-version>
 		<spring-version>3.0.5.RELEASE</spring-version>
     <restlet-version>2.0.8</restlet-version>
+	 <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
 	</properties>
 
 	<build>
