@@ -13,8 +13,7 @@
 
         <h:form>
 
-            <p:commandButton value="start" id="startProcess"
-                             actionListener="#{testbean.start}" styleClass="ui-priority-primary" oncomplete="poll.start()"/>
+            <p:commandButton value="start" id="startProcess" actionListener="#{testbean.start}" styleClass="ui-priority-primary" oncomplete="poll.start()"/>
 
             <p:poll interval="1" update="displayMessages" widgetVar="poll" listener="#{testbean.refresh}" autoStart="false" />
 

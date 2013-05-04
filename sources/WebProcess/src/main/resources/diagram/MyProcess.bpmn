@@ -13,8 +13,8 @@
         <sequenceFlow id="flow6" sourceRef="parallelgateway2" targetRef="usertask3"></sequenceFlow>
         <endEvent id="endevent1" name="End"></endEvent>
         <sequenceFlow id="flow7" sourceRef="usertask3" targetRef="endevent1"></sequenceFlow>
-        <serviceTask id="servicetask1" name="Task1" activiti:class="org.activiti.designer.test.bean1"></serviceTask>
-        <serviceTask id="servicetask2" name="Task2" activiti:class="org.activiti.designer.test.bean2"></serviceTask>
+        <serviceTask id="servicetask1" name="Task1" activiti:class="org.activiti.designer.myprocess.bean1"></serviceTask>
+        <serviceTask id="servicetask2" name="Task2" activiti:class="org.activiti.designer.myprocess.bean2"></serviceTask>
     </process>
     <bpmndi:BPMNDiagram id="BPMNDiagram_myProcess">
         <bpmndi:BPMNPlane bpmnElement="myProcess" id="BPMNPlane_myProcess">
