@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <title>Login</title>
+
+
+    </h:head>
+    <h:body>
+
+        <h:outputStylesheet library="css" name="dashboard.css"  />
+        
+        <div class="header">
+   
+            <h:form>
+            <img src="resources/images/BMW_logo.png" class="logo"></img>            
+            </h:form>
+            
+        </div>
+
+        <div class="menue">
+            <h:form>   
+                <p:commandButton value="Zurück" 
+                                 action="dashboard"/> <br/>              
+            </h:form>
+
+        </div>
+
+        <div class="up">
+            
+            <p:fieldset>
+                
+                
+                
+            </p:fieldset>
+           
+        </div>
+        <div class="noti">
+            <h:form >
+                <p:dataTable var="nots" value="#{NotifBean.notifs}">
+                    <f:facet name="header">
+                        Vertretungs Benachrichtigungen
+                    </f:facet>
+                    <p:column headerText="Event">
+                        #{nots.event}
+                    </p:column >
+                    <p:column headerText="Name">
+                        #{nots.name}
+                    </p:column>
+                    <p:column headerText="Vertretung">
+                        #{nots.vertretung}
+                    </p:column>
+                </p:dataTable>   
+            </h:form>
+        </div>
+    </h:body>
+</html>
+
+
