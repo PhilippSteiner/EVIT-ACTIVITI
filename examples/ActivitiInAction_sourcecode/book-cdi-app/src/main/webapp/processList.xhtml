@@ -8,6 +8,8 @@
 
 		<h1>List of deployed processes</h1>
 
+                <h:outputText>id: #{MyProcess.myProcess.id}</h:outputText>
+
 		<h:dataTable value="#{processDefinitionList}" var="v_process"
 		    styleClass="order-table"
         headerClass="order-table-header"
@@ -15,7 +17,7 @@
         cellpadding="10">
 			<h:column>
 				<f:facet name="header">Key</f:facet>
-				#{v_process.key} 
+				#{v_process.key}
 			</h:column>
 			<h:column>
 				<f:facet name="header">Name</f:facet>

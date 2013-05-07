@@ -1,5 +1,0 @@
-db=mssql
-jdbc.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver
-jdbc.url=jdbc:sqlserver://www.wi.fh-kufstein.ac.at:60903;DatabaseName=activiti
-jdbc.username=evit
-jdbc.password=1.admin
