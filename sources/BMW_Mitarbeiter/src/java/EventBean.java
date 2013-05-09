@@ -160,4 +160,14 @@ public final class EventBean implements Serializable{
         return "event";
         
     }
+    
+    public void saveEvent(){
+    
+        System.out.println("Event Saved");
+    }
+    
+        public void uploadFile(){
+    
+        System.out.println("File uploaded");
+    }
 }
