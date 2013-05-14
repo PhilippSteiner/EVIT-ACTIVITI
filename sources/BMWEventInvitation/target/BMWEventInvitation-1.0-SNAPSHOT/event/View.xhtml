@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventViewDlg" widgetVar="EventViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewEventTitle}">
+
+            <h:form id="EventViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{eventController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewEventLabel_id}"/>
+                        <h:outputText value="#{eventController.selected.id}" title="#{bundle.ViewEventTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_name}"/>
+                        <h:outputText value="#{eventController.selected.name}" title="#{bundle.ViewEventTitle_name}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_startEventdate}"/>
+                        <h:outputText value="#{eventController.selected.startEventdate}" title="#{bundle.ViewEventTitle_startEventdate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_endEventdate}"/>
+                        <h:outputText value="#{eventController.selected.endEventdate}" title="#{bundle.ViewEventTitle_endEventdate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_maxParticipants}"/>
+                        <h:outputText value="#{eventController.selected.maxParticipants}" title="#{bundle.ViewEventTitle_maxParticipants}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_description}"/>
+                        <h:outputText value="#{eventController.selected.description}" title="#{bundle.ViewEventTitle_description}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_location}"/>
+                        <h:outputText value="#{eventController.selected.location}" title="#{bundle.ViewEventTitle_location}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_urgencyDayLimit}"/>
+                        <h:outputText value="#{eventController.selected.urgencyDayLimit}" title="#{bundle.ViewEventTitle_urgencyDayLimit}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_eventUpdated}"/>
+                        <h:outputText value="#{eventController.selected.eventUpdated}" title="#{bundle.ViewEventTitle_eventUpdated}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_eventCreated}"/>
+                        <h:outputText value="#{eventController.selected.eventCreated}" title="#{bundle.ViewEventTitle_eventCreated}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_userUpdated}"/>
+                        <h:outputText value="#{eventController.selected.userUpdated}" title="#{bundle.ViewEventTitle_userUpdated}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_userCreated}"/>
+                        <h:outputText value="#{eventController.selected.userCreated}" title="#{bundle.ViewEventTitle_userCreated}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_progress}"/>
+                        <h:outputText value="#{eventController.selected.progress}" title="#{bundle.ViewEventTitle_progress}"/>
+
+                        <h:outputText value="#{bundle.ViewEventLabel_processId}"/>
+                        <h:outputText value="#{eventController.selected.processId}" title="#{bundle.ViewEventTitle_processId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EventViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
