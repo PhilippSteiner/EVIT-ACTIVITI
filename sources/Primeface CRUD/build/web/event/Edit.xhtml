@@ -15,17 +15,14 @@
                 <h:panelGroup id="display">
                     <p:panelGrid  columns="2" rendered="#{eventController.selected != null}">
 
-                        <h:outputLabel value="#{bundle.EditEventLabel_id}" for="id" />
-                        <h:outputText id="id" value="#{eventController.selected.id}" />
-
                         <h:outputLabel value="#{bundle.EditEventLabel_name}" for="name" />
                         <p:inputText id="name" value="#{eventController.selected.name}" title="#{bundle.EditEventTitle_name}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_name}"/>
 
                         <h:outputLabel value="#{bundle.EditEventLabel_startEventdate}" for="startEventdate" />
-                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.startEventdate}" title="#{bundle.EditEventTitle_startEventdate}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_startEventdate}" showOn="button"/>
+                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.startEventdate}" title="#{bundle.EditEventTitle_startEventdate}"  showOn="button"/>
 
                         <h:outputLabel value="#{bundle.EditEventLabel_endEventdate}" for="endEventdate" />
-                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.endEventdate}" title="#{bundle.EditEventTitle_endEventdate}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_endEventdate}" showOn="button"/>
+                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.endEventdate}" title="#{bundle.EditEventTitle_endEventdate}"  showOn="button"/>
 
                         <h:outputLabel value="#{bundle.EditEventLabel_maxParticipants}" for="maxParticipants" />
                         <p:inputText id="maxParticipants" value="#{eventController.selected.maxParticipants}" title="#{bundle.EditEventTitle_maxParticipants}" />
@@ -55,7 +52,10 @@
                         <p:inputText id="progress" value="#{eventController.selected.progress}" title="#{bundle.EditEventTitle_progress}" />
 
                         <h:outputLabel value="#{bundle.EditEventLabel_processId}" for="processId" />
-                        <p:inputText id="processId" value="#{eventController.selected.processId}" title="#{bundle.EditEventTitle_processId}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_processId}"/>
+                        <p:inputText id="processId" value="#{eventController.selected.processId}" title="#{bundle.EditEventTitle_processId}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{eventController.selected.id}" />
                     </p:panelGrid>
                     <p:commandButton actionListener="#{eventController.save}" value="#{bundle.Save}" update="display,:EventListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EventEditDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EventEditDialog.hide()"/>

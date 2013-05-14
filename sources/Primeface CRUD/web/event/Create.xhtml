@@ -15,17 +15,14 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{eventController.selected != null}">
 
-                        <h:outputLabel value="#{bundle.CreateEventLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{eventController.selected.id}" title="#{bundle.CreateEventTitle_id}" required="true" requiredMessage="#{bundle.CreateEventRequiredMessage_id}"/>
-
                         <h:outputLabel value="#{bundle.CreateEventLabel_name}" for="name" />
                         <p:inputText id="name" value="#{eventController.selected.name}" title="#{bundle.CreateEventTitle_name}" required="true" requiredMessage="#{bundle.CreateEventRequiredMessage_name}"/>
 
                         <h:outputLabel value="#{bundle.CreateEventLabel_startEventdate}" for="startEventdate" />
-                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.startEventdate}" title="#{bundle.EditEventTitle_startEventdate}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_startEventdate}" showOn="button"/>
+                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.startEventdate}" title="#{bundle.EditEventTitle_startEventdate}"  showOn="button"/>
 
                         <h:outputLabel value="#{bundle.CreateEventLabel_endEventdate}" for="endEventdate" />
-                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.endEventdate}" title="#{bundle.EditEventTitle_endEventdate}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_endEventdate}" showOn="button"/>
+                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.endEventdate}" title="#{bundle.EditEventTitle_endEventdate}"  showOn="button"/>
 
                         <h:outputLabel value="#{bundle.CreateEventLabel_maxParticipants}" for="maxParticipants" />
                         <p:inputText id="maxParticipants" value="#{eventController.selected.maxParticipants}" title="#{bundle.CreateEventTitle_maxParticipants}" />
@@ -35,7 +32,7 @@
 
                         <h:outputLabel value="#{bundle.CreateEventLabel_location}" for="location" />
                         <p:inputText id="location" value="#{eventController.selected.location}" title="#{bundle.CreateEventTitle_location}" />
-
+<!--
                         <h:outputLabel value="#{bundle.CreateEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
                         <p:inputText id="urgencyDayLimit" value="#{eventController.selected.urgencyDayLimit}" title="#{bundle.CreateEventTitle_urgencyDayLimit}" />
 
@@ -55,7 +52,11 @@
                         <p:inputText id="progress" value="#{eventController.selected.progress}" title="#{bundle.CreateEventTitle_progress}" />
 
                         <h:outputLabel value="#{bundle.CreateEventLabel_processId}" for="processId" />
-                        <p:inputText id="processId" value="#{eventController.selected.processId}" title="#{bundle.CreateEventTitle_processId}" required="true" requiredMessage="#{bundle.CreateEventRequiredMessage_processId}"/>
+                        <p:inputText id="processId" value="#{eventController.selected.processId}" title="#{bundle.CreateEventTitle_processId}" />
+-->
+                        <h:outputLabel value="#{bundle.CreateEventLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{eventController.selected.id}" title="#{bundle.CreateEventTitle_id}" required="true" requiredMessage="#{bundle.CreateEventRequiredMessage_id}"/>
+
                     </p:panelGrid>
                     <p:commandButton actionListener="#{eventController.saveNew}" value="#{bundle.Save}" update="display,:EventListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EventCreateDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EventCreateDialog.hide()"/>

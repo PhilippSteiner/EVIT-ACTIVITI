@@ -85,6 +85,7 @@ public abstract class AbstractController<T> {
         if (!isValidationFailed()) {
             items = null; // Invalidate list of items to trigger re-query.
         }
+        
     }
 
     public void delete(ActionEvent event) {

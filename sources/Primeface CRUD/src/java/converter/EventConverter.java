@@ -25,13 +25,13 @@ public class EventConverter implements Converter {
         return this.ejbFacade.find(getKey(value));
     }
 
-    java.lang.String getKey(String value) {
-        java.lang.String key;
-        key = value;
+    java.lang.Integer getKey(String value) {
+        java.lang.Integer key;
+        key = Integer.valueOf(value);
         return key;
     }
 
-    String getStringKey(java.lang.String value) {
+    String getStringKey(java.lang.Integer value) {
         StringBuffer sb = new StringBuffer();
         sb.append(value);
         return sb.toString();

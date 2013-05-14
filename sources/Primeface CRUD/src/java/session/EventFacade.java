@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Philipp Steiner
+ * @author Philipp
  */
 @Stateless
 public class EventFacade extends AbstractFacade<Event> {

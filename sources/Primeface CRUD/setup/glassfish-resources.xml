@@ -11,4 +11,5 @@
         <property name="driverClass" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="Evit Connection" object-type="user" pool-name="microsoft_sql_Evit_evitPool"/>
+    <jdbc-resource enabled="true" jndi-name="Evit" object-type="user" pool-name="microsoft_sql_Evit_evitPool"/>
 </resources>

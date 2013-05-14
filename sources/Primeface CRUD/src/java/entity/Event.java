@@ -9,6 +9,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
@@ -22,14 +24,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Philipp Steiner
+ * @author Philipp
  */
 @Entity
 @Table(name = "Event")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Event.findAll", query = "SELECT e FROM Event e"),
-    @NamedQuery(name = "Event.findById", query = "SELECT e FROM Event e WHERE e.id = :id"),
     @NamedQuery(name = "Event.findByName", query = "SELECT e FROM Event e WHERE e.name = :name"),
     @NamedQuery(name = "Event.findByStartEventdate", query = "SELECT e FROM Event e WHERE e.startEventdate = :startEventdate"),
     @NamedQuery(name = "Event.findByEndEventdate", query = "SELECT e FROM Event e WHERE e.endEventdate = :endEventdate"),
@@ -41,27 +42,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Event.findByUserUpdated", query = "SELECT e FROM Event e WHERE e.userUpdated = :userUpdated"),
     @NamedQuery(name = "Event.findByUserCreated", query = "SELECT e FROM Event e WHERE e.userCreated = :userCreated"),
     @NamedQuery(name = "Event.findByProgress", query = "SELECT e FROM Event e WHERE e.progress = :progress"),
-    @NamedQuery(name = "Event.findByProcessId", query = "SELECT e FROM Event e WHERE e.processId = :processId")})
+    @NamedQuery(name = "Event.findByProcessId", query = "SELECT e FROM Event e WHERE e.processId = :processId"),
+    @NamedQuery(name = "Event.findById", query = "SELECT e FROM Event e WHERE e.id = :id")})
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 36)
-    @Column(name = "id")
-    private String id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "Name")
     private String name;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "start_eventdate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startEventdate;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "end_eventdate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date endEventdate;
@@ -88,32 +80,25 @@ public class Event implements Serializable {
     private Integer userCreated;
     @Column(name = "progress")
     private Integer progress;
+    @Column(name = "process_id")
+    private Integer processId;
+    @Id
     @Basic(optional = false)
     @NotNull
-    @Column(name = "process_id")
-    private int processId;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
 
     public Event() {
     }
 
-    public Event(String id) {
+    public Event(Integer id) {
         this.id = id;
     }
 
-    public Event(String id, String name, Date startEventdate, Date endEventdate, int processId) {
+    public Event(Integer id, String name) {
         this.id = id;
         this.name = name;
-        this.startEventdate = startEventdate;
-        this.endEventdate = endEventdate;
-        this.processId = processId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -212,12 +197,20 @@ public class Event implements Serializable {
         this.progress = progress;
     }
 
-    public int getProcessId() {
+    public Integer getProcessId() {
         return processId;
     }
 
-    public void setProcessId(int processId) {
+    public void setProcessId(Integer processId) {
         this.processId = processId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override
