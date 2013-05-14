@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+<<<<<<< HEAD
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
         <file>
             <url>web/BMW_Event/journalisten.xhtml</url>
@@ -10,4 +11,7 @@
             </bookmark>
         </file>
     </editor-bookmarks>
+=======
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+>>>>>>> 8283241ad322c897bb28698d557f21a5c0aa0ca0
 </project-private>
