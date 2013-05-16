@@ -4,6 +4,7 @@
  */
 package ac.at.fhkufstein.entity;
 
+import ac.at.fhkufstein.processentity.EventProcess;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -44,7 +45,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Event.findByUserCreated", query = "SELECT e FROM Event e WHERE e.userCreated = :userCreated"),
     @NamedQuery(name = "Event.findByProgress", query = "SELECT e FROM Event e WHERE e.progress = :progress"),
     @NamedQuery(name = "Event.findByProcessId", query = "SELECT e FROM Event e WHERE e.processId = :processId")})
-public class Event implements Serializable {
+public class Event extends EventProcess implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -249,5 +250,5 @@ public class Event implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.Event[ id=" + id + " ]";
     }
-    
+
 }

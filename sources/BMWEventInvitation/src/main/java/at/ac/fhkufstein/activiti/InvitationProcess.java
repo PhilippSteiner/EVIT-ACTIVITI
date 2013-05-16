@@ -1,5 +1,6 @@
-package at.ac.fhkufstein.process;
+package at.ac.fhkufstein.activiti;
 
+import ac.at.fhkufstein.entity.Event;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -12,11 +13,16 @@ public class InvitationProcess {
     private String pid;
     private String processDefinitionId;
     private String currentActivity;
+    private Event event;
+
+    public InvitationProcess(Event event) {
+        this.event = event;
+    }
 
     public void startProcess() throws Exception {
 
         ProcessInstance processInstance = Services.getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION);
-        setPid(processInstance.getId());
+        event.setProcessId(Integer.valueOf(processInstance.getId()));
         setProcessDefinitionId(processInstance.getProcessDefinitionId());
 
         System.out.println("Proccess Instance #"+pid+" started");
@@ -46,7 +52,6 @@ public class InvitationProcess {
             resumeProcess();
         }
 
-        setCurrentActivity(Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(pid).singleResult().getActivityId());
         String formKey = Services.getFormService().getTaskFormKey(processDefinitionId, getCurrentActivity());
 
         System.out.println("task with form "+formKey);
@@ -95,13 +100,6 @@ public class InvitationProcess {
      * @return the currentActivity
      */
     public String getCurrentActivity() {
-        return currentActivity;
-    }
-
-    /**
-     * @param currentActivity the currentActivity to set
-     */
-    public void setCurrentActivity(String currentActivity) {
-        this.currentActivity = currentActivity;
+        return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(pid).singleResult().getActivityId();
     }
 }
