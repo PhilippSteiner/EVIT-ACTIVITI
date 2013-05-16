@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+      
+    </h:head>
+
+    <h:body>
+
+        <p>Welcome to the Journalisten</p>
+        
+        <h:form id="JournalistListForm">
+            
+        <p:dataTable id="JounalistDatatable" value="#{personenController.items}" var="item"
+                     paginator="true" rows="10">
+            <p:column >
+                <f:facet name="header">
+                    <h:outputText value="#{bundle.ListPersonenTitle_anrede}"/>
+                    </f:facet>
+                <h:outputText value="#{item.anrede}"></h:outputText>
+            </p:column>
+            <p:column >
+                <f:facet name="header">
+                    <h:outputText value="#{bundle.ListPersonenTitle_vorname}"/>
+                    </f:facet>
+                <h:outputText value="#{item.vorname}"></h:outputText>
+            </p:column>
+            <p:column >
+                <f:facet name="header">
+                    <h:outputText value="#{bundle.ListPersonenTitle_nachname}"/>
+                    </f:facet>
+                <h:outputText value="#{item.nachname}"></h:outputText>
+            </p:column>
+            <p:column >
+                <f:facet name="header">
+                    <h:outputText value="#{bundle.ListPersonenTitle_firma}"/>
+                    </f:facet>
+                <h:outputText value="#{item.firma}"></h:outputText>
+            </p:column>
+            <p:column >
+                <f:facet name="header">
+                    <h:outputText value="#{bundle.ListPersonenTitle_EMail1}"/>
+                    </f:facet>
+                <h:outputText value="#{item.EMail1}"></h:outputText>
+            </p:column>
+            <p:column >
+                <f:facet name="header">
+                    <h:outputText value="#{bundle.ListPersonenTitle_telefonMobil}"/>
+                    </f:facet>
+                <h:outputText value="#{item.telefonMobil}"></h:outputText>
+            </p:column>
+            
+        </p:dataTable>
+        
+            
+            
+        </h:form>
+        
+
+        <p:button outcome="dashboard.xhtml" value="Dashboard"></p:button>
+        
+    </h:body>
+</html>

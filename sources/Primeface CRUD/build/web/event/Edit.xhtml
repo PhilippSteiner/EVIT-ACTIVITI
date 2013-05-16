@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EventEditDlg" widgetVar="EventEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditEventTitle}">
+
+            <h:form id="EventEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" rendered="#{eventController.selected != null}">
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{eventController.selected.name}" title="#{bundle.EditEventTitle_name}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_name}"/>
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_startEventdate}" for="startEventdate" />
+                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.startEventdate}" title="#{bundle.EditEventTitle_startEventdate}"  showOn="button"/>
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_endEventdate}" for="endEventdate" />
+                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.endEventdate}" title="#{bundle.EditEventTitle_endEventdate}"  showOn="button"/>
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_maxParticipants}" for="maxParticipants" />
+                        <p:inputText id="maxParticipants" value="#{eventController.selected.maxParticipants}" title="#{bundle.EditEventTitle_maxParticipants}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_description}" for="description" />
+                        <p:inputTextarea rows="4" cols="30" id="description" value="#{eventController.selected.description}" title="#{bundle.EditEventTitle_description}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_location}" for="location" />
+                        <p:inputText id="location" value="#{eventController.selected.location}" title="#{bundle.EditEventTitle_location}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
+                        <p:inputText id="urgencyDayLimit" value="#{eventController.selected.urgencyDayLimit}" title="#{bundle.EditEventTitle_urgencyDayLimit}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_eventUpdated}" for="eventUpdated" />
+                        <p:calendar id="eventUpdated" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.eventUpdated}" title="#{bundle.EditEventTitle_eventUpdated}"  showOn="button"/>
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_eventCreated}" for="eventCreated" />
+                        <p:calendar id="eventCreated" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.eventCreated}" title="#{bundle.EditEventTitle_eventCreated}"  showOn="button"/>
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_userUpdated}" for="userUpdated" />
+                        <p:inputText id="userUpdated" value="#{eventController.selected.userUpdated}" title="#{bundle.EditEventTitle_userUpdated}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_userCreated}" for="userCreated" />
+                        <p:inputText id="userCreated" value="#{eventController.selected.userCreated}" title="#{bundle.EditEventTitle_userCreated}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_progress}" for="progress" />
+                        <p:inputText id="progress" value="#{eventController.selected.progress}" title="#{bundle.EditEventTitle_progress}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_processId}" for="processId" />
+                        <p:inputText id="processId" value="#{eventController.selected.processId}" title="#{bundle.EditEventTitle_processId}" />
+
+                        <h:outputLabel value="#{bundle.EditEventLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{eventController.selected.id}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{eventController.save}" value="#{bundle.Save}" update="display,:EventListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EventEditDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EventEditDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
