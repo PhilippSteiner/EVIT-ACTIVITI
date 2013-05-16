@@ -4,7 +4,7 @@
  */
 package ac.at.fhkufstein.bmweventinvitation;
 
-import at.ac.fhkufstein.activiti.InvitationProcess;
+import ac.at.fhkufstein.activiti.InvitationProcess;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;

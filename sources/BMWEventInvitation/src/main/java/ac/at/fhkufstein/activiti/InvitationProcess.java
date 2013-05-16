@@ -1,4 +1,4 @@
-package at.ac.fhkufstein.activiti;
+package ac.at.fhkufstein.activiti;
 
 import ac.at.fhkufstein.entity.Event;
 import java.util.logging.Level;

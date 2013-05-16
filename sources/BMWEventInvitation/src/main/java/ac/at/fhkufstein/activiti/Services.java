@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.fhkufstein.activiti;
+package ac.at.fhkufstein.activiti;
 
 import javax.faces.bean.ApplicationScoped;
 import org.activiti.engine.FormService;
