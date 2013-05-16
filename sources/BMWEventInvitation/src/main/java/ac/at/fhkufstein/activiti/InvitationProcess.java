@@ -9,7 +9,7 @@ import java.util.Iterator;
 public class InvitationProcess {
 
     final static public String PROCESS_DEFINITION = "InvitationProcess";
-    final static public String PROCESS_FILE = "diagrams/"+PROCESS_DEFINITION+".bpmn";
+    final static public String PROCESS_FILE = "diagrams/" + PROCESS_DEFINITION + ".bpmn";
     private String pid;
     private String processDefinitionId;
     private String currentActivity;
@@ -25,7 +25,7 @@ public class InvitationProcess {
         event.setProcessId(Integer.valueOf(processInstance.getId()));
         setProcessDefinitionId(processInstance.getProcessDefinitionId());
 
-        System.out.println("Proccess Instance #"+pid+" started");
+        System.out.println("Proccess Instance #" + pid + " started");
     }
 
     public String getStartFormKey() {
@@ -33,14 +33,14 @@ public class InvitationProcess {
         String processDefinitionId = Services.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_DEFINITION).latestVersion().singleResult().getId();
         String formKey = Services.getFormService().getStartFormKey(processDefinitionId);
 
-        System.out.println("start task with form "+formKey);
+        System.out.println("start task with form " + formKey);
 
         return formKey;
     }
 
     public String getNextFormKey() {
 
-        if(pid == null) {
+        if (pid == null) {
 
             try {
                 startProcess();
@@ -54,13 +54,13 @@ public class InvitationProcess {
 
         String formKey = Services.getFormService().getTaskFormKey(processDefinitionId, getCurrentActivity());
 
-        System.out.println("task with form "+formKey);
+        System.out.println("task with form " + formKey);
 
         return formKey;
     }
 
     public void resumeProcess() {
-        System.out.println("resume Process with Id "+pid);
+        System.out.println("resume Process with Id " + pid);
         Services.getRuntimeService().signal(pid);
     }
 

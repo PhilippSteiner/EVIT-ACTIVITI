@@ -53,5 +53,4 @@ public class InvitationEvent {
     public void setProcess(InvitationProcess process) {
         this.process = process;
     }
-
 }

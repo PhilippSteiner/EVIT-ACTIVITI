@@ -25,7 +25,7 @@ public class Services {
         instantiateProcessEngine();
 
 //        if(getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(InvitationProcess.PROCESS_DEFINITION).list().isEmpty()) {
-            getRepositoryService().createDeployment()
+        getRepositoryService().createDeployment()
                 .addClasspathResource(InvitationProcess.PROCESS_FILE)
                 .deploy();
 //        }

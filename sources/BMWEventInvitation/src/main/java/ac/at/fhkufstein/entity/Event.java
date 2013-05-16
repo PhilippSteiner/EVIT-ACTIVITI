@@ -46,11 +46,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Event.findByProgress", query = "SELECT e FROM Event e WHERE e.progress = :progress"),
     @NamedQuery(name = "Event.findByProcessId", query = "SELECT e FROM Event e WHERE e.processId = :processId")})
 public class Event extends EventProcess implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -250,5 +251,4 @@ public class Event extends EventProcess implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.Event[ id=" + id + " ]";
     }
-
 }
