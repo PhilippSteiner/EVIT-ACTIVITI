@@ -12,11 +12,15 @@
 
             <h:form id="EventCreateForm">
 
+                 #{eventController.selected.setId(0)}
+                        
+                    <!--    <p:outputLabel value="#{bundle.CreateEventLabel_id}" for="id" />-->
+                        <h:inputHidden id="id" value="#{eventController.selected.id}"  />
+                        
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{eventController.selected != null}">
-
-                        <p:outputLabel value="#{bundle.CreateEventLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{eventController.selected.id}" title="#{bundle.CreateEventTitle_id}" required="true" requiredMessage="#{bundle.CreateEventRequiredMessage_id}"/>
+                        
+                       
 
                         <p:outputLabel value="#{bundle.CreateEventLabel_name}" for="name" />
                         <p:inputText id="name" value="#{eventController.selected.name}" title="#{bundle.CreateEventTitle_name}" required="true" requiredMessage="#{bundle.CreateEventRequiredMessage_name}"/>
