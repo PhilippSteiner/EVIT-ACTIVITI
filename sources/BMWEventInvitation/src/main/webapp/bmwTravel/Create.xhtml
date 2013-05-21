@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwTravelCreateDlg" widgetVar="BmwTravelCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateBmwTravelTitle}">
+
+            <h:form id="BmwTravelCreateForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwTravelController.selected != null}">
+
+                        <p:outputLabel value="#{bundle.CreateBmwTravelLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{bmwTravelController.selected.id}" title="#{bundle.CreateBmwTravelTitle_id}" required="false" requiredMessage="#{bundle.CreateBmwTravelRequiredMessage_id}"/>
+
+                        <p:outputLabel value="#{bundle.CreateBmwTravelLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{bmwTravelController.selected.type}" title="#{bundle.CreateBmwTravelTitle_type}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwTravelLabel_arrivalDatetime}" for="arrivalDatetime" />
+                        <p:calendar id="arrivalDatetime" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwTravelController.selected.arrivalDatetime}" title="#{bundle.EditBmwTravelTitle_arrivalDatetime}"  showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.CreateBmwTravelLabel_pdfTicketUrl}" for="pdfTicketUrl" />
+                        <p:inputText id="pdfTicketUrl" value="#{bmwTravelController.selected.pdfTicketUrl}" title="#{bundle.CreateBmwTravelTitle_pdfTicketUrl}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwTravelLabel_flightId}" for="flightId" />
+                        <p:selectOneMenu id="flightId" value="#{bmwTravelController.selected.flightId}" required="true" requiredMessage="#{bundle.EditBmwTravelRequiredMessage_flightId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{bmwFlightController.items}"
+                                           var="flightIdItem"
+                                           itemValue="#{flightIdItem}"
+                                           itemLabel="#{flightIdItem.id.toString()}"
+                                           />
+                            <f:converter binding="#{bmwFlightConverter}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{bmwTravelController.saveNew}" value="#{bundle.Save}" update="display,:BmwTravelListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwTravelCreateDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwTravelCreateDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
