@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SysdiagramsViewDlg" widgetVar="SysdiagramsViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewSysdiagramsTitle}">
+
+            <h:form id="SysdiagramsViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{sysdiagramsController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewSysdiagramsLabel_name}"/>
+                        <h:outputText value="#{sysdiagramsController.selected.name}" title="#{bundle.ViewSysdiagramsTitle_name}"/>
+
+                        <h:outputText value="#{bundle.ViewSysdiagramsLabel_principalId}"/>
+                        <h:outputText value="#{sysdiagramsController.selected.principalId}" title="#{bundle.ViewSysdiagramsTitle_principalId}"/>
+
+                        <h:outputText value="#{bundle.ViewSysdiagramsLabel_diagramId}"/>
+                        <h:outputText value="#{sysdiagramsController.selected.diagramId}" title="#{bundle.ViewSysdiagramsTitle_diagramId}"/>
+
+                        <h:outputText value="#{bundle.ViewSysdiagramsLabel_version}"/>
+                        <h:outputText value="#{sysdiagramsController.selected.version}" title="#{bundle.ViewSysdiagramsTitle_version}"/>
+
+                        <h:outputText value="#{bundle.ViewSysdiagramsLabel_definition}"/>
+                        <h:outputText value="#{sysdiagramsController.selected.definition}" title="#{bundle.ViewSysdiagramsTitle_definition}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="SysdiagramsViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

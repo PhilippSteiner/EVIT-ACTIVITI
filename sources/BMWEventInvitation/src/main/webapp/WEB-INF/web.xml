@@ -23,10 +23,9 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-<<<<<<< HEAD
+
+
         <welcome-file>faces/index.xhtml</welcome-file>
-=======
-        <welcome-file>faces/bmwmitarbeiter/dashboard.xhtml</welcome-file>
->>>>>>> 40e6765f05279ce35e26675df3f06a76e1200320
+
     </welcome-file-list>
 </web-app>
