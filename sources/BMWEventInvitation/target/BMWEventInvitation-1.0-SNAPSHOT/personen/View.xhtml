@@ -8,9 +8,9 @@
 
     <ui:composition>
 
-        <p:dialog id="PersonenViewDlg" widgetVar="PersonenViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewPersonenTitle}">
+        <p:dialog id="PersonenViewDlg" widgetVar="PersonenViewDialog"  modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewPersonenTitle}">
 
-            <h:form id="PersonenViewForm">
+            <h:form id="PersonenViewForm" >
 
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{personenController.selected != null}">
