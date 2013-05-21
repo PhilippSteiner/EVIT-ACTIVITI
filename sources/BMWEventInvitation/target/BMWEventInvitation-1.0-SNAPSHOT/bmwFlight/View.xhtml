@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwFlightViewDlg" widgetVar="BmwFlightViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwFlightTitle}">
+
+            <h:form id="BmwFlightViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwFlightController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_id}"/>
+                        <h:outputText value="#{bmwFlightController.selected.id}" title="#{bundle.ViewBmwFlightTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_flightNumber}"/>
+                        <h:outputText value="#{bmwFlightController.selected.flightNumber}" title="#{bundle.ViewBmwFlightTitle_flightNumber}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_departureLocation}"/>
+                        <h:outputText value="#{bmwFlightController.selected.departureLocation}" title="#{bundle.ViewBmwFlightTitle_departureLocation}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_arrivalLocation}"/>
+                        <h:outputText value="#{bmwFlightController.selected.arrivalLocation}" title="#{bundle.ViewBmwFlightTitle_arrivalLocation}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_departureTime}"/>
+                        <h:outputText value="#{bmwFlightController.selected.departureTime}" title="#{bundle.ViewBmwFlightTitle_departureTime}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_arrivalTime}"/>
+                        <h:outputText value="#{bmwFlightController.selected.arrivalTime}" title="#{bundle.ViewBmwFlightTitle_arrivalTime}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_eventId}"/>
+                        <h:outputText value="#{bmwFlightController.selected.eventId.name}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwFlightLabel_bmwTravelCollection}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwFlightViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
