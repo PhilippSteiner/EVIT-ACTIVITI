@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwUserViewDlg" widgetVar="BmwUserViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwUserTitle}">
+
+            <h:form id="BmwUserViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwUserController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewBmwUserLabel_uid}"/>
+                        <h:outputText value="#{bmwUserController.selected.uid}" title="#{bundle.ViewBmwUserTitle_uid}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwUserLabel_pwd}"/>
+                        <h:outputText value="#{bmwUserController.selected.pwd}" title="#{bundle.ViewBmwUserTitle_pwd}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwUserLabel_rating}"/>
+                        <h:outputText value="#{bmwUserController.selected.rating}" title="#{bundle.ViewBmwUserTitle_rating}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwUserLabel_seatingPriority}"/>
+                        <h:outputText value="#{bmwUserController.selected.seatingPriority}" title="#{bundle.ViewBmwUserTitle_seatingPriority}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwUserLabel_bmwParticipantsCollection}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwUserLabel_personenID}"/>
+                        <h:outputText value="#{bmwUserController.selected.personenID.vorname}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwUserViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SysdiagramsEditDlg" widgetVar="SysdiagramsEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditSysdiagramsTitle}">
+
+            <h:form id="SysdiagramsEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" rendered="#{sysdiagramsController.selected != null}">
+
+                        <p:outputLabel value="#{bundle.EditSysdiagramsLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{sysdiagramsController.selected.name}" title="#{bundle.EditSysdiagramsTitle_name}" required="true" requiredMessage="#{bundle.EditSysdiagramsRequiredMessage_name}"/>
+
+                        <p:outputLabel value="#{bundle.EditSysdiagramsLabel_principalId}" for="principalId" />
+                        <p:inputText id="principalId" value="#{sysdiagramsController.selected.principalId}" title="#{bundle.EditSysdiagramsTitle_principalId}" required="true" requiredMessage="#{bundle.EditSysdiagramsRequiredMessage_principalId}"/>
+
+                        <h:outputLabel value="#{bundle.EditSysdiagramsLabel_diagramId}" for="diagramId" />
+                        <h:outputText id="diagramId" value="#{sysdiagramsController.selected.diagramId}" />
+
+                        <p:outputLabel value="#{bundle.EditSysdiagramsLabel_version}" for="version" />
+                        <p:inputText id="version" value="#{sysdiagramsController.selected.version}" title="#{bundle.EditSysdiagramsTitle_version}" />
+
+                        <p:outputLabel value="#{bundle.EditSysdiagramsLabel_definition}" for="definition" />
+                        <p:inputTextarea rows="4" cols="30" id="definition" value="#{sysdiagramsController.selected.definition}" title="#{bundle.EditSysdiagramsTitle_definition}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{sysdiagramsController.save}" value="#{bundle.Save}" update="display,:SysdiagramsListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,SysdiagramsEditDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="SysdiagramsEditDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

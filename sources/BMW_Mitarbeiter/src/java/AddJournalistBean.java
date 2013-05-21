@@ -78,6 +78,7 @@ public class AddJournalistBean implements Serializable {
 
 
     public void onCarDrop(DragDropEvent ddEvent) {
+        
         Journalist car = ((Journalist) ddEvent.getData());
 
         droppedCars.add(car);
