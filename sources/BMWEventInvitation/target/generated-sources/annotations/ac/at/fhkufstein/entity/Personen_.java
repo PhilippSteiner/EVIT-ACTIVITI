@@ -1,11 +1,13 @@
 package ac.at.fhkufstein.entity;
 
+import ac.at.fhkufstein.entity.BmwUser;
 import java.util.Date;
 import javax.annotation.Generated;
+import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.3.2.v20111125-r10461", date="2013-05-21T08:19:58")
+@Generated(value="EclipseLink-2.3.2.v20111125-r10461", date="2013-05-21T15:10:51")
 @StaticMetamodel(Personen.class)
 public class Personen_ { 
 
@@ -36,6 +38,7 @@ public class Personen_ {
     public static volatile SingularAttribute<Personen, String> firma;
     public static volatile SingularAttribute<Personen, String> fuehrerscheinKlassen;
     public static volatile SingularAttribute<Personen, String> nachname;
+    public static volatile CollectionAttribute<Personen, BmwUser> bmwUserCollection;
     public static volatile SingularAttribute<Personen, String> telefonPrivat;
     public static volatile SingularAttribute<Personen, String> fuehrerscheinBehoerde;
     public static volatile SingularAttribute<Personen, String> fax;
