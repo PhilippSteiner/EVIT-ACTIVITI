@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="PersonenListForm">
+
+        <p:panel header="#{bundle.ListPersonenTitle}">
+
+            <p:dataTable id="datalist" value="#{personenController.items}" var="item"
+                         selectionMode="single" selection="#{personenController.selected}"
+                         rowKey="#{item.personalID}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30"
+                         >
+
+                <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+<!--
+                <p:column sortBy="#{item.personalID}" filterBy="#{item.personalID}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_personalID}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personalID}"/>
+                </p:column>
+                
+                <p:column sortBy="#{item.speichernUnter}" filterBy="#{item.speichernUnter}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_speichernUnter}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.speichernUnter}"/>
+                </p:column>
+                
+                <p:column sortBy="#{item.orgEinheit}" filterBy="#{item.orgEinheit}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_orgEinheit}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.orgEinheit}"/>
+                </p:column>
+         -->
+                
+           
+         <p:column sortBy="#{item.firma}" filterBy="#{item.firma}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_firma}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.firma}"/>
+                </p:column>
+              <p:column sortBy="#{item.anrede}" filterBy="#{item.anrede}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_anrede}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.anrede}"/>
+                </p:column>
+                <p:column sortBy="#{item.akadTitel}" filterBy="#{item.akadTitel}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_akadTitel}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.akadTitel}"/>
+                </p:column>
+ <!--        
+                <p:column sortBy="#{item.berufstitel}" filterBy="#{item.berufstitel}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_berufstitel}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.berufstitel}"/>
+                </p:column>
+ -->    
+    
+ <p:column sortBy="#{item.vorname}" filterBy="#{item.vorname}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_vorname}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.vorname}"/>
+                </p:column>
+                <p:column sortBy="#{item.nachname}" filterBy="#{item.nachname}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_nachname}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nachname}"/>
+                </p:column>
+ <!--
+                <p:column sortBy="#{item.nameVollstaendig}" filterBy="#{item.nameVollstaendig}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_nameVollstaendig}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nameVollstaendig}"/>
+                </p:column>
+                <p:column sortBy="#{item.abteilung}" filterBy="#{item.abteilung}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_abteilung}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.abteilung}"/>
+                </p:column>
+                <p:column sortBy="#{item.position}" filterBy="#{item.position}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_position}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.position}"/>
+                </p:column>
+                <p:column sortBy="#{item.strasse}" filterBy="#{item.strasse}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_strasse}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.strasse}"/>
+                </p:column>
+                <p:column sortBy="#{item.plz}" filterBy="#{item.plz}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_plz}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.plz}"/>
+                </p:column>
+                <p:column sortBy="#{item.ort}" filterBy="#{item.ort}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_ort}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.ort}"/>
+                </p:column>
+                <p:column sortBy="#{item.land}" filterBy="#{item.land}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_land}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.land}"/>
+                </p:column>
+                <p:column sortBy="#{item.briefkopf}" filterBy="#{item.briefkopf}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_briefkopf}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.briefkopf}"/>
+                </p:column>
+                <p:column sortBy="#{item.weitereStrasse}" filterBy="#{item.weitereStrasse}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_weitereStrasse}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.weitereStrasse}"/>
+                </p:column>
+                <p:column sortBy="#{item.weiterePLZ}" filterBy="#{item.weiterePLZ}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_weiterePLZ}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.weiterePLZ}"/>
+                </p:column>
+                <p:column sortBy="#{item.weitererOrt}" filterBy="#{item.weitererOrt}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_weitererOrt}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.weitererOrt}"/>
+                </p:column>
+                <p:column sortBy="#{item.weiteresLand}" filterBy="#{item.weiteresLand}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_weiteresLand}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.weiteresLand}"/>
+                </p:column>
+                <p:column sortBy="#{item.weitererBriefkopf}" filterBy="#{item.weitererBriefkopf}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_weitererBriefkopf}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.weitererBriefkopf}"/>
+                </p:column>
+                <p:column sortBy="#{item.briefanredeSie}" filterBy="#{item.briefanredeSie}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_briefanredeSie}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.briefanredeSie}"/>
+                </p:column>
+ 
+ -->
+                <p:column sortBy="#{item.EMail1}" filterBy="#{item.EMail1}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_EMail1}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.EMail1}"/>
+                </p:column>
+ <!--
+                <p:column sortBy="#{item.EMail2}" filterBy="#{item.EMail2}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_EMail2}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.EMail2}"/>
+                </p:column>
+                <p:column sortBy="#{item.webseite}" filterBy="#{item.webseite}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_webseite}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.webseite}"/>
+                </p:column>
+ 
+                <p:column sortBy="#{item.notizen}" filterBy="#{item.notizen}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_notizen}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.notizen}"/>
+                </p:column>
+ -->
+                <p:column sortBy="#{item.telefonGeschaeftlich}" filterBy="#{item.telefonGeschaeftlich}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_telefonGeschaeftlich}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.telefonGeschaeftlich}"/>
+                </p:column>
+ <!--
+                <p:column sortBy="#{item.telefonPrivat}" filterBy="#{item.telefonPrivat}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_telefonPrivat}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.telefonPrivat}"/>
+                </p:column>
+ 
+                <p:column sortBy="#{item.fax}" filterBy="#{item.fax}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_fax}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fax}"/>
+                </p:column>
+ -->
+                <p:column sortBy="#{item.telefonMobil}" filterBy="#{item.telefonMobil}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_telefonMobil}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.telefonMobil}"/>
+                </p:column>
+ <!--
+                <p:column sortBy="#{item.geburtsdatum}" filterBy="#{item.geburtsdatum}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_geburtsdatum}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.geburtsdatum}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+ 
+                <p:column sortBy="#{item.kinderPartner}" filterBy="#{item.kinderPartner}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_kinderPartner}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.kinderPartner}"/>
+                </p:column>
+                <p:column sortBy="#{item.hobby}" filterBy="#{item.hobby}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_hobby}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.hobby}"/>
+                </p:column>
+ 
+ <p:column sortBy="#{item.kategorien}" filterBy="#{item.kategorien}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_kategorien}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.kategorien}"/>
+                </p:column>
+ 
+                <p:column sortBy="#{item.verteiler}" filterBy="#{item.verteiler}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_verteiler}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.verteiler}"/>
+                </p:column>
+                <p:column sortBy="#{item.fotoName}" filterBy="#{item.fotoName}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_fotoName}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fotoName}"/>
+                </p:column>
+                <p:column sortBy="#{item.KIDSKontaktNr}" filterBy="#{item.KIDSKontaktNr}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_KIDSKontaktNr}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.KIDSKontaktNr}"/>
+                </p:column>
+                <p:column sortBy="#{item.fuehrerscheinNummer}" filterBy="#{item.fuehrerscheinNummer}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_fuehrerscheinNummer}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fuehrerscheinNummer}"/>
+                </p:column>
+                <p:column sortBy="#{item.fuehrerscheinKlassen}" filterBy="#{item.fuehrerscheinKlassen}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_fuehrerscheinKlassen}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fuehrerscheinKlassen}"/>
+                </p:column>
+                <p:column sortBy="#{item.fuehrerscheinDatum}" filterBy="#{item.fuehrerscheinDatum}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_fuehrerscheinDatum}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fuehrerscheinDatum}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.fuehrerscheinBehoerde}" filterBy="#{item.fuehrerscheinBehoerde}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_fuehrerscheinBehoerde}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.fuehrerscheinBehoerde}"/>
+                </p:column>
+                <p:column sortBy="#{item.geloescht}" filterBy="#{item.geloescht}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_geloescht}"/>
+                    </f:facet>
+                    <h:selectBooleanCheckbox id="geloescht" value="#{item.geloescht}" title="#{bundle.EditPersonenTitle_geloescht}" required="true" requiredMessage="#{bundle.EditPersonenRequiredMessage_geloescht}" disabled="true"/>
+                </p:column>
+ -->
+                <p:column sortBy="#{item.letzteAenderungAm}" filterBy="#{item.letzteAenderungAm}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_letzteAenderungAm}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.letzteAenderungAm}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+ <!--
+                <p:column sortBy="#{item.letzteAenderungDurch}" filterBy="#{item.letzteAenderungDurch}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_letzteAenderungDurch}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.letzteAenderungDurch}"/>
+                </p:column>
+ -->
+                <f:facet name="footer">
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{personenController.prepareCreate}" update=":PersonenCreateForm" oncomplete="PersonenCreateDialog.show()"/>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":PersonenViewForm" oncomplete="PersonenViewDialog.show()" disabled="#{empty personenController.selected}"/>
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":PersonenEditForm" oncomplete="PersonenEditDialog.show()" disabled="#{empty personenController.selected}"/>
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{personenController.delete}" update=":growl,datalist" disabled="#{empty personenController.selected}"/>
+                </f:facet>
+
+            </p:dataTable>
+
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>

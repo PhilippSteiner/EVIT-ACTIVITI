@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwParticipantsViewDlg" widgetVar="BmwParticipantsViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwParticipantsTitle}">
+
+            <h:form id="BmwParticipantsViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwParticipantsController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_id}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.id}" title="#{bundle.ViewBmwParticipantsTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_PState}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.PState}" title="#{bundle.ViewBmwParticipantsTitle_PState}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_repId}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.repId}" title="#{bundle.ViewBmwParticipantsTitle_repId}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_bmwAuth}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.bmwAuth}" title="#{bundle.ViewBmwParticipantsTitle_bmwAuth}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_userId}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.userId.uid}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_travelId}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.travelId.id}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwParticipantsLabel_eventId}"/>
+                        <h:outputText value="#{bmwParticipantsController.selected.eventId.name}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwParticipantsViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
