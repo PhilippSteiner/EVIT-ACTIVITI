@@ -18,7 +18,7 @@ public class BmwEventController extends AbstractController<BmwEvent> implements 
     public BmwEventController() {
         super(BmwEvent.class);
     }
-
+    
     @PostConstruct
     public void init() {
         super.setFacade(ejbFacade);
