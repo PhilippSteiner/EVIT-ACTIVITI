@@ -25,6 +25,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.joda.time.DateTime;
+
+
 
 /**
  *
@@ -197,8 +200,10 @@ public class BmwEvent implements Serializable {
         return eventCreated;
     }
 
-    public void setEventCreated(Date eventCreated) {
-        this.eventCreated = eventCreated;
+    public void setEventCreated() {
+        //Um aktuelles Datum und Zeit zu bekommen
+        Date now = new Date();
+        this.eventCreated = now;
     }
 
     public Integer getUserUpdated() {
