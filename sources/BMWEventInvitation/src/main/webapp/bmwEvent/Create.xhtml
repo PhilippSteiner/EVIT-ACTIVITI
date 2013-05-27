@@ -14,11 +14,6 @@
 
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{bmwEventController.selected != null}">
-
-<!--                        
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{bmwEventController.selected.id}" title="#{bundle.CreateBmwEventTitle_id}" required="false" requiredMessage="#{bundle.CreateBmwEventRequiredMessage_id}"/>
--->
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_name}" for="name" />
                         <p:inputText id="name" value="#{bmwEventController.selected.name}" title="#{bundle.CreateBmwEventTitle_name}" required="true" requiredMessage="#{bundle.CreateBmwEventRequiredMessage_name}"/>
 
@@ -40,14 +35,6 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
                         <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.CreateBmwEventTitle_urgencyDayLimit}" />
 
-                        <!-- Muss nur bei update des Events erneuert werden
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_eventUpdated}" for="eventUpdated" />
-                        <p:calendar id="eventUpdated" pattern="dd/MM/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventUpdated}" title="#{bundle.EditBmwEventTitle_eventUpdated}"  showOn="button"/>
-                        -->
-                        
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_eventCreated}" for="eventCreated" />
-                        <p:calendar id="eventCreated" pattern="dd/MM/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventCreated}" title="#{bundle.EditBmwEventTitle_eventCreated}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_eventCreated}" showOn="button"/>
-
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_userUpdated}" for="userUpdated" />
                         <p:inputText id="userUpdated" value="#{bmwEventController.selected.userUpdated}" title="#{bundle.CreateBmwEventTitle_userUpdated}" />
 
@@ -59,8 +46,23 @@
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_processId}" for="processId" />
                         <p:inputText id="processId" value="#{bmwEventController.selected.processId}" title="#{bundle.CreateBmwEventTitle_processId}" />
+
+                        <!-- Muss nur bei update des Events erneuert werden
+<p:outputLabel value="#{bundle.CreateBmwEventLabel_eventUpdated}" for="eventUpdated" />
+<p:calendar id="eventUpdated" pattern="dd/MM/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventUpdated}" title="#{bundle.EditBmwEventTitle_eventUpdated}"  showOn="button"/>
+
+
+<p:outputLabel value="#{bundle.CreateBmwEventLabel_eventCreated}" for="eventCreated" />
+<p:inputText id="eventCreated" pattern="dd/MM/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventCreated}" title="#{bundle.EditBmwEventTitle_eventCreated}" required="false" requiredMessage="#{bundle.EditBmwEventRequiredMessage_eventCreated}" showOn="button"/>
+
+<p:calendar id="eventCreated" pattern="dd/MM/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventCreated}" title="#{bundle.EditBmwEventTitle_eventCreated}" required="false" requiredMessage="#{bundle.EditBmwEventRequiredMessage_eventCreated}" showOn="button"/>
+
+<p:outputLabel value="#{bundle.CreateBmwEventLabel_id}" for="id" />
+<p:inputText id="id" value="#{bmwEventController.selected.id}" title="#{bundle.CreateBmwEventTitle_id}" required="false" requiredMessage="#{bundle.CreateBmwEventRequiredMessage_id}"/>
+                        -->
+
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{bmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>
+                    <p:commandButton actionListener="#{bmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="BmwEventCreateDialog.hide()"/>
                 </h:panelGroup>
 
