@@ -38,12 +38,10 @@
 
                         <p:outputLabel value="#{bundle.EditBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
                         <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.EditBmwEventTitle_urgencyDayLimit}" />
-
+                      
+                        
                         <p:outputLabel value="#{bundle.EditBmwEventLabel_eventUpdated}" for="eventUpdated" />
                         <p:calendar id="eventUpdated" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventUpdated}" title="#{bundle.EditBmwEventTitle_eventUpdated}"  showOn="button"/>
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_eventCreated}" for="eventCreated" />
-                        <p:calendar id="eventCreated" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventCreated}" title="#{bundle.EditBmwEventTitle_eventCreated}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_eventCreated}" showOn="button"/>
 
                         <p:outputLabel value="#{bundle.EditBmwEventLabel_userUpdated}" for="userUpdated" />
                         <p:inputText id="userUpdated" value="#{bmwEventController.selected.userUpdated}" title="#{bundle.EditBmwEventTitle_userUpdated}" />
@@ -56,6 +54,8 @@
 
                         <p:outputLabel value="#{bundle.EditBmwEventLabel_processId}" for="processId" />
                         <p:inputText id="processId" value="#{bmwEventController.selected.processId}" title="#{bundle.EditBmwEventTitle_processId}" />
+                    
+                       
                     </p:panelGrid>
                     <p:commandButton actionListener="#{bmwEventController.save}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwEventEditDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="BmwEventEditDialog.hide()"/>
