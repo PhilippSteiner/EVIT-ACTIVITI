@@ -51,6 +51,13 @@
                     </f:facet>
                     <h:outputText value="#{item.personenID.vorname}"/>
                 </p:column>
+				
+                <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personenID.nachname}"/>
+                </p:column>
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwUserController.prepareCreate}" update=":BmwUserCreateForm" oncomplete="BmwUserCreateDialog.show()"/>
                     <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty bmwUserController.selected}"/>
