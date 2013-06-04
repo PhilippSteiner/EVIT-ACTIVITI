@@ -26,14 +26,13 @@ import java.text.SimpleDateFormat;
  *
  * @author mike
  */
-
 @ManagedBean(name = "csvImportController")
 @ViewScoped
 public class CsvImportController {
 
     private UploadedFile csvFile;
     private boolean columnNames;
-    private final char CSV_SEPERATOR = ',';
+    private final char CSV_SEPERATOR = ';';
     private final char CSV_QUOTECHAR = '"';
 
     public UploadedFile getCsvFile() {
@@ -42,24 +41,27 @@ public class CsvImportController {
 
     public void setCsvFile(UploadedFile csvFile) {
         this.csvFile = csvFile;
-          FacesMessage msg = new FacesMessage("setter", "setter");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void upload() {
-          FacesMessage msg = new FacesMessage("upload", "upload");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
+
         if (csvFile != null) {
             try {
                 importCsv(csvFile.getInputstream(), columnNames ? 1 : 0);
 
-                 msg = new FacesMessage("Succesful", csvFile.getFileName() + " is uploaded.");
+                FacesMessage msg = new FacesMessage("Erfolg", "Die Datei "+csvFile.getFileName() + " wurde erfolgreich importiert.");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
 
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
+
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Die Datei "+csvFile.getFileName() + " konnte nicht importiert werden.");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
             }
 
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Die Datei konnte nicht hochgeladen werden.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
     }
 
@@ -71,24 +73,27 @@ public class CsvImportController {
 
     private void importCsv(BufferedReader br, int firstLine) throws IOException {
 
-            PersonenController personenController = new PersonenController();
-            personenController.init();
 
-             SimpleDateFormat datum_sdfToDate = new SimpleDateFormat( "dd.MM.yy" );
-             SimpleDateFormat zeit_sdfToDate = new SimpleDateFormat( "dd.MM.yy HH:mm:ss" );
+        PersonenController personenController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{personenController}", PersonenController.class);
+        personenController.init();
+
+        SimpleDateFormat datum_sdfToDate = new SimpleDateFormat("dd.MM.yy");
+        SimpleDateFormat zeit_sdfToDate = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
 
         CSVReader reader = new CSVReader(br, CSV_SEPERATOR, CSV_QUOTECHAR, firstLine);
         String[] line;
         int i = 0;
-            System.out.println("start reading...");
-        while ((line = reader.readNext()) != null && i < 10) {
+
+        while ((line = reader.readNext()) != null) {
             i++;
-            System.out.println("line "+i);
 
             Personen person = personenController.getFacade().find(line[0]);
 
-            if(person == null) {
-                person = new Personen(line[0]);
+            boolean newEntry = false;
+            if (person == null) {
+                newEntry = true;
+                person = personenController.prepareCreate(null);
+                person.setPersonalID(getUniqueidentifierString(line[0]));
             }
 
             // put column values to members
@@ -122,11 +127,13 @@ public class CsvImportController {
             person.setTelefonPrivat(line[28]);
             person.setFax(line[29]);
             person.setTelefonMobil(line[30]);
-                try {
+            try {
+                if (!line[31].isEmpty()) {
                     person.setGeburtsdatum(datum_sdfToDate.parse(line[31]));
-                } catch (ParseException ex) {
-                    Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } catch (ParseException ex) {
+                Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             person.setKinderPartner(line[32]);
             person.setHobby(line[33]);
             person.setKategorien(line[34]);
@@ -135,25 +142,36 @@ public class CsvImportController {
             person.setKIDSKontaktNr(line[37]);
             person.setFuehrerscheinNummer(line[38]);
             person.setFuehrerscheinKlassen(line[39]);
-                try {
+            try {
+                if (!line[40].isEmpty()) {
                     person.setFuehrerscheinDatum(datum_sdfToDate.parse(line[40]));
-                } catch (ParseException ex) {
-                    Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } catch (ParseException ex) {
+                Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             person.setFuehrerscheinBehoerde(line[41]);
             person.setGeloescht(Boolean.parseBoolean(line[42]));
-                try {
-                    person.setLetzteAenderungAm(zeit_sdfToDate.parse(line[43]));
-                } catch (ParseException ex) {
-                    Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                if (!line[43].isEmpty()) {
+                    person.setLetzteAenderungAm(datum_sdfToDate.parse(line[43]));
                 }
+            } catch (ParseException ex) {
+                Logger.getLogger(CsvImportController.class.getName()).log(Level.SEVERE, null, ex);
+            }
             person.setLetzteAenderungDurch(line[44]);
 
 
-
-            personenController.setSelected(person);
-            personenController.saveNew(new ActionEvent(null));
+            if (newEntry) {
+                personenController.saveNew(null);
+            } else {
+                personenController.setSelected(person);
+                personenController.save(null);
+            }
         }
+    }
+
+    public static String getUniqueidentifierString(String csvInput) {
+        return csvInput.substring(1, 37);
     }
 
     /**
@@ -168,7 +186,5 @@ public class CsvImportController {
      */
     public void setColumnNames(boolean columnNames) {
         this.columnNames = columnNames;
-          FacesMessage msg = new FacesMessage("names", "names");
-                FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }

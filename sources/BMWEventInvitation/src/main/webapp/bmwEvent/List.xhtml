@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="BmwEventListForm">
+
+        <p:panel header="#{bundle.ListBmwEventTitle}">
+
+            <p:dataTable id="datalist" value="#{bmwEventController.items}" var="item"
+                         selectionMode="single" selection="#{bmwEventController.selected}"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30"
+                         
+                         >
+
+                <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton :BMWEventEditForm01"/>
+                <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton :BMWEventEditForm01"/>
+
+                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_id}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column sortBy="#{item.name}" filterBy="#{item.name}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_name}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.name}"/>
+                </p:column>
+                <p:column sortBy="#{item.startEventdate}" filterBy="#{item.startEventdate}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_startEventdate}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.startEventdate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.endEventdate}" filterBy="#{item.endEventdate}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_endEventdate}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.endEventdate}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.maxParticipants}" filterBy="#{item.maxParticipants}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_maxParticipants}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.maxParticipants}"/>
+                </p:column>
+                <p:column sortBy="#{item.description}" filterBy="#{item.description}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_description}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.description}"/>
+                </p:column>
+                <p:column sortBy="#{item.location}" filterBy="#{item.location}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_location}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.location}"/>
+                </p:column>
+                <p:column sortBy="#{item.urgencyDayLimit}" filterBy="#{item.urgencyDayLimit}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_urgencyDayLimit}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.urgencyDayLimit}"/>
+                </p:column>
+                <p:column sortBy="#{item.eventUpdated}" filterBy="#{item.eventUpdated}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_eventUpdated}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eventUpdated}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.eventCreated}" filterBy="#{item.eventCreated}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_eventCreated}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eventCreated}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.userUpdated}" filterBy="#{item.userUpdated}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_userUpdated}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.userUpdated}"/>
+                </p:column>
+                <p:column sortBy="#{item.userCreated}" filterBy="#{item.userCreated}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_userCreated}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.userCreated}"/>
+                </p:column>
+                <p:column sortBy="#{item.progress}" filterBy="#{item.progress}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_progress}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.progress}"/>
+                </p:column>
+                <p:column sortBy="#{item.processId}" filterBy="#{item.processId}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEventTitle_processId}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.processId}"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwEventController.prepareCreate}" update=":BmwEventCreateForm" oncomplete="BmwEventCreateDialog.show()"/>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwEventViewForm" oncomplete="BmwEventViewDialog.show()" disabled="#{empty bmwEventController.selected}"/>
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwEventEditForm" oncomplete="BmwEventEditDialog.show()" disabled="#{empty bmwEventController.selected}"/>
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{bmwEventController.delete}" update=":growl,datalist" disabled="#{empty bmwEventController.selected}"/>
+                       
+                </f:facet>
+
+            </p:dataTable>
+
+        </p:panel>
+
+    </h:form>
+    
+    <!-- Form zur Ansicht des jeweils ausgewählten Events -->
+    
+    <h:form id="BMWEventEditForm01">
+                <p:panelGrid  columns="2" rendered="#{bmwEventController.selected != null}">
+
+                        <h:outputLabel value="#{bundle.EditBmwEventLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{bmwEventController.selected.id}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{bmwEventController.selected.name}" title="#{bundle.EditBmwEventTitle_name}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_name}"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_startEventdate}" for="startEventdate" />
+                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.startEventdate}" title="#{bundle.EditBmwEventTitle_startEventdate}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_startEventdate}" showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_endEventdate}" for="endEventdate" />
+                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.endEventdate}" title="#{bundle.EditBmwEventTitle_endEventdate}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_endEventdate}" showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_maxParticipants}" for="maxParticipants" />
+                        <p:inputText id="maxParticipants" value="#{bmwEventController.selected.maxParticipants}" title="#{bundle.EditBmwEventTitle_maxParticipants}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_description}" for="description" />
+                        <p:inputTextarea rows="4" cols="30" id="description" value="#{bmwEventController.selected.description}" title="#{bundle.EditBmwEventTitle_description}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_location}" for="location" />
+                        <p:inputText id="location" value="#{bmwEventController.selected.location}" title="#{bundle.EditBmwEventTitle_location}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
+                        <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.EditBmwEventTitle_urgencyDayLimit}" />
+                      
+                        
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_eventUpdated}" for="eventUpdated" />
+                        <p:calendar id="eventUpdated" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventUpdated}" title="#{bundle.EditBmwEventTitle_eventUpdated}"  showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_userUpdated}" for="userUpdated" />
+                        <p:inputText id="userUpdated" value="#{bmwEventController.selected.userUpdated}" title="#{bundle.EditBmwEventTitle_userUpdated}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_userCreated}" for="userCreated" />
+                        <p:inputText id="userCreated" value="#{bmwEventController.selected.userCreated}" title="#{bundle.EditBmwEventTitle_userCreated}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_userCreated}"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_progress}" for="progress" />
+                        <p:inputText id="progress" value="#{bmwEventController.selected.progress}" title="#{bundle.EditBmwEventTitle_progress}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEventLabel_processId}" for="processId" />
+                        <p:inputText id="processId" value="#{bmwEventController.selected.processId}" title="#{bundle.EditBmwEventTitle_processId}" />
+                    
+                       
+                    </p:panelGrid>
+                
+            </h:form>
+
+</ui:composition>

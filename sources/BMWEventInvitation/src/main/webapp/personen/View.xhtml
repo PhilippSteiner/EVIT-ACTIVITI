@@ -8,9 +8,9 @@
 
     <ui:composition>
 
-        <p:dialog id="PersonenViewDlg" widgetVar="PersonenViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewPersonenTitle}">
+        <p:dialog id="PersonenViewDlg" widgetVar="PersonenViewDialog"  modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewPersonenTitle}">
 
-            <h:form id="PersonenViewForm">
+            <h:form id="PersonenViewForm" >
 
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{personenController.selected != null}">
@@ -155,6 +155,8 @@
 
                         <h:outputText value="#{bundle.ViewPersonenLabel_letzteAenderungDurch}"/>
                         <h:outputText value="#{personenController.selected.letzteAenderungDurch}" title="#{bundle.ViewPersonenTitle_letzteAenderungDurch}"/>
+
+                        <h:outputText value="#{bundle.ViewPersonenLabel_bmwUserCollection}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="PersonenViewDialog.hide()"/>
                 </h:panelGroup>

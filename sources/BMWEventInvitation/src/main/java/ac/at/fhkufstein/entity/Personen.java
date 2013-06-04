@@ -5,19 +5,23 @@
 package ac.at.fhkufstein.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -222,6 +226,8 @@ public class Personen implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "LetzteAenderungDurch")
     private String letzteAenderungDurch;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personenID")
+    private Collection<BmwUser> bmwUserCollection;
 
     public Personen() {
     }
@@ -596,6 +602,15 @@ public class Personen implements Serializable {
 
     public void setLetzteAenderungDurch(String letzteAenderungDurch) {
         this.letzteAenderungDurch = letzteAenderungDurch;
+    }
+
+    @XmlTransient
+    public Collection<BmwUser> getBmwUserCollection() {
+        return bmwUserCollection;
+    }
+
+    public void setBmwUserCollection(Collection<BmwUser> bmwUserCollection) {
+        this.bmwUserCollection = bmwUserCollection;
     }
 
     @Override

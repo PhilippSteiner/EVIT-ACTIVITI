@@ -1,6 +1,6 @@
 package ac.at.fhkufstein.activiti;
 
-import ac.at.fhkufstein.entity.Event;
+import ac.at.fhkufstein.entity.BmwEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -13,9 +13,9 @@ public class InvitationProcess {
     private String pid;
     private String processDefinitionId;
     private String currentActivity;
-    private Event event;
+    private BmwEvent event;
 
-    public InvitationProcess(Event event) {
+    public InvitationProcess(BmwEvent event) {
         this.event = event;
     }
 
