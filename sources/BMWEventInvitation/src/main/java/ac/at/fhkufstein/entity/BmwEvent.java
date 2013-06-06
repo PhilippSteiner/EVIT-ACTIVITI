@@ -4,6 +4,7 @@
  */
 package ac.at.fhkufstein.entity;
 
+import ac.at.fhkufstein.processentity.EventProcess;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -280,5 +281,4 @@ public class BmwEvent implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwEvent[ id=" + id + " ]";
     }
-    
 }

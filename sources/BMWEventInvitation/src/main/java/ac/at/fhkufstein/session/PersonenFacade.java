@@ -15,6 +15,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class PersonenFacade extends AbstractFacade<Personen> {
+
     @PersistenceContext(unitName = "ac.at.fh-kufstein_BMWEventInvitation_war_1.0-SNAPSHOTPU")
     private EntityManager em;
 
@@ -26,5 +27,4 @@ public class PersonenFacade extends AbstractFacade<Personen> {
     public PersonenFacade() {
         super(Personen.class);
     }
-    
 }
