@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+       <h:outputStylesheet library="css" name="login.css"  />
+    </h:head>
+    <h:body>
+
+        <p:tabView id="jTAB" dynamic="true">
+
+            <p:tab id="tab1" title="Alle Journalisten">
+
+                <h:form>
+
+                    <p:dataTable id="dataTable" var="car" value="#{AddJournalistBean.allJournalists}" widgetVar="carsTable" 
+                                 emptyMessage="Keine passenden Journalisten gefunden" filteredValue="#{AddJournalistBean.filteredJournalistst}">
+
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Suche : " />
+                                <p:inputText id="globalFilter" onkeyup="carsTable.filter()" style="width:150px" />
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <p:column id="modelColumn" 
+                                  headerText="Vorname">
+                            <h:outputText value="#{car.vorname}" />
+                        </p:column>
+
+                        <p:column id="yearColumn" 
+                                  headerText="Nachname">
+                            <h:outputText value="#{car.nachname}" />
+                        </p:column>
+
+                        <p:column id="colorColumn"
+                                  headerText="Firma">
+                            <h:outputText value="#{car.firma}" />
+                        </p:column>
+
+                        <p:column style="width:3%"> 
+
+                            <p:commandButton id="basic" icon="ui-icon-search" onclick="JournShow.show();" type="button" />  
+
+                            <p:dialog id="JournDialog" header="Journalist Name" maximizable="true" minimizable="true" widgetVar="JournShow" dynamic="true">  
+                                <ui:include src="showjournalist.xhtml"></ui:include>
+      
+                            </p:dialog> 
+
+                        </p:column>
+                    </p:dataTable>
+
+                   <!-- <p:dataTable var="post" value="#{EventBean.post}">
+                        
+                        <f:facet name="header">
+                            Vergangene Events
+                        </f:facet>
+                        <p:column headerText="Name">
+                    #{post.name}
+                </p:column>
+                <p:column headerText="von">
+                    #{post.von}
+                </p:column>
+                <p:column headerText="bis">
+                    #{post.bis}
+                </p:column>
+                <p:column headerText="Ort">
+                    #{post.ort}
+                </p:column>
+                <p:column style="width:3%"> 
+
+                    <p:commandButton id="basic" icon="ui-icon-search" onclick="pastEventShow.show();" type="button" />  
+
+                    <p:dialog id="dialog" header="Dynamic Dialog" maximizable="true" minimizable="true" widgetVar="pastEventShow" dynamic="true">  
+                        <ui:include src="showevent.xhtml"></ui:include>
+                    </p:dialog> 
+
+                </p:column>
+
+            </p:dataTable>-->
+
+                </h:form>
+
+
+            </p:tab>
+
+        </p:tabView>			
+
+    </h:body>
+
+</html>

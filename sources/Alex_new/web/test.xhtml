@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>TODO supply a title</title>
+    </h:head>
+    <h:body>
+        <h:form>
+
+            <p:commandButton id="basic" value="Show Dialog" onclick="dlgD.show();" type="button" />  
+
+            <p:dialog header="Dialog" widgetVar="dlgD" maximizable="true" minimizable="true">  
+                <h:outputText value="This Dialog can be Maximized and Minimized!" />  
+            </p:dialog>  
+
+            <p:commandButton id="basic2" value="Show Dialog" onclick="dlg.show();" type="button" />  
+
+            <h:form>
+            <p:dialog header="Dialog" widgetVar="dlg" maximizable="true" minimizable="true">  
+                <h:outputText value="This Dialog can be Maximized and Minimized!" />  
+            </p:dialog>  
+            </h:form>
+        </h:form>
+    </h:body>
+</html>
