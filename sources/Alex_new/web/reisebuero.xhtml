@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+      <!--  <h:outputStylesheet library="css" name="login.css"  />-->
+    </h:head>
+    <h:body>
+
+        <!-- 
+NEUER EVENT - DATEN
+
+name => it
+kurzbeschreibung => ta
+ort(straße, hausnummer, plz, ort) => it
+anzahl interne teilnehmer => pi
+anzahl Teilnehmer Journalisten => pi
+urgenzmailfrist => dp
+teilnehmerliste erstellen => dd
+flüge hinzufügen( von bis (zeit/ort)) => dp, it
+files hochladen => fup
+        -->
+
+
+        <p:tabView id="ReiseTabView" dynamic="true">
+
+            <p:tab id="tab1" title="Alle Reisebüros">
+
+                <h:form>
+
+                    <p:dataTable var="up"  widgetVar="upcoming"   
+                                 emptyMessage="Noch kein Reisebüro angelegt" >
+
+                        <p:column headerText="Name" >
+                            
+                        </p:column>
+                        <p:column headerText="Ort" >
+                           
+                        </p:column>
+                        <p:column headerText="Tel" >
+                            
+                        </p:column>
+                        <p:column headerText="Email" >
+                           
+                        </p:column>
+                        <p:column style="width:3%"> 
+
+                        <p:commandButton id="basic" icon="ui-icon-search" onclick="ReiseShow.show();" type="button" />  
+
+                        <p:dialog id="ReiseDialog" header="Dynamic Dialog" maximizable="true" minimizable="true" widgetVar="ReiseShow" dynamic="true">  
+                            <ui:include src="showreisebuero.xhtml"></ui:include>
+                        </p:dialog> 
+
+                    </p:column>
+                    </p:dataTable>
+                </h:form>
+
+            </p:tab>
+
+            <p:tab id="tab2" title="Neues Reisebüro">
+
+                <ui:include src="showreisebuero.xhtml"></ui:include>
+
+            </p:tab>
+
+        </p:tabView>
+
+
+    </h:body>
+
+</html>

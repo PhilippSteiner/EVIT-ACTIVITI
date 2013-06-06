@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="login.css"/>
+    </h:head>
+    <h:body>
+
+        <h:form> 
+
+            <p:tabView id="tabView">
+
+                <p:tab id="tabA" title="Allgemeine Informationen">
+
+                    <h:panelGrid columns="2" cellpadding="10" styleClass="myPanels">  
+                        <h:outputText value="Name:" />  
+                        <p:inputText/> 
+
+                        <h:outputText value="Begin:" />  
+                        <p:calendar  pattern="dd.MM.yyyy HH:mm" showButtonPanel="false" /> 
+
+                        <h:outputText value="Ende:" />  
+                        <p:calendar  pattern="dd.MM.yyyy HH:mm" showButtonPanel="false"/>  
+
+                        <h:outputText value="Kurzbeschreibung: " /> 
+                        <p:inputTextarea rows="10" cols="40" counter="counter" maxlength="200"       
+                                         counterTemplate="{0} characters remaining."/><br/>
+                        <h:outputText id="counter" />
+
+                        <h:outputText value="Anzahl Interne Teilnehmer:" />  
+                        <p:spinner    
+                            min="0" max="100"/> 
+
+                        <h:outputText value="Anzahl Journalisten:" />  
+                        <p:spinner    
+                            min="0" max="100"/>
+
+                        <h:outputText value="Urgenzmailfrist:" />  
+                        <p:calendar showButtonPanel="false" value="#{calendarBean.date1}" pattern="dd.MM.yyyy HH:mm" />
+                    </h:panelGrid>
+                </p:tab>
+
+                <p:tab id="tabJ" title="Journalisten">
+
+                    <p:fieldset legend="Suche Journalisten">
+                        <p:dataTable id="availableCars" var="car" value="#{AddJournalistBean.allJournalists}">
+                            <p:column style="width:20px">
+                                <h:outputText id="dragIcon"
+                                              styleClass="ui-icon ui-icon-arrow-4" />
+                                <p:draggable for="dragIcon" revert="true" />
+                            </p:column>
+
+                            <p:column headerText="Vorname">
+                                <h:outputText value="#{car.vorname}" />
+                            </p:column>
+
+                            <p:column headerText="Nachname">
+                                <h:outputText value="#{car.nachname}" />
+                            </p:column>
+
+                            <p:column headerText="Firma">
+                                <h:outputText value="#{car.firma}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:fieldset>
+
+                    <p:fieldset id="selectedCars" legend="Teilnehmende Journalisten" style="margin-top:20px">
+                        <p:outputPanel id="dropArea">
+                            <h:outputText value="Journalisten per Drag and Drop hinzufügen"
+                                          rendered="#{empty AddJournalistBean.addedJournalistst}"
+                                          style="font-size:24px;"/>
+
+                            <p:dataTable var="car" value="#{AddJournalistBean.addedJournalistst}" 
+                                         rendered="#{not empty AddJournalistBean.addedJournalistst}">
+
+                                <p:column headerText="Vorname">
+                                    <h:outputText value="#{car.vorname}" />
+                                </p:column>
+
+                                <p:column headerText="Nachname">
+                                    <h:outputText value="#{car.nachname}" />
+                                </p:column>
+
+                                <p:column headerText="Firma">
+                                    <h:outputText value="#{car.firma}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </p:fieldset>
+
+                    <p:droppable for="selectedCars" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableCars" onDrop="handleDrop">
+                        <p:ajax listener="#{AddJournalistBean.onCarDrop()}" update="dropArea availableCars" />
+                    </p:droppable>
+
+                </p:tab>
+
+                <p:tab id="tabF" title="Flüge">
+
+                    <h:form id="flugform">
+
+                                    <p:fieldset legend="Neuer Flug">
+
+
+                <h:panelGrid columns="2" cellpadding="10">  
+
+                    <h:outputText value="Von:" />  
+                    <p:inputText  value="#{order.von}" /> 
+
+                    <h:outputText value="Nach:" />  
+                    <p:inputText  value="#{order.bis}" /> 
+
+                    <h:outputText value="Abflugzeit:" />  
+                    <p:inputText value="#{order.ankunftzeit}" /> 
+
+                    <h:outputText value="Ankunftzeit:" /> 
+                    <p:inputText  value="#{order.abflugzeit}" /> 
+
+                    <p:commandButton value="Flug hinzufügen" action="#{order.addAction()}" update="fluegetable"/> 
+
+                </h:panelGrid>
+
+            </p:fieldset>
+
+            <p:dataTable id="fluegetable" value="#{order.orderList}" var="o">
+
+                <p:column headerText="Von">
+                    <h:outputText value="#{o.von}"/>
+                </p:column>
+
+                <p:column headerText="Nach">
+                    <h:outputText value="#{o.bis}" />
+                </p:column>
+
+                <p:column headerText="Abflugzeit">
+                    <h:outputText value="#{o.abflugzeit}"/>
+                </p:column>
+
+                <p:column headerText="Ankunftzeit">
+                    <h:outputText value="#{o.ankunftzeit}"/>
+                </p:column>
+
+                <p:column style="width:3%">
+
+                    <h:commandButton value="entfernen"
+                                   action="#{order.deleteAction(o)}" />
+
+                </p:column>
+
+            </p:dataTable>
+
+                    </h:form>
+                </p:tab>
+
+                <p:tab id="tabD" title="Dateien">
+
+                    <h:form enctype="multipart/form-data">
+                        <p:fileUpload
+                            mode="advanced"
+                            fileUploadListener="#{EventBean.handleFileUpload()}"
+                            allowTypes="/(\.|\/)(gif|jpg|jpeg|gif|png|PNG|GIF|JPG|JPEG)$/" 
+                            auto="false"
+                            update="messages"/>
+
+                        <p:growl id="messages" showDetail="true"/> 
+                    </h:form>
+
+                    <p:dataTable var="file" >
+
+                        <p:column headerText="Name">
+                            <h:outputText/>
+                        </p:column>
+
+                        <p:column headerText="hinzugefügt am">
+                            <h:outputText />
+                        </p:column>
+
+                        <p:column headerText="Größe">
+                            <h:outputText />
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:tab>
+
+            </p:tabView>
+
+            <p:commandButton id="addEvent" value="Event speichern" actionListener="#{EventBean.saveEvent()}"/>  
+        </h:form>            
+    </h:body>
+
+</html>
+
