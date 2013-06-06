@@ -22,5 +22,6 @@ public class BmwUserController extends AbstractController<BmwUser> implements Se
     @PostConstruct
     public void init() {
         super.setFacade(ejbFacade);
+		
     }
 }

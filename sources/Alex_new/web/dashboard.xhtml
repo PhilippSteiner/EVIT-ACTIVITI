@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+       <!-- <h:outputStylesheet library="css" name="login.css"  />
+        <h:outputStylesheet library="css" name="dashboard.css"  />-->
+    </h:head>
+    <h:body>
+        <div class="up">
+            <h:form>
+
+                <p:dataTable id="upcomingEvents" var="up" value="#{EventBean.upcoming}" widgetVar="upval"   
+                             emptyMessage="Keine passenden Events gefunden" filteredValue="#{EventBean.filtered}">
+
+                    <f:facet name="header">
+                        Bevorstehende Events
+                    </f:facet>
+
+                    <f:facet name="filterheader">  
+                        <p:outputPanel>  
+                            <h:outputText value="Search all fields:" />  
+                            <p:inputText id="globalFilter" onkeyup="upval.filter()" style="width:150px" />  
+                        </p:outputPanel>  
+                    </f:facet>  
+
+                    <p:column id="namecollUP" headerText="Name" filterBy="#{up.name}" filterMatchMode="contains">
+                       <h:outputText value="#{up.name}" />
+                    </p:column>
+                    <p:column id="voncollUP" headerText="von" filterBy="#{up.von}" filterMatchMode="contains">
+                        <h:outputText value="#{up.von}" />
+                    </p:column>
+                    <p:column id="biscollUP" headerText="bis" filterBy="#{up.bis}" filterMatchMode="contains">
+                        <h:outputText value="#{up.bis}" />
+                    </p:column>
+                    <p:column id="ortcollUP" headerText="Ort" filterBy="#{up.ort}" filterMatchMode="contains">
+                        <h:outputText value="#{up.ort}" />
+                    </p:column>
+                    <p:column id="kapcollUP" headerText="Kapazität" filterBy="#{up.kapazitaet}" filterMatchMode="contains">
+                        <h:outputText value="#{up.kapazitaet}" />
+                    </p:column>
+                    <p:column id="zuscollUP" headerText="Zusagen" filterBy="#{up.zusagen}" filterMatchMode="contains">
+                        <h:outputText value="#{up.zusagen}" />
+                    </p:column>  
+                    <p:column style="width:3%">  
+
+                        <p:commandButton id="basic" icon="ui-icon-search" onclick="preEventShow.show();" type="button" />  
+
+                        <p:dialog id="PreEventDialog" header="Dynamic Dialog" widgetVar="preEventShow" maximizable="true" minimizable="true" dynamic="true">  
+                            <ui:include src="showevent.xhtml"></ui:include>
+                        </p:dialog> 
+
+                    </p:column>  
+                </p:dataTable>
+
+            </h:form>
+            <br/>
+            <h:form>
+
+                <p:dataTable var="post" value="#{EventBean.post}">
+                    <f:facet name="header">
+                        Vergangene Events
+                    </f:facet>
+                    <p:column headerText="Name">
+                        #{post.name}
+                    </p:column>
+                    <p:column headerText="von">
+                        #{post.von}
+                    </p:column>
+                    <p:column headerText="bis">
+                        #{post.bis}
+                    </p:column>
+                    <p:column headerText="Ort">
+                        #{post.ort}
+                    </p:column>
+                    <p:column style="width:3%"> 
+
+                        <p:commandButton id="basic" icon="ui-icon-search" onclick="pastEventShow.show();" type="button" />  
+
+                        <p:dialog id="PostEventDialog" header="Dynamic Dialog" maximizable="true" minimizable="true" widgetVar="pastEventShow" dynamic="true">  
+                            <ui:include src="showevent.xhtml"></ui:include>
+                        </p:dialog> 
+
+                    </p:column>
+
+                </p:dataTable>
+
+
+
+            </h:form>
+        </div>
+        <br/>
+        <div class="noti">
+            <h:form >
+                <p:dataTable var="nots" value="#{NotifBean.notifs}">
+                    <f:facet name="header">
+                        Vertretungs Benachrichtigungen
+                    </f:facet>
+                    <p:column headerText="Event">
+                        #{nots.event}
+                    </p:column >
+                    <p:column headerText="Name">
+                        #{nots.name}
+                    </p:column>
+                    <p:column headerText="Vertretung">
+                        #{nots.vertretung}
+                    </p:column>
+                </p:dataTable> 
+
+                <!--Dialog-->
+
+            </h:form>
+        </div>
+
+
+
+
+    </h:body>
+
+</html>
+
