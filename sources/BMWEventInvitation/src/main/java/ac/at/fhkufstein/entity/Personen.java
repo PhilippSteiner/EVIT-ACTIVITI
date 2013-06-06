@@ -78,6 +78,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Personen.findByLetzteAenderungAm", query = "SELECT p FROM Personen p WHERE p.letzteAenderungAm = :letzteAenderungAm"),
     @NamedQuery(name = "Personen.findByLetzteAenderungDurch", query = "SELECT p FROM Personen p WHERE p.letzteAenderungDurch = :letzteAenderungDurch")})
 public class Personen implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -636,5 +637,4 @@ public class Personen implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.Personen[ personalID=" + personalID + " ]";
     }
-    
 }
