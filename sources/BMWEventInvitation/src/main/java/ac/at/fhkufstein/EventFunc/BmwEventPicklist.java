@@ -4,8 +4,11 @@
  */
 package ac.at.fhkufstein.EventFunc;
 
+import ac.at.fhkufstein.bean.BmwEventController;
+import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.bean.PersonenController;
+import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.Personen;
 
@@ -35,8 +38,14 @@ public class BmwEventPicklist {
 	
 	private BmwUserController bmwUserController; // +setter
 	private DualListModel<String> cities;
+    private Integer eventID;
+    private BmwEventController bmwEventController;
+    private BmwParticipantsController bmwParticipantsController;
 
-    
+
+	private BmwEvent current;
+
+	
 //	public EntityManager em;
 	/**
 	 * Creates
@@ -54,7 +63,14 @@ public class BmwEventPicklist {
 		
 			bmwUserController=FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
 		 PersonenController personenController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{personenController}", PersonenController.class);
-        personenController.init();
+        bmwEventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
+        bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        
+		  FacesContext facesContext = FacesContext.getCurrentInstance();
+        this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext(). getRequestParameterMap().get("eventID"));
+		
+		current=bmwEventController.getFacade().find(eventID);
+		 personenController.init();
 		//Hier muss noch was eingebaut werden wenn keine user existieren? Sonst crasht das programm
 		
 		//Personen p = personenController.
@@ -92,6 +108,14 @@ public class BmwEventPicklist {
 		
 		System.out.println("set called"+cities); 
 	}
+	
+		public Integer getEventID() {
+		return eventID;
+	}
+
+	public void setEventID(Integer eventID) {
+		this.eventID = eventID;
+	}
     
     public void onTransfer(TransferEvent event) {
 		System.out.println("transfer called");
@@ -108,5 +132,23 @@ public class BmwEventPicklist {
         
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+	public BmwEvent getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(BmwEvent current) {
+		this.current = current;
+		//bmwEventController.setSelected(current);
+		//bmwEventController.save(null);
+		System.out.println("yeah");
+	}
+	
+	public void saveCurrent(){
+	
+	    bmwEventController.setSelected(current);
+		bmwEventController.save(null);
+		System.out.println("yeah");	
+	
+	}
 }
 

@@ -177,23 +177,5 @@
                     </p:panelGrid>
                 
             </h:form>
-	<p:pickList id="pickList" value="#{bmwEventPicklist.cities}" var="city" 
-                itemLabel="#{city}" itemValue="#{city}" />
-	<p:commandButton id="citySubmit" value="Submit"  oncomplete="cityDialog.show()" style="margin-top:5px"/>  
-     <!--update="displayCities" removed from commandbutton-->
-	 <p:dialog modal="true" showEffect="fade" hideEffect="fade" widgetVar="cityDialog">  
-		 Data Saved. NOOOOT!
-		 <!--
-        <h:panelGrid id="displayCities" columns="2">  
-            <h:outputText value="Data Saved " style="font-weight:bold"/>  
-              <ui:repeat value="#{pickListBean.cities.source}" var="item">  
-                <h:outputText value="#{item}" style="margin-right:5px" />  
-            </ui:repeat> 
-  
-            <h:outputText value="Target: " style="font-weight:bold"/> 
-            <ui:repeat value="#{pickListBean.cities.target}" var="item">  
-                <h:outputText value="#{item}" style="margin-right:5px" /> 
-            </ui:repeat>   
-        </h:panelGrid>  -->
-    </p:dialog>  
+	
 </ui:composition>
