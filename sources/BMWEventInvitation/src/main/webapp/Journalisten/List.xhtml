@@ -21,18 +21,6 @@
                 <p:ajax event="rowSelect"   update="viewButton"/>
                 <p:ajax event="rowUnselect" update="viewButton"/>
 
-                <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
-                    <f:facet name="header">
-                        <h:outputText value="ID"/>
-                    </f:facet>
-                    <h:outputText value="#{item.uid}"/>
-                </p:column>
-                <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
-                    <f:facet name="header">
-                        <h:outputText value="Rating"/>
-                    </f:facet>
-                    <h:outputText value="#{item.rating}"/>
-                </p:column>
                
                 <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
                     <f:facet name="header">
@@ -53,6 +41,13 @@
                     </f:facet>
                     <h:outputText value="#{item.personenID.firma}"/>
                 </p:column>
+				 <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                    <f:facet name="header">
+                        <h:outputText value="Rating"/>
+                    </f:facet>
+                    <h:outputText value="#{item.rating}"/>
+                </p:column>
+               
                 <f:facet name="footer">
                     <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty bmwUserController.selected}"/>
                     </f:facet>
