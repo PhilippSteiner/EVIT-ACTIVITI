@@ -4,18 +4,21 @@
  */
 package ac.at.fhkufstein.EventFunc;
 
+import ac.at.fhkufstein.bean.BmwEventController;
+import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.bean.PersonenController;
+import ac.at.fhkufstein.entity.BmwEvent;
+import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.Personen;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.TransferEvent;
@@ -35,8 +38,14 @@ public class BmwEventPicklist {
 	
 	private BmwUserController bmwUserController; // +setter
 	private DualListModel<String> cities;
+    private Integer eventID;
+    private BmwEventController bmwEventController;
+    private BmwParticipantsController bmwParticipantsController;
+	
+	private List<BmwUser> u;
+	private BmwEvent current;
 
-    
+	
 //	public EntityManager em;
 	/**
 	 * Creates
@@ -54,14 +63,34 @@ public class BmwEventPicklist {
 		
 			bmwUserController=FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
 		 PersonenController personenController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{personenController}", PersonenController.class);
-        personenController.init();
+        bmwEventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
+        bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        
+		  FacesContext facesContext = FacesContext.getCurrentInstance();
+        this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext(). getRequestParameterMap().get("eventID"));
+		
+		current=bmwEventController.getFacade().find(eventID);
+		 personenController.init();
 		//Hier muss noch was eingebaut werden wenn keine user existieren? Sonst crasht das programm
 		
 		//Personen p = personenController.
 		//System.out.println(p.getNachname());
-
-		
-
+		 
+		//BmwParticipants participants= bmwParticipantsController.getFacade().find(this);
+		/*
+		EntityManager em= ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+   List participants = em.createNamedQuery("BmwParticipants.findByEventId")
+            .setParameter("id", eventID)
+            .getResultList();
+ System.out.println("hello im here"+participants);
+ */
+		Collection<BmwParticipants> p=current.getBmwParticipantsCollection();
+		System.out.println("Size:"+p.size());
+		Iterator<BmwParticipants> it= p.iterator();
+		while(it.hasNext()){
+			u.add(it.next().getUserId());
+			System.out.println("Name"+it.next().getUserId().getPersonenID().getNameVollstaendig());
+		}
 		//Cities
 		List<String> citiesSource = new ArrayList<String>();
 		List<String> citiesTarget = new ArrayList<String>();
@@ -92,6 +121,14 @@ public class BmwEventPicklist {
 		
 		System.out.println("set called"+cities); 
 	}
+	
+		public Integer getEventID() {
+		return eventID;
+	}
+
+	public void setEventID(Integer eventID) {
+		this.eventID = eventID;
+	}
     
     public void onTransfer(TransferEvent event) {
 		System.out.println("transfer called");
@@ -108,5 +145,31 @@ public class BmwEventPicklist {
         
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+	public BmwEvent getCurrent() {
+		return current;
+	}
+
+	public void setCurrent(BmwEvent current) {
+		this.current = current;
+		//bmwEventController.setSelected(current);
+		//bmwEventController.save(null);
+		System.out.println("yeah");
+	}
+	
+	public void saveCurrent(){
+	
+	    bmwEventController.setSelected(current);
+		bmwEventController.save(null);
+		System.out.println("yeah");	
+	
+	}
+		public List<BmwUser> getU() {
+		return u;
+	}
+
+	public void setU(List<BmwUser> u) {
+		this.u = u;
+	}
+
 }
 
