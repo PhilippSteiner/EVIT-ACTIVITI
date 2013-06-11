@@ -4,7 +4,6 @@
  */
 package ac.at.fhkufstein.entity;
 
-import ac.at.fhkufstein.processentity.EventProcess;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
