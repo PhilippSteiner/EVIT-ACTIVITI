@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.ac.fhkufstein.process;
+package ac.at.fhkufstein.activiti;
 
 import javax.faces.bean.ApplicationScoped;
 import org.activiti.engine.FormService;
@@ -25,7 +25,7 @@ public class Services {
         instantiateProcessEngine();
 
 //        if(getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(InvitationProcess.PROCESS_DEFINITION).list().isEmpty()) {
-            getRepositoryService().createDeployment()
+        getRepositoryService().createDeployment()
                 .addClasspathResource(InvitationProcess.PROCESS_FILE)
                 .deploy();
 //        }

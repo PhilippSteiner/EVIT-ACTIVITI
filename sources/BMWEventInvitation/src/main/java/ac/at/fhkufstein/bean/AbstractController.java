@@ -36,7 +36,7 @@ public abstract class AbstractController<T> {
         this.itemClass = itemClass;
     }
 
-    protected AbstractFacade<T> getFacade() {
+    public AbstractFacade<T> getFacade() {
         return ejbFacade;
     }
 

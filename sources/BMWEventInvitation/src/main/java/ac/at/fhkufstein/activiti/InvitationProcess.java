@@ -1,5 +1,6 @@
-package at.ac.fhkufstein.process;
+package ac.at.fhkufstein.activiti;
 
+import ac.at.fhkufstein.entity.BmwEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -8,18 +9,23 @@ import java.util.Iterator;
 public class InvitationProcess {
 
     final static public String PROCESS_DEFINITION = "InvitationProcess";
-    final static public String PROCESS_FILE = "diagrams/"+PROCESS_DEFINITION+".bpmn";
+    final static public String PROCESS_FILE = "diagrams/" + PROCESS_DEFINITION + ".bpmn";
     private String pid;
     private String processDefinitionId;
     private String currentActivity;
+    private BmwEvent event;
+
+    public InvitationProcess(BmwEvent event) {
+        this.event = event;
+    }
 
     public void startProcess() throws Exception {
 
         ProcessInstance processInstance = Services.getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION);
-        setPid(processInstance.getId());
+        event.setProcessId(Integer.valueOf(processInstance.getId()));
         setProcessDefinitionId(processInstance.getProcessDefinitionId());
 
-        System.out.println("Proccess Instance #"+pid+" started");
+        System.out.println("Proccess Instance #" + pid + " started");
     }
 
     public String getStartFormKey() {
@@ -27,14 +33,14 @@ public class InvitationProcess {
         String processDefinitionId = Services.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_DEFINITION).latestVersion().singleResult().getId();
         String formKey = Services.getFormService().getStartFormKey(processDefinitionId);
 
-        System.out.println("start task with form "+formKey);
+        System.out.println("start task with form " + formKey);
 
         return formKey;
     }
 
     public String getNextFormKey() {
 
-        if(pid == null) {
+        if (pid == null) {
 
             try {
                 startProcess();
@@ -46,16 +52,15 @@ public class InvitationProcess {
             resumeProcess();
         }
 
-        setCurrentActivity(Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(pid).singleResult().getActivityId());
         String formKey = Services.getFormService().getTaskFormKey(processDefinitionId, getCurrentActivity());
 
-        System.out.println("task with form "+formKey);
+        System.out.println("task with form " + formKey);
 
         return formKey;
     }
 
     public void resumeProcess() {
-        System.out.println("resume Process with Id "+pid);
+        System.out.println("resume Process with Id " + pid);
         Services.getRuntimeService().signal(pid);
     }
 
@@ -95,13 +100,6 @@ public class InvitationProcess {
      * @return the currentActivity
      */
     public String getCurrentActivity() {
-        return currentActivity;
-    }
-
-    /**
-     * @param currentActivity the currentActivity to set
-     */
-    public void setCurrentActivity(String currentActivity) {
-        this.currentActivity = currentActivity;
+        return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(pid).singleResult().getActivityId();
     }
 }

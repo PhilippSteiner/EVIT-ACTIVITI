@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+      <!--  <h:outputStylesheet library="css" name="login.css"  />-->
+    </h:head>
+    <h:body>
+
+        <!-- 
+NEUER EVENT - DATEN
+
+name => it
+kurzbeschreibung => ta
+ort(straße, hausnummer, plz, ort) => it
+anzahl interne teilnehmer => pi
+anzahl Teilnehmer Journalisten => pi
+urgenzmailfrist => dp
+teilnehmerliste erstellen => dd
+flüge hinzufügen( von bis (zeit/ort)) => dp, it
+files hochladen => fup
+        -->
+
+
+        <p:tabView id="EventTabView" dynamic="true">
+
+            <p:tab id="tab1" title="Alle Events">
+
+                <h:form>
+
+                    <p:dataTable var="up" value="#{EventBean.upcoming}" widgetVar="upcoming"   
+                                 emptyMessage="Keine passenden Events gefunden" filteredValue="#{EventBean.upcoming}">
+
+                        <p:column headerText="Name" filterBy="#{up.name}" filterMatchMode="contains">
+                            #{up.name}
+                        </p:column>
+                        <p:column headerText="von" filterBy="#{up.von}" filterMatchMode="contains">
+                            #{up.von}
+                        </p:column>
+                        <p:column headerText="bis" filterBy="#{up.bis}" filterMatchMode="contains">
+                            #{up.bis}
+                        </p:column>
+                        <p:column headerText="Ort" filterBy="#{up.ort}" filterMatchMode="contains">
+                            #{up.ort}
+                        </p:column>
+                        <p:column headerText="Kapazität" filterBy="#{up.kapazitaet}" filterMatchMode="contains">
+                            #{up.kapazitaet}
+                        </p:column>
+                        <p:column headerText="Zusagen" filterBy="#{up.zusagen}" filterMatchMode="contains">
+                            #{up.zusagen}
+                        </p:column>
+                        <p:column style="width:3%"> 
+
+                        <p:commandButton id="basic" icon="ui-icon-search" onclick="EventShow.show();" type="button" />  
+
+                        <p:dialog id="EventDialog" header="Dynamic Dialog" maximizable="true" minimizable="true" widgetVar="EventShow" dynamic="true">  
+                            <ui:include src="showevent.xhtml"></ui:include>
+                        </p:dialog> 
+
+                    </p:column>
+                    </p:dataTable>
+                </h:form>
+
+            </p:tab>
+
+            <p:tab id="tab2" title="Neuer Event">
+
+                <ui:include src="showevent.xhtml"></ui:include>
+
+            </p:tab>
+
+        </p:tabView>
+
+        <h:form>
+
+            <!--<p:commandButton id="basic" value="Show Dialog" onclick="dlg.show();" type="button" />-->
+
+            <p:dialog id="dialog" header="Eventname" widgetVar="dlg" maximizable="true" minimizable="true" dynamic="true">
+                <!-- <p:scrollPanel> -->
+                <ui:include src="showevent.xhtml"></ui:include>
+                <!-- </p:scrollPanel>-->
+            </p:dialog>	
+
+
+        </h:form>
+
+    </h:body>
+
+</html>
