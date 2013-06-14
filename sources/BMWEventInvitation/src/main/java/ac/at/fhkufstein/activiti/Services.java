@@ -25,9 +25,11 @@ public class Services {
         instantiateProcessEngine();
 
 //        if(getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(InvitationProcess.PROCESS_DEFINITION).list().isEmpty()) {
-        getRepositoryService().createDeployment()
-                .addClasspathResource(InvitationProcess.PROCESS_FILE)
-                .deploy();
+        for (String process : InvitationProcess.PROCESSES) {
+            getRepositoryService().createDeployment()
+                    .addClasspathResource(InvitationProcess.PROCESS_FILE_LOCATION + process + InvitationProcess.SUFFIX)
+                    .deploy();
+        }
 //        }
 
     }
