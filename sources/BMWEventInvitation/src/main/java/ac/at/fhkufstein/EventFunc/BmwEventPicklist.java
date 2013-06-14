@@ -26,8 +26,7 @@ import org.primefaces.model.DualListModel;
 
 /**
  *
- * @author
- * wolfgangteves
+ * @author wolfgangteves
  */
 @ManagedBean(name = "bmwEventPicklist")
 @ViewScoped
