@@ -4,10 +4,12 @@
  */
 package ac.at.fhkufstein.dataimport;
 
+import ac.at.fhkufstein.bean.AbstractController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.bean.PersonenController;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.Personen;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -19,7 +21,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name="compareList")
 @RequestScoped
-public class compareList {
+public class compareList{
 
     
     private BmwUserController bmwUserController;
@@ -64,6 +66,20 @@ public class compareList {
             }
         }
         return newList;
+    }
+    
+    public void saveUsers(){
+        
+        
+        for(Personen up: newList){
+            BmwUser bmwUser = new BmwUser();
+            bmwUser.setPersonenID(up);
+            bmwUserController.prepareCreate(null);
+            bmwUserController.setSelected(bmwUser);
+            bmwUserController.saveNew(null);
+        }
+        
+    
     }
     
     

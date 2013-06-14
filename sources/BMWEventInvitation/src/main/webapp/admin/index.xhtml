@@ -11,8 +11,8 @@
             <h:outputText value="#{bundle.AppName}"></h:outputText>
         </ui:define>
         <ui:define name="body">
-            <p:panel header="#{bundle.Welcome}">
-                <p><h:outputText value="#{bundle.WelcomeMessage}"></h:outputText></p>
+            <p:panel header="CSV Import">
+                <p><h:outputText value="Wilkommen beim CSV Import. Bitte wählen Sie eine Datei von ihrem Lokalen System"></h:outputText></p>
 
 
                 <h:form enctype="multipart/form-data">
@@ -22,7 +22,7 @@
                     <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 
 
-                        <h:outputText value="CSV Datei " />
+                        <h:outputText value="CSV Datei: " />
                         <p:fileUpload value="#{csvImportController.csvFile}" mode="simple"/>
 
                     </h:panelGrid>
@@ -34,102 +34,104 @@
 
 
             </p:panel>
+<!--
+            <h:form id="userform">
+                <p:panel header="User">
+                    <p:dataTable id="datalist" value="#{compareList.users}" var="item"
 
-            
-            <p:panel header="User">
-                <p:dataTable id="datalist" value="#{compareList.users}" var="item"
-                         
-                         rowKey="#{item.uid}"
-                         paginator="true"
-                         rows="10"
-                         rowsPerPageTemplate="10,20,30"
-                         >
-                <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_uid}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.uid}"/>
-                </p:column>
-                <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.pwd}"/>
-                </p:column>
-                <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.rating}"/>
-                </p:column>
-                <p:column sortBy="#{item.seatingPriority}" filterBy="#{item.seatingPriority}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_seatingPriority}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.seatingPriority}"/>
-                </p:column>
-                <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.personenID.vorname}"/>
-                </p:column>
-                    <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
-                    </f:facet>
-                        <h:outputText value="#{item.personenID.nachname}"/>
-                </p:column>
-                
-                </p:dataTable>
-                
-            </p:panel>
-            
+                                 rowKey="#{item.uid}"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30"
+                                 >
+                        <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwUserTitle_uid}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.uid}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.pwd}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.rating}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.seatingPriority}" filterBy="#{item.seatingPriority}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwUserTitle_seatingPriority}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.seatingPriority}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.personenID.vorname}"/>
+                        </p:column>
+                        <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.personenID.nachname}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:panel>
+            </h:form>
+-->
             <h:form id="journalistenform">
-            <p:panel header="Journalisten">
-                <p:dataTable id="datalistpersonen" value="#{compareList.subPersonen}" var="pers"
-                             emptyMessage="Keine Änderungen vorhanden!"
-                         rowKey="#{pers.personalID}"
-                         paginator="true"
-                         rows="10"
-                         rowsPerPageTemplate="10,20,30"
-                         >
-                  <p:column sortBy="#{pers.firma}" filterBy="#{pers.firma}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListPersonenTitle_firma}"/>
-                    </f:facet>
-                    <h:outputText value="#{pers.firma}"/>
-                </p:column>
-              <p:column sortBy="#{pers.anrede}" filterBy="#{pers.anrede}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListPersonenTitle_anrede}"/>
-                    </f:facet>
-                    <h:outputText value="#{pers.anrede}"/>
-                </p:column>
-                <p:column sortBy="#{pers.akadTitel}" filterBy="#{pers.akadTitel}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListPersonenTitle_akadTitel}"/>
-                    </f:facet>
-                    <h:outputText value="#{pers.akadTitel}"/>
-                </p:column>
-                
-                    <p:column sortBy="#{pers.vorname}" filterBy="#{pers.vorname}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListPersonenTitle_vorname}"/>
-                    </f:facet>
-                    <h:outputText value="#{pers.vorname}"/>
-                </p:column>
-                <p:column sortBy="#{pers.nachname}" filterBy="#{pers.nachname}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListPersonenTitle_nachname}"/>
-                    </f:facet>
-                    <h:outputText value="#{pers.nachname}"/>
-                </p:column>
-                    
-                </p:dataTable>
-                
-            </p:panel>
-            
+                <p:panel header="Neue Journalisten die noch nicht vorhanden sind">
+                    <p:dataTable id="datalistpersonen" value="#{compareList.subPersonen}" var="pers"
+                                 emptyMessage="Keine Änderungen vorhanden!"
+                                 rowKey="#{pers.personalID}"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30"
+                                 >
+                        <p:column sortBy="#{pers.firma}" filterBy="#{pers.firma}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_firma}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.firma}"/>
+                        </p:column>
+                        <p:column sortBy="#{pers.anrede}" filterBy="#{pers.anrede}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_anrede}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.anrede}"/>
+                        </p:column>
+                        <p:column sortBy="#{pers.akadTitel}" filterBy="#{pers.akadTitel}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_akadTitel}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.akadTitel}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{pers.vorname}" filterBy="#{pers.vorname}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_vorname}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.vorname}"/>
+                        </p:column>
+                        <p:column sortBy="#{pers.nachname}" filterBy="#{pers.nachname}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_nachname}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.nachname}"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:commandButton actionListener="#{compareList.saveUsers}" value="#{bundle.Save}" update="datalistpersonen,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
+                </p:panel>
+
             </h:form>
         </ui:define>
 
