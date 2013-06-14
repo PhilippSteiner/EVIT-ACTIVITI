@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="BmwUserListForm">
+
+        <p:panel header="Journalisten">
+
+            <p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
+                         selectionMode="single" selection="#{bmwUserController.selected}"
+                         rowKey="#{item.uid}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30"
+                         >
+
+                <p:ajax event="rowSelect"   update="viewButton"/>
+                <p:ajax event="rowUnselect" update="viewButton"/>
+
+               
+                <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
+                    <f:facet name="header">
+                        <h:outputText value="Vorname"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personenID.vorname}"/>
+                </p:column>
+				
+                <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+                    <f:facet name="header">
+                        <h:outputText value="Nachname"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personenID.nachname}"/>
+                </p:column>
+				 <p:column sortBy="#{item.personenID.firma}" filterBy="#{item.personenID.firma}">
+                    <f:facet name="header">
+                        <h:outputText value="Firma"/>
+                    </f:facet>
+                    <h:outputText value="#{item.personenID.firma}"/>
+                </p:column>
+				 <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                    <f:facet name="header">
+                        <h:outputText value="Rating"/>
+                    </f:facet>
+                    <h:outputText value="#{item.rating}"/>
+                </p:column>
+               
+                <f:facet name="footer">
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty bmwUserController.selected}"/>
+                    </f:facet>
+
+            </p:dataTable>
+
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>

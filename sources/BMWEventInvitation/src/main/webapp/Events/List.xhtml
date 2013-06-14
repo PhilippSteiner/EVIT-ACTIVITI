@@ -22,21 +22,21 @@
                 <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton :BMWEventEditForm01"/>
                 <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton :BMWEventEditForm01"/>
 
-                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_id}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.id}"/>
-                </p:column>
+				<p:column style="width:4%">  
+                <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">  
+    <f:param name="eventID" value="#{item.id}" />  
+</p:button>  
+        </p:column>  
+				
                 <p:column sortBy="#{item.name}" filterBy="#{item.name}">
                     <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_name}"/>
+                        <h:outputText value="Name"/>
                     </f:facet>
                     <h:outputText value="#{item.name}"/>
                 </p:column>
                 <p:column sortBy="#{item.startEventdate}" filterBy="#{item.startEventdate}">
                     <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_startEventdate}"/>
+                        <h:outputText value="Start"/>
                     </f:facet>
                     <h:outputText value="#{item.startEventdate}">
                         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
@@ -44,7 +44,7 @@
                 </p:column>
                 <p:column sortBy="#{item.endEventdate}" filterBy="#{item.endEventdate}">
                     <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_endEventdate}"/>
+                        <h:outputText value="Ende"/>
                     </f:facet>
                     <h:outputText value="#{item.endEventdate}">
                         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
@@ -52,67 +52,15 @@
                 </p:column>
                 <p:column sortBy="#{item.maxParticipants}" filterBy="#{item.maxParticipants}">
                     <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_maxParticipants}"/>
+                        <h:outputText value="Maximale Anzahl Teilnehmer"/>
                     </f:facet>
                     <h:outputText value="#{item.maxParticipants}"/>
                 </p:column>
-                <p:column sortBy="#{item.description}" filterBy="#{item.description}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_description}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.description}"/>
-                </p:column>
                 <p:column sortBy="#{item.location}" filterBy="#{item.location}">
                     <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_location}"/>
+                        <h:outputText value="Ort"/>
                     </f:facet>
                     <h:outputText value="#{item.location}"/>
-                </p:column>
-                <p:column sortBy="#{item.urgencyDayLimit}" filterBy="#{item.urgencyDayLimit}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_urgencyDayLimit}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.urgencyDayLimit}"/>
-                </p:column>
-                <p:column sortBy="#{item.eventUpdated}" filterBy="#{item.eventUpdated}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_eventUpdated}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.eventUpdated}">
-                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                    </h:outputText>
-                </p:column>
-                <p:column sortBy="#{item.eventCreated}" filterBy="#{item.eventCreated}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_eventCreated}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.eventCreated}">
-                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
-                    </h:outputText>
-                </p:column>
-                <p:column sortBy="#{item.userUpdated}" filterBy="#{item.userUpdated}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_userUpdated}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.userUpdated}"/>
-                </p:column>
-                <p:column sortBy="#{item.userCreated}" filterBy="#{item.userCreated}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_userCreated}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.userCreated}"/>
-                </p:column>
-                <p:column sortBy="#{item.progress}" filterBy="#{item.progress}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_progress}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.progress}"/>
-                </p:column>
-                <p:column sortBy="#{item.processId}" filterBy="#{item.processId}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwEventTitle_processId}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.processId}"/>
                 </p:column>
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwEventController.prepareCreate}" update=":BmwEventCreateForm" oncomplete="BmwEventCreateDialog.show()"/>
