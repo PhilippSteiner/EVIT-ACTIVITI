@@ -222,7 +222,6 @@ public class Personen implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date letzteAenderungAm;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "LetzteAenderungDurch")
     private String letzteAenderungDurch;
