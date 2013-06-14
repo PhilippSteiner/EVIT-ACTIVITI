@@ -8,11 +8,10 @@ import java.util.Iterator;
 
 public class InvitationProcess {
 
+    final static public String DATABASE_EVENTID = "eventID";
     final static public String PROCESS_DEFINITION = "InvitationProcess";
     final static public String PROCESS_FILE = "diagrams/" + PROCESS_DEFINITION + ".bpmn";
-    private String pid;
     private String processDefinitionId;
-    private String currentActivity;
     private BmwEvent event;
 
     public InvitationProcess(BmwEvent event) {
@@ -23,9 +22,12 @@ public class InvitationProcess {
 
         ProcessInstance processInstance = Services.getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION);
         event.setProcessId(Integer.valueOf(processInstance.getId()));
+
+        Services.getRuntimeService().setVariable(processInstance.getId(), DATABASE_EVENTID, event.getId());
+
         setProcessDefinitionId(processInstance.getProcessDefinitionId());
 
-        System.out.println("Proccess Instance #" + pid + " started");
+        System.out.println("Proccess Instance #" + event.getProcessId() + " started");
     }
 
     public String getStartFormKey() {
@@ -40,8 +42,7 @@ public class InvitationProcess {
 
     public String getNextFormKey() {
 
-        if (pid == null) {
-
+        if (event.getProcessId() == null) {
             try {
                 startProcess();
             } catch (Exception ex) {
@@ -52,34 +53,26 @@ public class InvitationProcess {
             resumeProcess();
         }
 
-        String formKey = Services.getFormService().getTaskFormKey(processDefinitionId, getCurrentActivity());
+        String formKey;
 
-        System.out.println("task with form " + formKey);
+        try {
+            formKey = Services.getFormService().getTaskFormKey(processDefinitionId, getCurrentActivity());
+
+            System.out.println("task with form " + formKey);
+        } catch (org.activiti.engine.ActivitiIllegalArgumentException ex) {
+            formKey = "noformkey";
+        }
 
         return formKey;
     }
 
     public void resumeProcess() {
-        System.out.println("resume Process with Id " + pid);
-        Services.getRuntimeService().signal(pid);
-    }
-
-    /**
-     * @return the pid
-     */
-    public String getPid() {
-        return pid;
-    }
-
-    /**
-     * @param pid the pid to set
-     */
-    public void setPid(String pid) {
-        this.pid = pid;
+        System.out.println("resume Process with Id " + event.getProcessId());
+        Services.getRuntimeService().signal(String.valueOf(event.getProcessId()));
     }
 
     public boolean processStarted() {
-        return pid != null;
+        return event.getProcessId() != null;
     }
 
     /**
@@ -100,6 +93,11 @@ public class InvitationProcess {
      * @return the currentActivity
      */
     public String getCurrentActivity() {
-        return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(pid).singleResult().getActivityId();
+        try {
+            return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(String.valueOf(event.getProcessId())).singleResult().getActivityId();
+
+        } catch (NullPointerException ex) {
+            return null;
+        }
     }
 }

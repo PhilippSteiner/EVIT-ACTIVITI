@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwEventViewDlg" widgetVar="BmwEventViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwEventTitle}">
+
+            <h:form id="BmwEventViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwEventController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_id}"/>
+                        <h:outputText value="#{bmwEventController.selected.id}" title="#{bundle.ViewBmwEventTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_name}"/>
+                        <h:outputText value="#{bmwEventController.selected.name}" title="#{bundle.ViewBmwEventTitle_name}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_startEventdate}"/>
+                        <h:outputText value="#{bmwEventController.selected.startEventdate}" title="#{bundle.ViewBmwEventTitle_startEventdate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_endEventdate}"/>
+                        <h:outputText value="#{bmwEventController.selected.endEventdate}" title="#{bundle.ViewBmwEventTitle_endEventdate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_maxParticipants}"/>
+                        <h:outputText value="#{bmwEventController.selected.maxParticipants}" title="#{bundle.ViewBmwEventTitle_maxParticipants}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_description}"/>
+                        <h:outputText value="#{bmwEventController.selected.description}" title="#{bundle.ViewBmwEventTitle_description}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_location}"/>
+                        <h:outputText value="#{bmwEventController.selected.location}" title="#{bundle.ViewBmwEventTitle_location}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_urgencyDayLimit}"/>
+                        <h:outputText value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.ViewBmwEventTitle_urgencyDayLimit}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_eventUpdated}"/>
+                        <h:outputText value="#{bmwEventController.selected.eventUpdated}" title="#{bundle.ViewBmwEventTitle_eventUpdated}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_eventCreated}"/>
+                        <h:outputText value="#{bmwEventController.selected.eventCreated}" title="#{bundle.ViewBmwEventTitle_eventCreated}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_userUpdated}"/>
+                        <h:outputText value="#{bmwEventController.selected.userUpdated}" title="#{bundle.ViewBmwEventTitle_userUpdated}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_userCreated}"/>
+                        <h:outputText value="#{bmwEventController.selected.userCreated}" title="#{bundle.ViewBmwEventTitle_userCreated}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_progress}"/>
+                        <h:outputText value="#{bmwEventController.selected.progress}" title="#{bundle.ViewBmwEventTitle_progress}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_processId}"/>
+                        <h:outputText value="#{bmwEventController.selected.processId}" title="#{bundle.ViewBmwEventTitle_processId}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_bmwFlightCollection}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEventLabel_bmwParticipantsCollection}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwEventViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+            
+            
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
