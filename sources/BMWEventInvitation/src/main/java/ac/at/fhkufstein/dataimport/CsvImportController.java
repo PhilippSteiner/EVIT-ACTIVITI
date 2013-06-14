@@ -38,6 +38,7 @@ public class CsvImportController {
     private final char CSV_SEPERATOR = ';';
     private final char CSV_QUOTECHAR = '"';
     private final String EMPTY_ERROR = "Die CSV-Datei enthählt keine Einträge";
+    private final String CHARSET = "ISO-8859-1";
 
     public UploadedFile getCsvFile() {
         return csvFile;
@@ -71,7 +72,7 @@ public class CsvImportController {
 
     private void importCsv(InputStream is) throws Exception {
 
-        importCsv(new BufferedReader(new InputStreamReader(is)));
+        importCsv(new BufferedReader(new InputStreamReader(is, CHARSET)));
 
     }
 
@@ -108,7 +109,7 @@ public class CsvImportController {
                         for (Method personenMethod : tempPersonenMethods) {
                             if (personenMethod.getName().toLowerCase().equals("set" + field.getName().toLowerCase())) {
                                 personenMethods[personenFieldIndex++] = personenMethod;
-                                System.out.println(csvIndex + " " + line[csvIndex] + " " + field.getName() + " " + personenMethod.getName());
+//                                System.out.println(csvIndex + " " + line[csvIndex] + " " + field.getName() + " " + personenMethod.getName());
                             }
                         }
                     }
@@ -203,5 +204,5 @@ public class CsvImportController {
     public static String getUniqueidentifierString(String csvInput) {
         return csvInput.replace('{', ' ').replace('}', ' ').trim();
     }
-    
+
 }
