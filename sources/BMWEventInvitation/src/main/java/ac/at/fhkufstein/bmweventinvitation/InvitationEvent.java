@@ -5,10 +5,12 @@
 package ac.at.fhkufstein.bmweventinvitation;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
+import ac.at.fhkufstein.bean.BmwEventController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 @ManagedBean
 @SessionScoped
@@ -17,7 +19,11 @@ public class InvitationEvent {
     private InvitationProcess process;
 
     public InvitationEvent() {
-        //process = new InvitationProcess();
+
+        BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
+
+
+        process = new InvitationProcess( eventController.getFacade().find(12) );
     }
 
     public void startProcess() {
