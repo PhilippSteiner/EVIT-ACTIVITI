@@ -20,19 +20,18 @@ public class DebugPhaseListener implements PhaseListener {
     @Override
     public void afterPhase(PhaseEvent pe) {
 
-        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-        InvitationEvent invitationEvent = (InvitationEvent) FacesContext.getCurrentInstance().getApplication()
-                                                                .getELResolver().getValue(elContext, null, "invitationEvent");
-        String str = invitationEvent.getProcess().getPid() == null ? "not started" : invitationEvent.getProcess().getPid() + " last activity: "+invitationEvent.getProcess().getCurrentActivity();
-
-        FacesContext.getCurrentInstance().addMessage("status", new FacesMessage("process " + str));
-        System.out.println("process " + str);
+//        ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+//        InvitationEvent invitationEvent = (InvitationEvent) FacesContext.getCurrentInstance().getApplication()
+//                .getELResolver().getValue(elContext, null, "invitationEvent");
+//        String str = invitationEvent.getProcess().getPid() == null ? "not started" : invitationEvent.getProcess().getPid() + " last activity: " + invitationEvent.getProcess().getCurrentActivity();
+//
+//        FacesContext.getCurrentInstance().addMessage("status", new FacesMessage("process " + str));
+//        System.out.println("process " + str);
 
     }
 
     @Override
     public void beforePhase(PhaseEvent pe) {
-
     }
 
     @Override

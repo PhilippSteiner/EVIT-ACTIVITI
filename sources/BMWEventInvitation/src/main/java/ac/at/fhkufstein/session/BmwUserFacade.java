@@ -26,5 +26,4 @@ public class BmwUserFacade extends AbstractFacade<BmwUser> {
     public BmwUserFacade() {
         super(BmwUser.class);
     }
-    
 }

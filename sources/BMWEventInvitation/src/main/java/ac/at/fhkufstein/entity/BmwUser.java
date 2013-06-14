@@ -42,7 +42,7 @@ public class BmwUser implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     //@Basic(optional = false)
-    //@NotNull
+//    @NotNull
     @Column(name = "uid")
     private Integer uid;
     @Size(max = 50)
