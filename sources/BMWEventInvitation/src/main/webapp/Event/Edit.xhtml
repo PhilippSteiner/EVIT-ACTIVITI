@@ -49,7 +49,7 @@ ID: #{param.eventID}
         <p:panel header="Teilnehmer">
 
             <p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
-                         selection="#{bmwEventPicklist.u}"
+                         selection="#{bmwEventPicklist.selected}"
                          rowKey="#{item.uid}"
                          paginator="true"
                          rows="10"
@@ -87,6 +87,10 @@ ID: #{param.eventID}
                 <f:facet name="footer">
 					 <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"  
                              update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/> 
+					 <p:commandButton id="Submit" value="Speichern" action="#{bmwEventPicklist.saveCurrent()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>  
+            
+					 
+					 
               	</f:facet>
 
             </p:dataTable>
@@ -95,10 +99,10 @@ ID: #{param.eventID}
 
 	<p:dialog id="multiDialog" header="Car Detail" widgetVar="multiCarDialog"  
               height="300" showEffect="fade" hideEffect="explode">  
-  
-        <p:dataList id="displayMulti" value="#{bmwEventPicklist.u}" var="i" >  
-            Model: #{i.uid}, Year: #{i.personenID.nameVollstaendig}  
+  <p:dataList id="displayMulti" value="#{bmwEventPicklist.selected}" var="i" >  
+             #{i.personenID.nameVollstaendig}  
         </p:dataList>  
+        
   
     </p:dialog>  
 	</p:panel>

@@ -24,7 +24,6 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
 
-
 /**
  *
  * @author
@@ -32,20 +31,18 @@ import org.primefaces.model.DualListModel;
  */
 @ManagedBean(name = "bmwEventPicklist")
 @ViewScoped
-
 //@PersistenceContext
 public class BmwEventPicklist {
-	
+
 	private BmwUserController bmwUserController; // +setter
 	private DualListModel<String> cities;
-    private Integer eventID;
-    private BmwEventController bmwEventController;
-    private BmwParticipantsController bmwParticipantsController;
-	
-	private List<BmwUser> u;
+	private Integer eventID;
+	private BmwEventController bmwEventController;
+	private BmwParticipantsController bmwParticipantsController;
+	private List<BmwUser> u = new ArrayList<BmwUser>();
 	private BmwEvent current;
+	private BmwUser[] selected;
 
-	
 //	public EntityManager em;
 	/**
 	 * Creates
@@ -55,96 +52,99 @@ public class BmwEventPicklist {
 	 * of
 	 * bmwEventFunc
 	 */
-
 	public BmwEventPicklist() {
-		
-	
-		try{
-		
-			bmwUserController=FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
-		 PersonenController personenController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{personenController}", PersonenController.class);
-        bmwEventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
-        bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-        
-		  FacesContext facesContext = FacesContext.getCurrentInstance();
-        this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext(). getRequestParameterMap().get("eventID"));
-		
-		current=bmwEventController.getFacade().find(eventID);
-		 personenController.init();
-		//Hier muss noch was eingebaut werden wenn keine user existieren? Sonst crasht das programm
-		
-		//Personen p = personenController.
-		//System.out.println(p.getNachname());
-		 
-		//BmwParticipants participants= bmwParticipantsController.getFacade().find(this);
+
+
+		try {
+
+			bmwUserController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
+			PersonenController personenController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{personenController}", PersonenController.class);
+			bmwEventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
+			bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
+
+			current = bmwEventController.getFacade().find(eventID);
+			personenController.init();
+			//Hier muss noch was eingebaut werden wenn keine user existieren? Sonst crasht das programm
+
+			//Personen p = personenController.
+			//System.out.println(p.getNachname());
+
+			//BmwParticipants participants= bmwParticipantsController.getFacade().find(this);
 		/*
-		EntityManager em= ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-   List participants = em.createNamedQuery("BmwParticipants.findByEventId")
-            .setParameter("id", eventID)
-            .getResultList();
- System.out.println("hello im here"+participants);
- */
-		Collection<BmwParticipants> p=current.getBmwParticipantsCollection();
-		System.out.println("Size:"+p.size());
-		Iterator<BmwParticipants> it= p.iterator();
-		while(it.hasNext()){
-			u.add(it.next().getUserId());
-			System.out.println("Name"+it.next().getUserId().getPersonenID().getNameVollstaendig());
-		}
-		//Cities
-		List<String> citiesSource = new ArrayList<String>();
-		List<String> citiesTarget = new ArrayList<String>();
-		
-		
-		//Personen person = personenController.getFacade().find(sp.getPersonalID());
-		
-		int i=0;
-        while(i<bmwUserController.getItems().size()){
+			 EntityManager em= ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+			 List participants = em.createNamedQuery("BmwParticipants.findByEventId")
+			 .setParameter("id", eventID)
+			 .getResultList();
+			 System.out.println("hello im here"+participants);
+			 */
+			Collection<BmwParticipants> p = current.getBmwParticipantsCollection();
+			System.out.println("Size:" + p.size());
 			
-			Personen sp = bmwUserController.getItems().get(i).getPersonenID();
-			Personen person = personenController.getFacade().find(sp.getPersonalID());
-			citiesSource.add(person.getNameVollstaendig());
-			i++;
-		}
-		
-		cities = new DualListModel<String>(citiesSource, citiesTarget);
+			selected = new BmwUser[p.size()];
+			System.out.println("test");
+			Iterator<BmwParticipants> it = p.iterator();
+			int ii=0;
+			
+			while (it.hasNext()) {
+				selected[ii]=it.next().getUserId();
+			
+				//u.add((BmwUser) it.next().getUserId());
+				//System.out.println("Name"+it.next().getUserId().getPersonenID().getNameVollstaendig());
+				ii++;
+			}
+			//u.toArray();
+
+			//System.out.println("that" + selected.toString());
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 	}
-	
+
 	public DualListModel<String> getCities() {
-		return cities;	
-}
+		return cities;
+	}
+
 	public void setCities(DualListModel<String> cities) {
 		this.cities = cities;
-		
-		System.out.println("set called"+cities); 
+
+		System.out.println("set called" + cities);
 	}
-	
-		public Integer getEventID() {
+
+	public Integer getEventID() {
 		return eventID;
+	}
+
+	public BmwUser[] getSelected() {
+		return selected;
+	}
+
+	public void setSelected(BmwUser[] selected) {
+		this.selected = selected;
 	}
 
 	public void setEventID(Integer eventID) {
 		this.eventID = eventID;
 	}
-    
-    public void onTransfer(TransferEvent event) {
+
+	public void onTransfer(TransferEvent event) {
 		System.out.println("transfer called");
-        StringBuilder builder = new StringBuilder();
-        /*for(Object item : event.getItems()) {
-            builder.append(((Player) item).getName()).append("<br />");
-        }
-        */
-		
-        FacesMessage msg = new FacesMessage();
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        msg.setSummary("Items Transferred");
-        msg.setDetail(builder.toString());
-        
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
+		StringBuilder builder = new StringBuilder();
+		/*for(Object item : event.getItems()) {
+		 builder.append(((Player) item).getName()).append("<br />");
+		 }
+		 */
+
+		FacesMessage msg = new FacesMessage();
+		msg.setSeverity(FacesMessage.SEVERITY_INFO);
+		msg.setSummary("Items Transferred");
+		msg.setDetail(builder.toString());
+
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+
 	public BmwEvent getCurrent() {
 		return current;
 	}
@@ -155,21 +155,22 @@ public class BmwEventPicklist {
 		//bmwEventController.save(null);
 		System.out.println("yeah");
 	}
-	
-	public void saveCurrent(){
-	
-	    bmwEventController.setSelected(current);
+
+	public void saveCurrent() {
+
+		bmwEventController.setSelected(current);
 		bmwEventController.save(null);
-		System.out.println("yeah");	
-	
+		
+		//bmwUserController.setSelected();
+		System.out.println("yeah");
+
 	}
-		public List<BmwUser> getU() {
+
+	public List<BmwUser> getU() {
 		return u;
 	}
 
 	public void setU(List<BmwUser> u) {
 		this.u = u;
 	}
-
 }
-
