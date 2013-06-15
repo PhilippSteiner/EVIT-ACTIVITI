@@ -12,7 +12,7 @@
         </ui:define>
         <ui:define name="body">
             <p:panel header="CSV Import">
-                <p><h:outputText value="Wilkommen beim CSV Import. Bitte wählen Sie eine Datei von ihrem Lokalen System"></h:outputText></p>
+                <p><h:outputText value="Wilkommen beim CSV Import. Bitte wählen Sie eine Datei von ihrem Lokalen System."></h:outputText></p>
 
 
                 <h:form enctype="multipart/form-data">
@@ -23,11 +23,11 @@
 
 
                         <h:outputText value="CSV Datei: " />
-                        <p:fileUpload value="#{csvImportController.csvFile}" mode="simple"/>
+                        <p:fileUpload value="#{csvImportController.csvFile}" mode="simple" label="Datei..." allowTypes="/(\.|\/)(csv)$/" update=":journalistenform:datalistpersonen"/>
 
                     </h:panelGrid>
 
-                    <p:commandButton value="Submit" ajax="false"
+                    <p:commandButton value="Hochladen" ajax="false"
                                      actionListener="#{csvImportController.upload}" />
 
                 </h:form>
@@ -107,12 +107,7 @@
                             </f:facet>
                             <h:outputText value="#{pers.anrede}"/>
                         </p:column>
-                        <p:column sortBy="#{pers.akadTitel}" filterBy="#{pers.akadTitel}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPersonenTitle_akadTitel}"/>
-                            </f:facet>
-                            <h:outputText value="#{pers.akadTitel}"/>
-                        </p:column>
+                  
 
                         <p:column sortBy="#{pers.vorname}" filterBy="#{pers.vorname}">
                             <f:facet name="header">
@@ -127,9 +122,15 @@
                             <h:outputText value="#{pers.nachname}"/>
                         </p:column>
 
+                         <p:column sortBy="#{pers.EMail1}" filterBy="#{pers.EMail1}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListPersonenTitle_EMail1}"/>
+                    </f:facet>
+                    <h:outputText value="#{pers.EMail1}"/>
+                </p:column>
                     </p:dataTable>
 
-                    <p:commandButton actionListener="#{compareList.saveUsers}" value="#{bundle.Save}" update="datalistpersonen,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
+                    <p:commandButton actionListener="#{compareList.saveUsers}" value="Importieren" update="datalistpersonen,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
                 </p:panel>
 
             </h:form>

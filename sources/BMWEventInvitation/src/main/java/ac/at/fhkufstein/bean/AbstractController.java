@@ -105,7 +105,7 @@ public abstract class AbstractController<T> {
                 } else {
                     this.ejbFacade.remove(selected);
                 }
-                JsfUtil.addSuccessMessage(successMessage);
+                //JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
                 String msg = "";
                 Throwable cause = JsfUtil.getRootCause(ex.getCause());
