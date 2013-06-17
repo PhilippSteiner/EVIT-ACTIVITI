@@ -6,12 +6,10 @@
     <sequenceFlow id="flow2" sourceRef="createEvent" targetRef="addJournalists"></sequenceFlow>
     <userTask id="releaseEvent" name="Event freigeben" activiti:formKey="releaseEvent.xhtml"></userTask>
     <sequenceFlow id="flow3" sourceRef="addJournalists" targetRef="releaseEvent"></sequenceFlow>
-    <sequenceFlow id="flow4" sourceRef="releaseEvent" targetRef="sendInvitationmails"></sequenceFlow>
-    <serviceTask id="sendInvitationmails" name="Einladungsmails verschicken" activiti:class="ac.at.fhkufstein.activiti.delegates.SendInvitationmails"></serviceTask>
-    <sequenceFlow id="flow5" sourceRef="sendInvitationmails" targetRef="startSubprocesses"></sequenceFlow>
     <serviceTask id="startSubprocesses" name="Subprozesse starten" activiti:class="ac.at.fhkufstein.activiti.delegates.StartSubprocesses"></serviceTask>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow6" sourceRef="startSubprocesses" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="releaseEvent" targetRef="startSubprocesses"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_InvitationProcess">
     <bpmndi:BPMNPlane bpmnElement="InvitationProcess" id="BPMNPlane_InvitationProcess">
@@ -25,19 +23,10 @@
         <omgdc:Bounds height="55.0" width="105.0" x="660.0" y="240.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="980.0" y="400.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="820.0" y="240.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask2" id="BPMNShape_servicetask2">
-        <omgdc:Bounds height="55.0" width="105.0" x="820.0" y="390.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="sendInvitationmails" id="BPMNShape_sendInvitationmails">
-        <omgdc:Bounds height="55.0" width="105.0" x="820.0" y="240.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="990.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="startSubprocesses" id="BPMNShape_startSubprocesses">
-        <omgdc:Bounds height="55.0" width="105.0" x="820.0" y="390.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="830.0" y="240.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="445.0" y="267.0"></omgdi:waypoint>
@@ -47,17 +36,13 @@
         <omgdi:waypoint x="605.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="660.0" y="267.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
-        <omgdi:waypoint x="765.0" y="267.0"></omgdi:waypoint>
-        <omgdi:waypoint x="820.0" y="267.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
-        <omgdi:waypoint x="872.0" y="295.0"></omgdi:waypoint>
-        <omgdi:waypoint x="872.0" y="390.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="925.0" y="417.0"></omgdi:waypoint>
-        <omgdi:waypoint x="980.0" y="417.0"></omgdi:waypoint>
+        <omgdi:waypoint x="935.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="990.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="765.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="830.0" y="267.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

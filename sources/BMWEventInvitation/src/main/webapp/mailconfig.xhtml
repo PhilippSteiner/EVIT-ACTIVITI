@@ -30,7 +30,7 @@
                         <h:outputLabel value="Absender Mail Adresse" for="sendermail" />
                         <p:inputText id="sendermail" value="#{mailConfigController.mailConfig.senderMailAddress}" title="Mail Adresse des Sender der Mails von diesem Server"/>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{mailConfigController.save}" value="Speichern" update="display" oncomplete="handleSubmit(xhr,status,args,MailConfigDialog);"/>
+                    <p:commandButton actionListener="#{mailConfigController.save}" value="Speichern" update="display"/>
 
                 </h:panelGroup>
 
