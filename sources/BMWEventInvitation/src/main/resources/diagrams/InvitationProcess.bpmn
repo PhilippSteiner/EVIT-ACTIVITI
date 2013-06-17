@@ -6,7 +6,7 @@
     <sequenceFlow id="flow2" sourceRef="createEvent" targetRef="addJournalists"></sequenceFlow>
     <userTask id="releaseEvent" name="Event freigeben" activiti:formKey="releaseEvent.xhtml"></userTask>
     <sequenceFlow id="flow3" sourceRef="addJournalists" targetRef="releaseEvent"></sequenceFlow>
-    <serviceTask id="startSubprocesses" name="Subprozesse starten" activiti:class="ac.at.fhkufstein.activiti.delegates.StartSubprocesses"></serviceTask>
+    <serviceTask id="startSubprocesses" name="Subprozesse starten" activiti:class="ac.at.fhkufstein.activiti.delegates.StartSingleProcesses"></serviceTask>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow6" sourceRef="startSubprocesses" targetRef="endevent1"></sequenceFlow>
     <sequenceFlow id="flow7" sourceRef="releaseEvent" targetRef="startSubprocesses"></sequenceFlow>
