@@ -23,36 +23,40 @@ import javax.xml.bind.Unmarshaller;
 @ViewScoped
 public class MailConfigController {
 
+    private static String resourceFolder = MailConfigController.class.getResource("/"+MailConfigController.class.getName().replace(".", "/").replace(MailConfigController.class.getSimpleName(), "")).getFile();
+    private final static String FILE = "mailconfig.xml";
+
     /**
      * Creates a new instance of MailConfigController
      */
     public MailConfigController() {
     }
 
-    public void marshalConfig(MailConfig config) {
+    public static void marshalConfig(MailConfig config) {
         try {
             JAXBContext context = JAXBContext.newInstance(MailConfig.class);
 
             Marshaller marshaller = context.createMarshaller();
 
-            marshaller.marshal(config, new File("ac/at/fhkufstein/mailing/mailconfig.xml"));
+            marshaller.marshal(config, new File(resourceFolder+FILE));
 
+        System.out.println("Mailconfiguration marhsalled");
         } catch (JAXBException ex) {
             Logger.getLogger(MailConfigController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public MailConfig unmarshalConfig() {
+    public static MailConfig unmarshalConfig() {
 
-        MailConfig mailConfig = MailConfig.getInstance();
+        MailConfig mailConfig = null;
 
         try {
             JAXBContext context = JAXBContext.newInstance(MailConfig.class);
 
             Unmarshaller unmarshaller = context.createUnmarshaller();
 
-            mailConfig = (MailConfig) unmarshaller.unmarshal(new File("ac/at/fhkufstein/mailing/mailconfig.xml"));
+            mailConfig = (MailConfig) unmarshaller.unmarshal(new File(resourceFolder+FILE));
 
         } catch (JAXBException ex) {
             Logger.getLogger(MailConfigController.class.getName()).log(Level.SEVERE, null, ex);
@@ -65,7 +69,7 @@ public class MailConfigController {
      * @return the mailConfig
      */
     public MailConfig getMailConfig() {
-        return unmarshalConfig();
+        return MailConfig.getInstance();
     }
 
     /**
@@ -77,5 +81,6 @@ public class MailConfigController {
 
     public void save() {
         marshalConfig(MailConfig.getInstance());
+        System.out.println("Mailconfiguration saved to "+resourceFolder+FILE);
     }
 }
