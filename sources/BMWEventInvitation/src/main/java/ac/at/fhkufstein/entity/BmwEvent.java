@@ -53,6 +53,8 @@ import org.joda.time.DateTime;
     @NamedQuery(name = "BmwEvent.findByProgress", query = "SELECT b FROM BmwEvent b WHERE b.progress = :progress"),
     @NamedQuery(name = "BmwEvent.findByProcessId", query = "SELECT b FROM BmwEvent b WHERE b.processId = :processId")})
 public class BmwEvent implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "eid")
+    private Collection<EmailTemplates> emailTemplatesCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -280,5 +282,14 @@ public class BmwEvent implements Serializable {
     @Override
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwEvent[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<EmailTemplates> getEmailTemplatesCollection() {
+        return emailTemplatesCollection;
+    }
+
+    public void setEmailTemplatesCollection(Collection<EmailTemplates> emailTemplatesCollection) {
+        this.emailTemplatesCollection = emailTemplatesCollection;
     }
 }
