@@ -134,6 +134,31 @@
                 </p:panel>
 
             </h:form>
+
+<p:panel header="Mail Konfiguration">
+
+
+            <h:form id="MailConfigForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2">
+
+                        <h:outputLabel value="Host" for="host" />
+                        <p:inputText id="host" value="#{mailConfigController.mailConfig.hostname}" title="Name des Hosts"/>
+
+                        <h:outputLabel value="SMTP Port" for="smtpport" />
+                        <p:inputText id="smtpport" value="#{mailConfigController.mailConfig.smtpPort}" title="SMTP Port des Hosts"/>
+
+                        <h:outputLabel value="Absender Mail Adresse" for="sendermail" />
+                        <p:inputText id="sendermail" value="#{mailConfigController.mailConfig.senderMailAddress}" title="Mail Adresse des Sender der Mails von diesem Server"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{mailConfigController.save}" value="Speichern" update="display"/>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:panel>
         </ui:define>
 
     </ui:composition>
