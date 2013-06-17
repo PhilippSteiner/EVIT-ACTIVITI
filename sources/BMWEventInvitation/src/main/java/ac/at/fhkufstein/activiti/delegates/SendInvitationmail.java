@@ -6,6 +6,7 @@ package ac.at.fhkufstein.activiti.delegates;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
+import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import javax.faces.bean.ManagedBean;
@@ -29,14 +30,10 @@ public class SendInvitationmail implements JavaDelegate {
         System.out.println("################# sending invitation mails #################");
 
 
-        BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
-        BmwEvent event = eventController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_EVENTID) )) );
+        execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
+        BmwParticipantsController participantController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        BmwParticipants participant = participantController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID) )) );
 
 
-        for(BmwParticipants participant : event.getBmwParticipantsCollection()) {
-
-
-            System.out.println("################# mailing invitation to person #"+participant.getUserId().getUid()+" #################");
-        }
     }
 }
