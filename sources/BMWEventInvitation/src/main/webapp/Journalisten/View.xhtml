@@ -13,7 +13,6 @@
             <h:form id="BmwUserViewForm">
 
                 <h:panelGroup id="display">
-<<<<<<< HEAD
                     <p:scrollPanel style="width:600px; height:600px">
                         <p:panelGrid columns="2">
 
@@ -162,7 +161,6 @@
 
                         </p:panelGrid>
                     </p:scrollPanel>
-=======
 					<p:scrollPanel  scrollMode="native">
                     <p:panelGrid columns="2" >
 
@@ -237,12 +235,10 @@
 						
 						
 						<h:outputText value="Land"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.land}"/>
-						
+                        <h:outputText value="#{bmwUserController.selected.personenID.land}"/>s
 						
 						<h:outputText value="Briefkopf"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.briefkopf}"/>
-						
+                        <h:outputText value="#{bmwUserController.selected.personenID.briefkopf}"/>		
 						
 						<h:outputText value="Weitere Straße"/>
                         <h:outputText value="#{bmwUserController.selected.personenID.weitereStrasse}"/>
@@ -321,23 +317,9 @@
 						
 						<h:outputText value="Letzte Änderung durch"/>
                         <h:outputText value="#{bmwUserController.selected.personenID.letzteAenderungDurch}"/>
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
+							
 						</p:panelGrid>
 						</p:scrollPanel>
->>>>>>> 53e7a92780ec32eeb9c405f21de783d995271fe5
                     <p:commandButton value="#{bundle.Close}" onclick="BmwUserViewDialog.hide()"/>
                 </h:panelGroup>
 
