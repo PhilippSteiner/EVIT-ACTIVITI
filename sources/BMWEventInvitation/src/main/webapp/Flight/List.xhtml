@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
 
     <h:form id="BmwFlightListForm">
-		#{bmwFlightController.items.size()}
+
         <p:panel header="#{bundle.ListBmwFlightTitle}">
 
-            <p:dataTable id="datalist" value="#{bmwFlightController.items}" var="item"
+            <p:dataTable id="datalist" value="#{Flight.p}" var="item"
                          selectionMode="single" selection="#{bmwFlightController.selected}"
                          rowKey="#{item.id}"
                          paginator="true"
@@ -21,12 +23,6 @@
                 <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                 <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
 
-                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwFlightTitle_id}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.id}"/>
-                </p:column>
                 <p:column sortBy="#{item.flightNumber}" filterBy="#{item.flightNumber}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle.ListBmwFlightTitle_flightNumber}"/>
@@ -61,12 +57,7 @@
                         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                     </h:outputText>
                 </p:column>
-                <p:column sortBy="#{item.eventId.name}" filterBy="#{item.eventId.name}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwFlightTitle_eventId}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.eventId.name}"/>
-                </p:column>
+
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwFlightController.prepareCreate}" update=":BmwFlightCreateForm" oncomplete="BmwFlightCreateDialog.show()"/>
                     <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwFlightViewForm" oncomplete="BmwFlightViewDialog.show()" disabled="#{empty bmwFlightController.selected}"/>
@@ -81,3 +72,4 @@
     </h:form>
 
 </ui:composition>
+</html>
