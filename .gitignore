@@ -1,8 +1,7 @@
 /sources/Primeface CRUD/dist/
 /sources/BMW_Mitarbeiter/dist/
-<<<<<<< HEAD
-<<<<<<< HEAD
 /sources/BMWEventInvitation/target/
+<<<<<<< HEAD
 =======
 /sources/Alex_new/nbproject/private/
 /sources/Alex_new/build/
@@ -19,3 +18,8 @@
 /sources/Alex_new/build/
 >>>>>>> e801d06532edc3fef6b43b623a46f687382e083a
 >>>>>>> 53e7a92780ec32eeb9c405f21de783d995271fe5
+=======
+/sources/Alex_new/nbproject/private/
+/sources/Alex_new/build/
+>>>>>>> ea89fc2ddefda1143b5ef0d53379ad997ec9b9f2
+/sources/EVIT/dist/
