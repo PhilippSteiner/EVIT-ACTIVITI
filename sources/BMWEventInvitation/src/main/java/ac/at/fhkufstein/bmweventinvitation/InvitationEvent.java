@@ -23,7 +23,7 @@ public class InvitationEvent {
         BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
 
 
-        process = new InvitationProcess( eventController.getFacade().find(12) );
+        process = new InvitationProcess( eventController.getFacade().find(12), InvitationProcess.PROCESSES[0] );
     }
 
     public void startProcess() {

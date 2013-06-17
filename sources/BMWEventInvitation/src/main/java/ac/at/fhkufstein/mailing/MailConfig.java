@@ -4,8 +4,11 @@
  */
 package ac.at.fhkufstein.mailing;
 
+import ac.at.fhkufstein.bean.PersonenController;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,28 +21,26 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "MailConfig")
 @XmlAccessorType(XmlAccessType.FIELD)
+@ApplicationScoped
+@ManagedBean
 public class MailConfig {
 
     @XmlElement(name = "hostname")
-    private String hostname;
+    private String hostname = "172.16.5.159";
     @XmlElement(name = "smtpPort")
-    private int smtpPort;
+    private int smtpPort =  25;
     @XmlElement(name = "senderMailAddress")
-    private String senderMailAddress;
-
-    private static MailConfig instance;
+    private String senderMailAddress = "evit@fh-kustein.ac.at";
 
     /**
      * Creates a new instance of MailConfig
      */
-    private MailConfig() {
+    public MailConfig() {
+        MailConfigController.unmarshalConfig();
     }
 
     public static MailConfig getInstance() {
-        if(instance == null) {
-            instance = new MailConfig();
-        }
-        return instance;
+        return FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{mailConfig}", MailConfig.class);
     }
 
     /**
