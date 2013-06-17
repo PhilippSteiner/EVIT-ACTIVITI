@@ -12,6 +12,7 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.Personen;
+import ac.at.fhkufstein.session.BmwParticipantsFacade;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,17 +22,20 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
+ 
+import javax.faces.event.ActionEvent; 
 
 /**
  *
  * @author wolfgangteves
  */
-@ManagedBean(name = "bmwEventPicklist")
+@ManagedBean(name = "Participants")
 @ViewScoped
 //@PersistenceContext
-public class BmwEventPicklist {
+public class Participants {
 
 	private BmwUserController bmwUserController; // +setter
 	private DualListModel<String> cities;
@@ -42,6 +46,9 @@ public class BmwEventPicklist {
 	private BmwEvent current;
 	private BmwUser[] selected;
 
+	
+	//Current is the event itself
+	//selected are the participants
 //	public EntityManager em;
 	/**
 	 * Creates
@@ -51,7 +58,7 @@ public class BmwEventPicklist {
 	 * of
 	 * bmwEventFunc
 	 */
-	public BmwEventPicklist() {
+	public Participants() {
 
 
 		try {
@@ -72,14 +79,15 @@ public class BmwEventPicklist {
 			//System.out.println(p.getNachname());
 
 			//BmwParticipants participants= bmwParticipantsController.getFacade().find(this);
-		/*
+		
 			 EntityManager em= ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-			 List participants = em.createNamedQuery("BmwParticipants.findByEventId")
-			 .setParameter("id", eventID)
+			 List p = em.createNamedQuery("BmwParticipants.findByEventId")
+			 .setParameter("id", current)
 			 .getResultList();
-			 System.out.println("hello im here"+participants);
-			 */
-			Collection<BmwParticipants> p = current.getBmwParticipantsCollection();
+			 //System.out.println("hello im here"+participants.size());
+			 
+			//Collection<BmwParticipants> p = current.getBmwParticipantsCollection();
+			
 			System.out.println("Size:" + p.size());
 			
 			selected = new BmwUser[p.size()];
@@ -95,7 +103,7 @@ public class BmwEventPicklist {
 				ii++;
 			}
 			//u.toArray();
-
+			System.out.println("Origin Selected"+selected.length);
 			//System.out.println("that" + selected.toString());
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -124,6 +132,52 @@ public class BmwEventPicklist {
 		this.selected = selected;
 	}
 
+	public void saveSelected() {
+		
+		    
+		
+		//Saves the participants
+		EntityManager em= ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+			 List p = em.createNamedQuery("BmwParticipants.findByEventId")
+			 .setParameter("id", current)
+			 .getResultList();
+		
+		
+		System.out.println("Size:"+p.size());	
+		
+			Iterator<BmwParticipants> it = p.iterator();
+		
+			while (it.hasNext()) {
+				bmwParticipantsController.setSelected(it.next());
+				bmwParticipantsController.delete(null);
+				
+				System.out.println("deleted");
+			}
+	
+			System.out.println("Anzahl Selected"+selected.length);
+			int i=0;
+			
+			while (i<selected.length) {
+				BmwUser b =selected[i];
+				
+				BmwParticipants pc=bmwParticipantsController.prepareCreate(null);
+				pc.setUserId(b);
+				pc.setEventId(current);
+				System.out.println("Added:"+b.getPersonenID().getNameVollstaendig());
+				bmwParticipantsController.setSelected(pc);
+				bmwParticipantsController.saveNew(null);
+			
+				i++;
+			}
+		
+		//bmwUserController.setSelected();
+			FacesContext context = FacesContext.getCurrentInstance();  
+          
+        context.addMessage(null, new FacesMessage("Successful", "Teilnehmer gespeichert"));
+		
+		System.out.println("yeah saveSelected");
+
+	}
 	public void setEventID(Integer eventID) {
 		this.eventID = eventID;
 	}
@@ -152,16 +206,16 @@ public class BmwEventPicklist {
 		this.current = current;
 		//bmwEventController.setSelected(current);
 		//bmwEventController.save(null);
-		System.out.println("yeah");
+		System.out.println("yeah setCurrent");
 	}
 
 	public void saveCurrent() {
-
+		//Saves the Event Itself
 		bmwEventController.setSelected(current);
 		bmwEventController.save(null);
 		
 		//bmwUserController.setSelected();
-		System.out.println("yeah");
+		System.out.println("yeah saveCurrent");
 
 	}
 

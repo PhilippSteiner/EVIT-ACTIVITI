@@ -19,8 +19,8 @@
                          
                          >
 
-                <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton :BMWEventEditForm01"/>
-                <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton :BMWEventEditForm01"/>
+                <p:ajax event="rowSelect"   update="createButton"/>
+                <p:ajax event="rowUnselect" update="createButton"/>
 
 				<p:column style="width:4%">  
                 <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">  
@@ -64,10 +64,7 @@
                 </p:column>
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwEventController.prepareCreate}" update=":BmwEventCreateForm" oncomplete="BmwEventCreateDialog.show()"/>
-                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwEventViewForm" oncomplete="BmwEventViewDialog.show()" disabled="#{empty bmwEventController.selected}"/>
-                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwEventEditForm" oncomplete="BmwEventEditDialog.show()" disabled="#{empty bmwEventController.selected}"/>
-                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{bmwEventController.delete}" update=":growl,datalist" disabled="#{empty bmwEventController.selected}"/>
-                       
+                    
                 </f:facet>
 
             </p:dataTable>
@@ -76,54 +73,6 @@
 
     </h:form>
     
-    <!-- Form zur Ansicht des jeweils ausgewählten Events -->
     
-    <h:form id="BMWEventEditForm01">
-                <p:panelGrid  columns="2" rendered="#{bmwEventController.selected != null}">
-
-                        <h:outputLabel value="#{bundle.EditBmwEventLabel_id}" for="id" />
-                        <h:outputText id="id" value="#{bmwEventController.selected.id}" />
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_name}" for="name" />
-                        <p:inputText id="name" value="#{bmwEventController.selected.name}" title="#{bundle.EditBmwEventTitle_name}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_name}"/>
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_startEventdate}" for="startEventdate" />
-                        <p:calendar id="startEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.startEventdate}" title="#{bundle.EditBmwEventTitle_startEventdate}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_startEventdate}" showOn="button"/>
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_endEventdate}" for="endEventdate" />
-                        <p:calendar id="endEventdate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.endEventdate}" title="#{bundle.EditBmwEventTitle_endEventdate}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_endEventdate}" showOn="button"/>
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_maxParticipants}" for="maxParticipants" />
-                        <p:inputText id="maxParticipants" value="#{bmwEventController.selected.maxParticipants}" title="#{bundle.EditBmwEventTitle_maxParticipants}" />
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_description}" for="description" />
-                        <p:inputTextarea rows="4" cols="30" id="description" value="#{bmwEventController.selected.description}" title="#{bundle.EditBmwEventTitle_description}" />
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_location}" for="location" />
-                        <p:inputText id="location" value="#{bmwEventController.selected.location}" title="#{bundle.EditBmwEventTitle_location}" />
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
-                        <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.EditBmwEventTitle_urgencyDayLimit}" />
-                      
-                        
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_eventUpdated}" for="eventUpdated" />
-                        <p:calendar id="eventUpdated" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.eventUpdated}" title="#{bundle.EditBmwEventTitle_eventUpdated}"  showOn="button"/>
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_userUpdated}" for="userUpdated" />
-                        <p:inputText id="userUpdated" value="#{bmwEventController.selected.userUpdated}" title="#{bundle.EditBmwEventTitle_userUpdated}" />
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_userCreated}" for="userCreated" />
-                        <p:inputText id="userCreated" value="#{bmwEventController.selected.userCreated}" title="#{bundle.EditBmwEventTitle_userCreated}" required="true" requiredMessage="#{bundle.EditBmwEventRequiredMessage_userCreated}"/>
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_progress}" for="progress" />
-                        <p:inputText id="progress" value="#{bmwEventController.selected.progress}" title="#{bundle.EditBmwEventTitle_progress}" />
-
-                        <p:outputLabel value="#{bundle.EditBmwEventLabel_processId}" for="processId" />
-                        <p:inputText id="processId" value="#{bmwEventController.selected.processId}" title="#{bundle.EditBmwEventTitle_processId}" />
-                    
-                       
-                    </p:panelGrid>
-                
-            </h:form>
 	
 </ui:composition>
