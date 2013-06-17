@@ -9,30 +9,51 @@ import java.util.Iterator;
 public class InvitationProcess {
 
     final static public String DATABASE_EVENTID = "eventID";
-    final static public String PROCESS_DEFINITION = "InvitationProcess";
-    final static public String PROCESS_FILE = "diagrams/" + PROCESS_DEFINITION + ".bpmn";
+    final static public String DATABASE_PARTICIPANTID = "participantID";
+    final static public String ACTIVITI_CANCEL_INVITATION_TIME = "cancelInvitationTime";
+    final static public String ACTIVITI_REMINDER_SENT = "reminderSent";
+    final static public String ACTIVITI_EVENT_IS_OPEN = "eventIsOpen";
+    final static public String ACTIVITI_INVITATION_ACCEPTED = "invitationAccepted";
+    final static public String[] PROCESSES = {"InvitationProcess", "Journalist_Invitation_Response"};
+    final static public String PROCESS_FILE_LOCATION = "diagrams/";
+    final static public String SUFFIX = ".bpmn";
+    private String processDefinition;
     private String processDefinitionId;
+    private ProcessInstance processInstance;
     private BmwEvent event;
 
-    public InvitationProcess(BmwEvent event) {
+    public InvitationProcess(BmwEvent event, String processDefinition) {
         this.event = event;
+        this.processDefinition = processDefinition;
     }
 
     public void startProcess() throws Exception {
 
-        ProcessInstance processInstance = Services.getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION);
-        event.setProcessId(Integer.valueOf(processInstance.getId()));
+        setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(PROCESS_FILE_LOCATION+processDefinition+SUFFIX));
 
-        Services.getRuntimeService().setVariable(processInstance.getId(), DATABASE_EVENTID, event.getId());
+        // nur bei Hauptprozess
+        if(processDefinition.equals(PROCESSES[0])) {
+            event.setProcessId(Integer.valueOf(getProcessInstance().getId()));
+        }
 
-        setProcessDefinitionId(processInstance.getProcessDefinitionId());
+        setVariable(DATABASE_EVENTID, event.getId());
+
+        setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
         System.out.println("Proccess Instance #" + event.getProcessId() + " started");
     }
 
+    public void setVariable(String name, Object value) {
+        Services.getRuntimeService().setVariable(getProcessInstance().getId(), name, value);
+    }
+
+    public void getVariable(String name) {
+
+    }
+
     public String getStartFormKey() {
 
-        String processDefinitionId = Services.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(PROCESS_DEFINITION).latestVersion().singleResult().getId();
+        String processDefinitionId = Services.getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(processDefinition).latestVersion().singleResult().getId();
         String formKey = Services.getFormService().getStartFormKey(processDefinitionId);
 
         System.out.println("start task with form " + formKey);
@@ -99,5 +120,19 @@ public class InvitationProcess {
         } catch (NullPointerException ex) {
             return null;
         }
+    }
+
+    /**
+     * @return the processInstance
+     */
+    public ProcessInstance getProcessInstance() {
+        return processInstance;
+    }
+
+    /**
+     * @param processInstance the processInstance to set
+     */
+    public void setProcessInstance(ProcessInstance processInstance) {
+        this.processInstance = processInstance;
     }
 }
