@@ -32,12 +32,19 @@ public class MailService {
         return mail;
     }
 
-    public static void addTos(Email mail, String[] tos) throws EmailException {
+    private static void addTos(Email mail, String[] tos) throws EmailException {
         for (String to : tos) {
             mail.addTo(to);
         }
     }
 
+    /**
+     * send Mail
+     * @param to
+     * @param subject
+     * @param message
+     * @return if success it returns true otherwise false
+     */
     public static boolean sendMail(String to, String subject, String message) {
         try {
             Email mail = initMail();

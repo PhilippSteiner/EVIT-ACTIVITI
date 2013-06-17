@@ -22,7 +22,7 @@ import org.activiti.engine.delegate.JavaDelegate;
  */
 @ManagedBean
 @RequestScoped
-public class SendInvitationmail implements JavaDelegate {
+public class SendTicketNotification implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
