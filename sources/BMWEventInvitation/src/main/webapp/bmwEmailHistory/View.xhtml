@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwEmailHistoryViewDlg" widgetVar="BmwEmailHistoryViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwEmailHistoryTitle}">
+
+            <h:form id="BmwEmailHistoryViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwEmailHistoryController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_id}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.id}" title="#{bundle.ViewBmwEmailHistoryTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_userFrom}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.userFrom}" title="#{bundle.ViewBmwEmailHistoryTitle_userFrom}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailSubject}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailSubject}" title="#{bundle.ViewBmwEmailHistoryTitle_emailSubject}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailType}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailType}" title="#{bundle.ViewBmwEmailHistoryTitle_emailType}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailContent}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailContent}" title="#{bundle.ViewBmwEmailHistoryTitle_emailContent}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailTo}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailTo}" title="#{bundle.ViewBmwEmailHistoryTitle_emailTo}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailFrom}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailFrom}" title="#{bundle.ViewBmwEmailHistoryTitle_emailFrom}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailBcc}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailBcc}" title="#{bundle.ViewBmwEmailHistoryTitle_emailBcc}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_emailCc}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailCc}" title="#{bundle.ViewBmwEmailHistoryTitle_emailCc}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_datetimeSent}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.datetimeSent}" title="#{bundle.ViewBmwEmailHistoryTitle_datetimeSent}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_datetimeRecieved}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.datetimeRecieved}" title="#{bundle.ViewBmwEmailHistoryTitle_datetimeRecieved}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_sentStatus}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.sentStatus}" title="#{bundle.ViewBmwEmailHistoryTitle_sentStatus}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailHistoryLabel_userTo}"/>
+                        <h:outputText value="#{bmwEmailHistoryController.selected.userTo.username}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwEmailHistoryViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
