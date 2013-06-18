@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmailTemplatesEditDlg" widgetVar="EmailTemplatesEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditEmailTemplatesTitle}">
+
+            <h:form id="EmailTemplatesEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" rendered="#{emailTemplatesController.selected != null}">
+
+                        <h:outputLabel value="#{bundle.EditEmailTemplatesLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{emailTemplatesController.selected.id}" />
+
+                        <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_subject}" for="subject" />
+                        <p:inputText id="subject" value="#{emailTemplatesController.selected.subject}" title="#{bundle.EditEmailTemplatesTitle_subject}" />
+
+                        <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.EditEmailTemplatesTitle_type}" />
+
+                        <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_emailContent}" for="emailContent" />
+                        <p:inputTextarea rows="4" cols="30" id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}" />
+
+                        <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_eid}" for="eid" />
+                        <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{bmwEventController.items}"
+                                           var="eidItem"
+                                           itemValue="#{eidItem}"
+                                           itemLabel="#{eidItem.name.toString()}"
+                                           />
+                            <f:converter binding="#{bmwEventConverter}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{emailTemplatesController.save}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesEditDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EmailTemplatesEditDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

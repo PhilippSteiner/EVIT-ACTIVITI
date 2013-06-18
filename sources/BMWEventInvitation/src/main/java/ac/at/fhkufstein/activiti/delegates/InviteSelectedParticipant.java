@@ -23,7 +23,7 @@ import org.activiti.engine.delegate.JavaDelegate;
  */
 @ManagedBean
 @RequestScoped
-public class StartSubprocesses implements JavaDelegate {
+public class InviteSelectedParticipant implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {

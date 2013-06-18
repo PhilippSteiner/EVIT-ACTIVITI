@@ -34,58 +34,58 @@
 
 
             </p:panel>
-<!--
-            <h:form id="userform">
-                <p:panel header="User">
-                    <p:dataTable id="datalist" value="#{compareList.users}" var="item"
-
-                                 rowKey="#{item.uid}"
-                                 paginator="true"
-                                 rows="10"
-                                 rowsPerPageTemplate="10,20,30"
-                                 >
-                        <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwUserTitle_uid}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.uid}"/>
-                        </p:column>
-                        <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.pwd}"/>
-                        </p:column>
-                        <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.rating}"/>
-                        </p:column>
-                        <p:column sortBy="#{item.seatingPriority}" filterBy="#{item.seatingPriority}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwUserTitle_seatingPriority}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.seatingPriority}"/>
-                        </p:column>
-                        <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.personenID.vorname}"/>
-                        </p:column>
-                        <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.personenID.nachname}"/>
-                        </p:column>
-
-                    </p:dataTable>
-
-                </p:panel>
-            </h:form>
--->
+            <!--
+                        <h:form id="userform">
+                            <p:panel header="User">
+                                <p:dataTable id="datalist" value="#{compareList.users}" var="item"
+            
+                                             rowKey="#{item.uid}"
+                                             paginator="true"
+                                             rows="10"
+                                             rowsPerPageTemplate="10,20,30"
+                                             >
+                                    <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_uid}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.uid}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.pwd}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.rating}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.seatingPriority}" filterBy="#{item.seatingPriority}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_seatingPriority}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.seatingPriority}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.personenID.vorname}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.personenID.nachname}"/>
+                                    </p:column>
+            
+                                </p:dataTable>
+            
+                            </p:panel>
+                        </h:form>
+            -->
             <h:form id="journalistenform">
                 <p:panel header="Neue Journalisten die noch nicht vorhanden sind">
                     <p:dataTable id="datalistpersonen" value="#{compareList.subPersonen}" var="pers"
@@ -107,7 +107,7 @@
                             </f:facet>
                             <h:outputText value="#{pers.anrede}"/>
                         </p:column>
-                  
+
 
                         <p:column sortBy="#{pers.vorname}" filterBy="#{pers.vorname}">
                             <f:facet name="header">
@@ -122,18 +122,101 @@
                             <h:outputText value="#{pers.nachname}"/>
                         </p:column>
 
-                         <p:column sortBy="#{pers.EMail1}" filterBy="#{pers.EMail1}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListPersonenTitle_EMail1}"/>
-                    </f:facet>
-                    <h:outputText value="#{pers.EMail1}"/>
-                </p:column>
+                        <p:column sortBy="#{pers.EMail1}" filterBy="#{pers.EMail1}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_EMail1}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.EMail1}"/>
+                        </p:column>
                     </p:dataTable>
 
                     <p:commandButton actionListener="#{compareList.saveUsers}" value="Importieren" update="datalistpersonen,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
                 </p:panel>
 
             </h:form>
+
+            <p:panel header="Mail Konfiguration">
+
+
+                <h:form id="MailConfigForm">
+
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2">
+
+                            <h:outputLabel value="Host" for="host" />
+                            <p:inputText id="host" value="#{mailConfigController.mailConfig.hostname}" title="Name des Hosts"/>
+
+                            <h:outputLabel value="SMTP Port" for="smtpport" />
+                            <p:inputText id="smtpport" value="#{mailConfigController.mailConfig.smtpPort}" title="SMTP Port des Hosts"/>
+
+                            <h:outputLabel value="Absender Mail Adresse" for="sendermail" />
+                            <p:inputText id="sendermail" value="#{mailConfigController.mailConfig.senderMailAddress}" title="Mail Adresse des Sender der Mails von diesem Server"/>
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{mailConfigController.save}" value="Speichern" update="display"/>
+
+                    </h:panelGroup>
+
+                </h:form>
+
+            </p:panel>
+
+
+            <p:panel header="TestEmail">
+                <h:form id="testMailForm">
+                    <h:panelGroup id="mailGroup">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="E-mail: " for="to"></p:outputLabel>
+                            <p:inputText id="to" value="#{mailBean.to}"></p:inputText>
+
+                            <p:outputLabel value="Subject: " for="subject"></p:outputLabel>
+                            <p:inputText id="subject" value="#{mailBean.subject}"></p:inputText>
+
+                            <p:outputLabel value="Message: " for="message"></p:outputLabel>
+                            <p:inputText id="message" value="#{mailBean.message}"></p:inputText>
+                        </p:panelGrid>
+                    </h:panelGroup>
+                    <p:commandButton actionListener="#{mailBean.send}" value="Senden"/>
+                </h:form>
+            </p:panel>
+            
+            <p:panel header="Templates erstellen">
+                <h:form id="emailTemplate">
+                    <h:panelGroup id="emailTemplateGroup">
+                        <p:panelGrid columns="2" rendered="#{emailTemplatesController.selected != null}">
+                            
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{emailTemplatesController.selected.id}" title="#{bundle.CreateEmailTemplatesTitle_id}" required="true" requiredMessage="#{bundle.CreateEmailTemplatesRequiredMessage_id}"/>
+
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_subject}" for="subject" />
+                        <p:inputText id="subject" value="#{emailTemplatesController.selected.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" />
+
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.CreateEmailTemplatesTitle_type}" />
+
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
+                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}"/>
+
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_eid}" for="eid" />
+                        <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{bmwEventController.items}"
+                                           var="eidItem"
+                                           itemValue="#{eidItem}"
+                                           itemLabel="#{eidItem.name.toString()}"
+                                           />
+                            <f:converter binding="#{bmwEventConverter}"/>
+                        </p:selectOneMenu>
+                            
+                            
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{emailTemplatesController.saveNew}" value="#{bundle.Save}" update="emailTemplateGroup" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
+                    </h:panelGroup>
+                   
+                </h:form>
+            </p:panel>
+
+
+
         </ui:define>
 
     </ui:composition>
