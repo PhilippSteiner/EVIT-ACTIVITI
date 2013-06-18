@@ -21,6 +21,7 @@ public class InvitationProcess {
     final static public String DATABASE_EVENTID = "eventID";
     final static public String DATABASE_PARTICIPANTID = "participantId";
     final static public String ACTIVITI_CANCEL_INVITATION_TIME = "cancelInvitationTime";
+    final static public String ACTIVITI_INVITATION_SENT = "invitationSent";
     final static public String ACTIVITI_REMINDER_SENT = "reminderSent";
     final static public String ACTIVITI_EVENT_IS_OPEN = "eventIsOpen";
     final static public String ACTIVITI_INVITATION_ACCEPTED = "invitationAccepted";

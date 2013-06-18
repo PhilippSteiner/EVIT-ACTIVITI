@@ -10,6 +10,7 @@ import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.mailing.MailService;
+import ac.at.fhkufstein.persistence.PersistenceService;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -32,18 +33,34 @@ public class SendInvitationmail implements JavaDelegate {
         System.out.println("################# sending invitation mails #################");
 
 
-        execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
-        BmwParticipantsController participantController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-        BmwParticipants participant = participantController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID) )) );
+        BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
 
 
-//        MailService.sendMail(null, null, null);
+        if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
 
-        
-        String mailSentMessage = "Email wurde an Teilnehmer "+participant.getUserId().getPersonenID().getVorname()+" "+participant.getUserId().getPersonenID().getNachname()+" gesendet.";
+            // @todo implementMailFunction
+//            MailService.sendMail(null, null, null);
 
-        System.out.println(mailSentMessage);
-        FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
+            execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
+
+            String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+
+            System.out.println(mailSentMessage);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(mailSentMessage));
+        } else {
+
+            // @todo implementMailFunction
+//            MailService.sendMail(null, null, null);
+
+            execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
+
+            String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+
+            System.out.println(mailSentMessage);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(mailSentMessage));
+        }
+
     }
 }

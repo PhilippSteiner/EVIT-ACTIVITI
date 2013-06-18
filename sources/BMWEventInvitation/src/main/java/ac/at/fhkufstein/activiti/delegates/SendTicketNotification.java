@@ -34,11 +34,11 @@ public class SendTicketNotification implements JavaDelegate {
 
         BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
 
-
+        // @todo implementMailFunction
 //        MailService.sendMail(null, null, null);
 
 
-        String mailSentMessage = "Ticket Notification wurde an Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+        String mailSentMessage = "Ticket Notification wurde an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
         System.out.println(mailSentMessage);
         FacesContext.getCurrentInstance().addMessage(null,

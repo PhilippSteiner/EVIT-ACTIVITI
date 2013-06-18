@@ -34,7 +34,7 @@ public class SendBookingMail implements JavaDelegate {
 
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
-
+        // @todo implementMailFunction
 //        MailService.sendMail(null, null, null);
 
 
