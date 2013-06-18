@@ -38,6 +38,44 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BmwUser.findByRating", query = "SELECT b FROM BmwUser b WHERE b.rating = :rating"),
     @NamedQuery(name = "BmwUser.findBySeatingPriority", query = "SELECT b FROM BmwUser b WHERE b.seatingPriority = :seatingPriority")})
 public class BmwUser implements Serializable {
+    @Size(max = 255)
+    @Column(name = "username")
+    private String username;
+    @Column(name = "role")
+    private Integer role;
+    @Size(max = 50)
+    @Column(name = "frequentflyer")
+    private String frequentflyer;
+    @Size(max = 50)
+    @Column(name = "firstName")
+    private String firstName;
+    @Size(max = 50)
+    @Column(name = "lastName")
+    private String lastName;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Size(max = 50)
+    @Column(name = "email")
+    private String email;
+    // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+    @Size(max = 50)
+    @Column(name = "phone")
+    private String phone;
+    @Size(max = 200)
+    @Column(name = "companyName")
+    private String companyName;
+    @Size(max = 5)
+    @Column(name = "postalCode")
+    private String postalCode;
+    @Size(max = 50)
+    @Column(name = "city")
+    private String city;
+    @Size(max = 50)
+    @Column(name = "street")
+    private String street;
+    @OneToMany(mappedBy = "userTo")
+    private Collection<BmwEmailHistory> bmwEmailHistoryCollection;
+    @OneToMany(mappedBy = "travelAgency")
+    private Collection<BmwEvent> bmwEventCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -138,6 +176,112 @@ public class BmwUser implements Serializable {
     @Override
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwUser[ uid=" + uid + " ]";
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
+    public String getFrequentflyer() {
+        return frequentflyer;
+    }
+
+    public void setFrequentflyer(String frequentflyer) {
+        this.frequentflyer = frequentflyer;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    @XmlTransient
+    public Collection<BmwEmailHistory> getBmwEmailHistoryCollection() {
+        return bmwEmailHistoryCollection;
+    }
+
+    public void setBmwEmailHistoryCollection(Collection<BmwEmailHistory> bmwEmailHistoryCollection) {
+        this.bmwEmailHistoryCollection = bmwEmailHistoryCollection;
+    }
+
+    @XmlTransient
+    public Collection<BmwEvent> getBmwEventCollection() {
+        return bmwEventCollection;
+    }
+
+    public void setBmwEventCollection(Collection<BmwEvent> bmwEventCollection) {
+        this.bmwEventCollection = bmwEventCollection;
     }
     
 }
