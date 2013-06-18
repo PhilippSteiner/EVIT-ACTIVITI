@@ -10,6 +10,8 @@ import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.mailing.MailService;
+import ac.at.fhkufstein.persistence.PersistenceService;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -27,14 +29,19 @@ public class SendTicketNotification implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
+        System.out.println("################# sending ticket notification mail #################");
 
-        System.out.println("################# sending invitation mails #################");
 
+        BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
 
-        execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
-        BmwParticipantsController participantController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-        BmwParticipants participant = participantController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID) )) );
 
 //        MailService.sendMail(null, null, null);
+
+
+        String mailSentMessage = "Ticket Notification wurde an Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+
+        System.out.println(mailSentMessage);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(mailSentMessage));
     }
 }

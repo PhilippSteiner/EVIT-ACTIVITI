@@ -10,6 +10,7 @@ import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.mailing.MailService;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -35,6 +36,14 @@ public class SendInvitationmail implements JavaDelegate {
         BmwParticipantsController participantController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
         BmwParticipants participant = participantController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID) )) );
 
+
 //        MailService.sendMail(null, null, null);
+
+        
+        String mailSentMessage = "Email wurde an Teilnehmer "+participant.getUserId().getPersonenID().getVorname()+" "+participant.getUserId().getPersonenID().getNachname()+" gesendet.";
+
+        System.out.println(mailSentMessage);
+        FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(mailSentMessage));
     }
 }
