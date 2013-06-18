@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="BmwEmailHistoryListForm">
+
+        <p:panel header="#{bundle.ListBmwEmailHistoryTitle}">
+
+            <p:dataTable id="datalist" value="#{bmwEmailHistoryController.items}" var="item"
+                         selectionMode="single" selection="#{bmwEmailHistoryController.selected}"
+                         rowKey="#{item.id}"
+                         paginator="true"
+                         rows="10"
+                         rowsPerPageTemplate="10,20,30"
+                         >
+
+                <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_id}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column sortBy="#{item.userFrom}" filterBy="#{item.userFrom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_userFrom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.userFrom}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailSubject}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailType}" filterBy="#{item.emailType}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailType}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailType}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailContent}" filterBy="#{item.emailContent}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailContent}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailContent}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailTo}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailFrom}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailBcc}" filterBy="#{item.emailBcc}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailBcc}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailBcc}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailCc}" filterBy="#{item.emailCc}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailCc}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailCc}"/>
+                </p:column>
+                <p:column sortBy="#{item.datetimeSent}" filterBy="#{item.datetimeSent}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_datetimeSent}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datetimeSent}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.datetimeRecieved}" filterBy="#{item.datetimeRecieved}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_datetimeRecieved}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.datetimeRecieved}">
+                        <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+                <p:column sortBy="#{item.sentStatus}" filterBy="#{item.sentStatus}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_sentStatus}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.sentStatus}"/>
+                </p:column>
+                <p:column sortBy="#{item.userTo.username}" filterBy="#{item.userTo.username}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_userTo}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.userTo.username}"/>
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwEmailHistoryController.prepareCreate}" update=":BmwEmailHistoryCreateForm" oncomplete="BmwEmailHistoryCreateDialog.show()"/>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwEmailHistoryViewForm" oncomplete="BmwEmailHistoryViewDialog.show()" disabled="#{empty bmwEmailHistoryController.selected}"/>
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwEmailHistoryEditForm" oncomplete="BmwEmailHistoryEditDialog.show()" disabled="#{empty bmwEmailHistoryController.selected}"/>
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{bmwEmailHistoryController.delete}" update=":growl,datalist" disabled="#{empty bmwEmailHistoryController.selected}"/>
+                </f:facet>
+
+            </p:dataTable>
+
+        </p:panel>
+
+    </h:form>
+
+</ui:composition>
