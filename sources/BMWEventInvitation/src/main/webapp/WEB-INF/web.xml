@@ -24,14 +24,16 @@
     </session-config>
     <welcome-file-list>
 
+        <!--BMW_Journalist/journalistmenue-->
 
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>faces/BMW_Journalist/journalistmenue.xhtml</welcome-file>
 
     </welcome-file-list>
 
     <!-- ############################################# -->
     <!-- # File upload                               # -->
     <!-- ############################################# -->
+    
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>

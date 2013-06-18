@@ -72,6 +72,7 @@ public class Participants {
 			this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
 
 			current = bmwEventController.getFacade().find(eventID);
+                        
 			personenController.init();
 			//Hier muss noch was eingebaut werden wenn keine user existieren? Sonst crasht das programm
 
