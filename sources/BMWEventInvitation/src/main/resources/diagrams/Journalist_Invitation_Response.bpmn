@@ -22,7 +22,7 @@
     <sequenceFlow id="flow7" name="Urgenzmail bereits versendet" sourceRef="reminderSent" targetRef="eventIsOpen">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reminderSent == true}]]></conditionExpression>
     </sequenceFlow>
-    <serviceTask id="inviteNextParticipant" name="naechsten Teilnehmer nachladen"></serviceTask>
+    <serviceTask id="inviteNextParticipant" name="naechsten Teilnehmer nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteNextParticipant"></serviceTask>
     <sequenceFlow id="flow8" name="Event offen" sourceRef="eventIsOpen" targetRef="inviteNextParticipant">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${eventIsOpen == true}]]></conditionExpression>
     </sequenceFlow>
@@ -43,37 +43,25 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == false}]]></conditionExpression>
     </sequenceFlow>
     <userTask id="selectiveInvitation" name="Selektive Nachladung"></userTask>
-    <sequenceFlow id="flow15" name="normal" sourceRef="kindOfRejection" targetRef="eventIsOpen">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted== false}]]></conditionExpression>
-    </sequenceFlow>
+    <sequenceFlow id="flow15" name="normal" sourceRef="kindOfRejection" targetRef="eventIsOpen"></sequenceFlow>
     <sequenceFlow id="flow17" sourceRef="selectiveInvitation" targetRef="inviteSelectedParticipant"></sequenceFlow>
-    <serviceTask id="inviteSelectedParticipant" name="ausgewaehlten Teilnehmer nachladen"></serviceTask>
+    <serviceTask id="inviteSelectedParticipant" name="ausgewaehlten Teilnehmer nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteSelectedParticipant"></serviceTask>
     <endEvent id="endevent3" name="End"></endEvent>
     <sequenceFlow id="flow18" sourceRef="inviteSelectedParticipant" targetRef="endevent3"></sequenceFlow>
-    <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="selectiveInvitation">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
-    </sequenceFlow>
+    <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="selectiveInvitation"></sequenceFlow>
     <exclusiveGateway id="typeOfJourney" name="Type of Journey"></exclusiveGateway>
-    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="confirmArrival">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == true}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == false}]]></conditionExpression>
-    </sequenceFlow>
+    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="confirmArrival"></sequenceFlow>
+    <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4"></sequenceFlow>
     <endEvent id="endevent4" name="End"></endEvent>
-    <exclusiveGateway id="predefinedFlight" name="predefinedFlight"></exclusiveGateway>
-    <sequenceFlow id="flow20" sourceRef="confirmArrival" targetRef="predefinedFlight"></sequenceFlow>
+    <exclusiveGateway id="whichFlight" name="whichFlight"></exclusiveGateway>
+    <sequenceFlow id="flow20" sourceRef="confirmArrival" targetRef="whichFlight"></sequenceFlow>
     <userTask id="manualExecution" name="manuelle Abwicklung"></userTask>
-    <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="predefinedFlight" targetRef="manualExecution">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == false}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="predefinedFlight" targetRef="sendBookingMail">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == true}]]></conditionExpression>
-    </sequenceFlow>
-    <serviceTask id="sendBookingMail" name="Buchungsmail senden"></serviceTask>
+    <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="whichFlight" targetRef="manualExecution"></sequenceFlow>
+    <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="whichFlight" targetRef="sendBookingMail"></sequenceFlow>
+    <serviceTask id="sendBookingMail" name="Buchungsmail senden" activiti:class="ac.at.fhkufstein.activiti.delegates.SendBookingMail"></serviceTask>
     <userTask id="supplyFlightInfos" name="Flugdaten eingeben"></userTask>
     <sequenceFlow id="flow21" sourceRef="sendBookingMail" targetRef="supplyFlightInfos"></sequenceFlow>
-    <serviceTask id="sendTicketNotification" name="Ticketbenachrichtigung senden"></serviceTask>
+    <serviceTask id="sendTicketNotification" name="Ticketbenachrichtigung senden" activiti:class="ac.at.fhkufstein.activiti.delegates.SendTicketNotification"></serviceTask>
     <sequenceFlow id="flow22" sourceRef="supplyFlightInfos" targetRef="sendTicketNotification"></sequenceFlow>
     <endEvent id="endevent5" name="End"></endEvent>
     <sequenceFlow id="flow23" sourceRef="sendTicketNotification" targetRef="endevent5"></sequenceFlow>
@@ -142,7 +130,7 @@
       <bpmndi:BPMNShape bpmnElement="endevent4" id="BPMNShape_endevent4">
         <omgdc:Bounds height="35.0" width="35.0" x="1089.0" y="403.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="predefinedFlight" id="BPMNShape_predefinedFlight">
+      <bpmndi:BPMNShape bpmnElement="whichFlight" id="BPMNShape_whichFlight">
         <omgdc:Bounds height="40.0" width="40.0" x="1035.0" y="517.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="manualExecution" id="BPMNShape_manualExecution">
@@ -258,14 +246,14 @@
         <omgdi:waypoint x="890.0" y="440.0"></omgdi:waypoint>
         <omgdi:waypoint x="890.0" y="510.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="21.0" x="7.0" y="0.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="100.0" x="7.0" y="0.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="car" id="BPMNEdge_car">
         <omgdi:waypoint x="910.0" y="420.0"></omgdi:waypoint>
         <omgdi:waypoint x="1089.0" y="420.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="22.0" x="-3.0" y="4.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="100.0" x="-3.0" y="4.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
@@ -276,14 +264,14 @@
         <omgdi:waypoint x="1055.0" y="557.0"></omgdi:waypoint>
         <omgdi:waypoint x="1055.0" y="610.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="52.0" x="10.0" y="0.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="predefinedFlight" id="BPMNEdge_predefinedFlight">
         <omgdi:waypoint x="1075.0" y="537.0"></omgdi:waypoint>
         <omgdi:waypoint x="1245.0" y="537.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="61.0" x="-21.0" y="4.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="100.0" x="-21.0" y="4.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
