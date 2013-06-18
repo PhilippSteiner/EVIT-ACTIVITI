@@ -159,6 +159,36 @@
             </h:form>
 
         </p:panel>
+
+
+<p:panel header="E-mail versenden">
+    <h:form id="emailForm">
+        <h:panelGroup id="emailPanel">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Template: " for="template"/>
+                <h:selectOneMenu id="template" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_subject}">
+                    <f:selectItem itemLabel="Template auswählen"/>
+                    <f:selectItems value="#{mailBean.emails}" var="email"
+                                   itemValue="#{email.subject}"
+                                   itemLabel="#{email.subject.toString()}"
+                                   
+                                   />
+                
+                    
+                </h:selectOneMenu>
+                
+                
+              
+                
+            </h:panelGrid>
+            <p:commandButton actionListener="#{mailBean.send}" value="Senden"/>
+        </h:panelGroup>
+    </h:form>
+    
+    
+    
+</p:panel>
+
         </ui:define>
 
     </ui:composition>
