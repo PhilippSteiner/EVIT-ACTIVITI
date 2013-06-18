@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwEmailHistoryEditDlg" widgetVar="BmwEmailHistoryEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditBmwEmailHistoryTitle}">
+
+            <h:form id="BmwEmailHistoryEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" rendered="#{bmwEmailHistoryController.selected != null}">
+
+                        <h:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{bmwEmailHistoryController.selected.id}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_userFrom}" for="userFrom" />
+                        <p:inputText id="userFrom" value="#{bmwEmailHistoryController.selected.userFrom}" title="#{bundle.EditBmwEmailHistoryTitle_userFrom}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailSubject}" for="emailSubject" />
+                        <p:inputText id="emailSubject" value="#{bmwEmailHistoryController.selected.emailSubject}" title="#{bundle.EditBmwEmailHistoryTitle_emailSubject}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailType}" for="emailType" />
+                        <p:inputText id="emailType" value="#{bmwEmailHistoryController.selected.emailType}" title="#{bundle.EditBmwEmailHistoryTitle_emailType}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailContent}" for="emailContent" />
+                        <p:inputTextarea rows="4" cols="30" id="emailContent" value="#{bmwEmailHistoryController.selected.emailContent}" title="#{bundle.EditBmwEmailHistoryTitle_emailContent}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailTo}" for="emailTo" />
+                        <p:inputText id="emailTo" value="#{bmwEmailHistoryController.selected.emailTo}" title="#{bundle.EditBmwEmailHistoryTitle_emailTo}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailFrom}" for="emailFrom" />
+                        <p:inputText id="emailFrom" value="#{bmwEmailHistoryController.selected.emailFrom}" title="#{bundle.EditBmwEmailHistoryTitle_emailFrom}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailBcc}" for="emailBcc" />
+                        <p:inputText id="emailBcc" value="#{bmwEmailHistoryController.selected.emailBcc}" title="#{bundle.EditBmwEmailHistoryTitle_emailBcc}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_emailCc}" for="emailCc" />
+                        <p:inputText id="emailCc" value="#{bmwEmailHistoryController.selected.emailCc}" title="#{bundle.EditBmwEmailHistoryTitle_emailCc}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_datetimeSent}" for="datetimeSent" />
+                        <p:calendar id="datetimeSent" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEmailHistoryController.selected.datetimeSent}" title="#{bundle.EditBmwEmailHistoryTitle_datetimeSent}"  showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_datetimeRecieved}" for="datetimeRecieved" />
+                        <p:calendar id="datetimeRecieved" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEmailHistoryController.selected.datetimeRecieved}" title="#{bundle.EditBmwEmailHistoryTitle_datetimeRecieved}"  showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_sentStatus}" for="sentStatus" />
+                        <p:inputText id="sentStatus" value="#{bmwEmailHistoryController.selected.sentStatus}" title="#{bundle.EditBmwEmailHistoryTitle_sentStatus}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailHistoryLabel_userTo}" for="userTo" />
+                        <p:selectOneMenu id="userTo" value="#{bmwEmailHistoryController.selected.userTo}" >
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{bmwUserController.items}"
+                                           var="userToItem"
+                                           itemValue="#{userToItem}"
+                                           itemLabel="#{userToItem.username.toString()}"
+                                           />
+                            <f:converter binding="#{bmwUserConverter}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{bmwEmailHistoryController.save}" value="#{bundle.Save}" update="display,:BmwEmailHistoryListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwEmailHistoryEditDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwEmailHistoryEditDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

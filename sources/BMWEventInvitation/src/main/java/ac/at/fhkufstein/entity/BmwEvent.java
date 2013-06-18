@@ -15,7 +15,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -53,6 +55,31 @@ import org.joda.time.DateTime;
     @NamedQuery(name = "BmwEvent.findByProgress", query = "SELECT b FROM BmwEvent b WHERE b.progress = :progress"),
     @NamedQuery(name = "BmwEvent.findByProcessId", query = "SELECT b FROM BmwEvent b WHERE b.processId = :processId")})
 public class BmwEvent implements Serializable {
+    @Column(name = "sendFollowup")
+    private Integer sendFollowup;
+    @Column(name = "bmwParticipants")
+    private Integer bmwParticipants;
+    @Size(max = 255)
+    @Column(name = "documents")
+    private String documents;
+    @Column(name = "embargo")
+    private Boolean embargo;
+    @Size(max = 50)
+    @Column(name = "responsibleUser")
+    private String responsibleUser;
+    @Column(name = "sendReminder")
+    private Integer sendReminder;
+    @Column(name = "cancelInvitation")
+    private Integer cancelInvitation;
+    @Column(name = "closeInvitation")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date closeInvitation;
+    @Column(name = "embargoDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date embargoDate;
+    @JoinColumn(name = "travelAgency", referencedColumnName = "uid")
+    @ManyToOne
+    private BmwUser travelAgency;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "eid")
     private Collection<EmailTemplates> emailTemplatesCollection;
     private static final long serialVersionUID = 1L;
@@ -291,5 +318,85 @@ public class BmwEvent implements Serializable {
 
     public void setEmailTemplatesCollection(Collection<EmailTemplates> emailTemplatesCollection) {
         this.emailTemplatesCollection = emailTemplatesCollection;
+    }
+
+    public Integer getSendFollowup() {
+        return sendFollowup;
+    }
+
+    public void setSendFollowup(Integer sendFollowup) {
+        this.sendFollowup = sendFollowup;
+    }
+
+    public Integer getBmwParticipants() {
+        return bmwParticipants;
+    }
+
+    public void setBmwParticipants(Integer bmwParticipants) {
+        this.bmwParticipants = bmwParticipants;
+    }
+
+    public String getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(String documents) {
+        this.documents = documents;
+    }
+
+    public Boolean getEmbargo() {
+        return embargo;
+    }
+
+    public void setEmbargo(Boolean embargo) {
+        this.embargo = embargo;
+    }
+
+    public String getResponsibleUser() {
+        return responsibleUser;
+    }
+
+    public void setResponsibleUser(String responsibleUser) {
+        this.responsibleUser = responsibleUser;
+    }
+
+    public Integer getSendReminder() {
+        return sendReminder;
+    }
+
+    public void setSendReminder(Integer sendReminder) {
+        this.sendReminder = sendReminder;
+    }
+
+    public Integer getCancelInvitation() {
+        return cancelInvitation;
+    }
+
+    public void setCancelInvitation(Integer cancelInvitation) {
+        this.cancelInvitation = cancelInvitation;
+    }
+
+    public Date getCloseInvitation() {
+        return closeInvitation;
+    }
+
+    public void setCloseInvitation(Date closeInvitation) {
+        this.closeInvitation = closeInvitation;
+    }
+
+    public Date getEmbargoDate() {
+        return embargoDate;
+    }
+
+    public void setEmbargoDate(Date embargoDate) {
+        this.embargoDate = embargoDate;
+    }
+
+    public BmwUser getTravelAgency() {
+        return travelAgency;
+    }
+
+    public void setTravelAgency(BmwUser travelAgency) {
+        this.travelAgency = travelAgency;
     }
 }
