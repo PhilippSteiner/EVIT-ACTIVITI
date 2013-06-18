@@ -14,6 +14,9 @@ public class InvitationProcess {
     final static public String ACTIVITI_REMINDER_SENT = "reminderSent";
     final static public String ACTIVITI_EVENT_IS_OPEN = "eventIsOpen";
     final static public String ACTIVITI_INVITATION_ACCEPTED = "invitationAccepted";
+    final static public String ACTIVITI_WILL_BE_SUBSTITUTED = "willBeSubstituted";
+    final static public String ACTIVITI_TAKES_FLIGHT = "takesFlight";
+    final static public String ACTIVITI_TAKES_PREDEFINED_FLIGHT = "takesPredefinedFlight";
     final static public String[] PROCESSES = {"InvitationProcess", "Journalist_Invitation_Response"};
     final static public String PROCESS_FILE_LOCATION = "diagrams/";
     final static public String SUFFIX = ".bpmn";
