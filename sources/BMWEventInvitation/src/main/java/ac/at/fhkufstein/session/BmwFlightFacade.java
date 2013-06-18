@@ -19,7 +19,7 @@ public class BmwFlightFacade extends AbstractFacade<BmwFlight> {
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 

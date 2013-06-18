@@ -41,6 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BmwTravel.findByArrivalDatetime", query = "SELECT b FROM BmwTravel b WHERE b.arrivalDatetime = :arrivalDatetime"),
     @NamedQuery(name = "BmwTravel.findByPdfTicketUrl", query = "SELECT b FROM BmwTravel b WHERE b.pdfTicketUrl = :pdfTicketUrl")})
 public class BmwTravel implements Serializable {
+    @Size(max = 50)
+    @Column(name = "comment")
+    private String comment;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -142,6 +145,14 @@ public class BmwTravel implements Serializable {
     @Override
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwTravel[ id=" + id + " ]";
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
     
 }

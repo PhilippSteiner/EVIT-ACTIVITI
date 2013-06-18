@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <h:form id="BmwFlightListForm">
-
+		#{bmwFlightController.items.size()}
         <p:panel header="#{bundle.ListBmwFlightTitle}">
 
             <p:dataTable id="datalist" value="#{bmwFlightController.items}" var="item"

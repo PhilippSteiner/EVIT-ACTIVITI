@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwFlightCreateDlg" widgetVar="BmwFlightCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateBmwFlightTitle}">
+
+            <h:form id="BmwFlightCreateForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwFlightController.selected != null}">
+
+                        <p:outputLabel value="#{bundle.CreateBmwFlightLabel_eventId}" for="eventId" />
+                        <p:inputText id="eventId" value="#{bmwFlightController.selected.eventId}" title="#{bundle.CreateBmwFlightTitle_eventId}" required="false" requiredMessage="#{bundle.CreateBmwFlightRequiredMessage_eventId}"/>
+
+                        <p:outputLabel value="#{bundle.CreateBmwFlightLabel_flightNumber}" for="flightNumber" />
+                        <p:inputText id="flightNumber" value="#{bmwFlightController.selected.flightNumber}" title="#{bundle.CreateBmwFlightTitle_flightNumber}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwFlightLabel_departureLocation}" for="departureLocation" />
+                        <p:inputText id="departureLocation" value="#{bmwFlightController.selected.departureLocation}" title="#{bundle.CreateBmwFlightTitle_departureLocation}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwFlightLabel_arrivalLocation}" for="arrivalLocation" />
+                        <p:inputText id="arrivalLocation" value="#{bmwFlightController.selected.arrivalLocation}" title="#{bundle.CreateBmwFlightTitle_arrivalLocation}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwFlightLabel_departureTime}" for="departureTime" />
+                        <p:calendar id="departureTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwFlightController.selected.departureTime}" title="#{bundle.EditBmwFlightTitle_departureTime}"  showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.CreateBmwFlightLabel_arrivalTime}" for="arrivalTime" />
+                        <p:calendar id="arrivalTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwFlightController.selected.arrivalTime}" title="#{bundle.EditBmwFlightTitle_arrivalTime}"  showOn="button"/>
+
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{bmwFlightController.saveNew}" value="#{bundle.Save}" update="display,:BmwFlightListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwFlightCreateDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwFlightCreateDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
