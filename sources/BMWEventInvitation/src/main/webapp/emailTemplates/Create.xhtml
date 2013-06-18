@@ -25,7 +25,7 @@
                         <p:inputText id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.CreateEmailTemplatesTitle_type}" />
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
-                        <p:inputTextarea rows="4" cols="30" id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
+                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_eid}" for="eid" />
                         <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
