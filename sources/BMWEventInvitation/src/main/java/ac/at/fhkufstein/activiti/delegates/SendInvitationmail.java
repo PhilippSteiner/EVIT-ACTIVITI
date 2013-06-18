@@ -11,6 +11,8 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.mailing.MailService;
 import ac.at.fhkufstein.persistence.PersistenceService;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -27,39 +29,56 @@ import org.activiti.engine.delegate.JavaDelegate;
 public class SendInvitationmail implements JavaDelegate {
 
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
 
 
         System.out.println("################# sending invitation mails #################");
 
 
         BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
+        BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
+        try {
+            if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
 
-        if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
-
-            // @todo implementMailFunction
+                // @todo implementMailFunction
 //            MailService.sendMail(null, null, null);
 
-            execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
+                execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
 
-            String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+                Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getUrgencyDayLimit());
 
-            System.out.println(mailSentMessage);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(mailSentMessage));
-        } else {
+                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.getActivitiDateFormat().format(new Date(sendReminderTime)));
 
-            // @todo implementMailFunction
+                String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+
+                System.out.println(mailSentMessage);
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(mailSentMessage));
+            } else {
+
+                // @todo implementMailFunction
 //            MailService.sendMail(null, null, null);
 
-            execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
+                execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
 
-            String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+                Long cancelInvitationTime = InvitationProcess.getDueTime(event, participant, event.getCancelInvitation());
 
-            System.out.println(mailSentMessage);
+                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.getActivitiDateFormat().format(new Date(cancelInvitationTime)));
+
+                String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+
+                System.out.println(mailSentMessage);
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(mailSentMessage));
+            }
+
+        } catch (Exception ex) {
+            String mailSentMessage = ex.getMessage();
+
+            System.err.println(mailSentMessage);
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(mailSentMessage));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
         }
 
     }

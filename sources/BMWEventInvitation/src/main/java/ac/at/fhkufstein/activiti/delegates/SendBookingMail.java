@@ -38,7 +38,7 @@ public class SendBookingMail implements JavaDelegate {
 //        MailService.sendMail(null, null, null);
 
 
-        String mailSentMessage = "Email wurde an das Reisebüro " + event.toString() + " gesendet.";
+        String mailSentMessage = "Email wurde an das Reisebüro " + event.getTravelAgency().getCompanyName() + " gesendet.";
 
         System.out.println(mailSentMessage);
         FacesContext.getCurrentInstance().addMessage(null,

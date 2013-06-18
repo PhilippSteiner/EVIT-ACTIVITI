@@ -15,6 +15,8 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class InvitationProcess {
 
@@ -165,17 +167,39 @@ public class InvitationProcess {
         InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[1]);
         process.setVariable(InvitationProcess.DATABASE_PARTICIPANTID, participant.getId());
         //@todo get ACTIVITI_CANCEL_INVITATION_TIME from event
-        process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, "2011-03-11T12:13:14");
+
+        SimpleDateFormat dateFormat = InvitationProcess.getActivitiDateFormat();
+
+        Long sendReminderTime = (event.getStartEventdate().getTime() - event.getUrgencyDayLimit() * 24 * 3600 * 1000);
+
+        process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, dateFormat.format(new Date(sendReminderTime)));
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
 
-        // not usable yet
-//            participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));
-//            PerstistenceService.save(BmwParticipantsController.class, participant);
+        participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));
+        PersistenceService.save(BmwParticipantsController.class, participant);
 
         process.resumeProcess();
 
         return process;
+    }
+
+    public static long getDueTime(BmwEvent event, BmwParticipants participant, int days) throws Exception {
+        Long dueTime;
+
+        if ((dueTime = event.getStartEventdate().getTime() /*participant invitationdate */ + days * 24 * 3600 * 1000) > event.getCloseInvitation().getTime()) {
+            dueTime = event.getCloseInvitation().getTime();
+        }
+
+        if(dueTime >= new Date().getTime()) {
+            throw new Exception("Zeitpunkt bereits vorüber.");
+        }
+
+        return dueTime;
+    }
+
+    public static SimpleDateFormat getActivitiDateFormat() {
+        return new SimpleDateFormat("yyyyy-MM-ddTHH:mm:ss"); // example: "2011-03-11T12:13:14"
     }
 
     public static BmwUser getNextParticipant(BmwEvent event) {
@@ -192,13 +216,13 @@ public class InvitationProcess {
         while (iter.hasNext()) {
             BmwUser user = (BmwUser) iter.next();
             boolean alreadyInvited = false;
-            for(BmwParticipants participant : participantsList) {
-                if(user.getUid()==participant.getUserId().getUid()) {
+            for (BmwParticipants participant : participantsList) {
+                if (user.getUid() == participant.getUserId().getUid()) {
                     alreadyInvited = true;
                     break;
                 }
             }
-            if(!alreadyInvited) {
+            if (!alreadyInvited) {
                 return user;
             }
         }

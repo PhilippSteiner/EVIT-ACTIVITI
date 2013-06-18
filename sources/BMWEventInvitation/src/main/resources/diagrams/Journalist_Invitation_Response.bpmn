@@ -34,7 +34,6 @@
     </sequenceFlow>
     <exclusiveGateway id="answer" name="answer"></exclusiveGateway>
     <sequenceFlow id="flow11" sourceRef="answerInvitation" targetRef="answer"></sequenceFlow>
-    <userTask id="confirmArrival" name="Anreise bestätigen"></userTask>
     <sequenceFlow id="flow12" name="Zusage" sourceRef="answer" targetRef="typeOfJourney">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == true}]]></conditionExpression>
     </sequenceFlow>
@@ -50,11 +49,10 @@
     <sequenceFlow id="flow18" sourceRef="inviteSelectedParticipant" targetRef="endevent3"></sequenceFlow>
     <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="selectiveInvitation"></sequenceFlow>
     <exclusiveGateway id="typeOfJourney" name="Type of Journey"></exclusiveGateway>
-    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="confirmArrival"></sequenceFlow>
+    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="whichFlight"></sequenceFlow>
     <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4"></sequenceFlow>
     <endEvent id="endevent4" name="End"></endEvent>
     <exclusiveGateway id="whichFlight" name="whichFlight"></exclusiveGateway>
-    <sequenceFlow id="flow20" sourceRef="confirmArrival" targetRef="whichFlight"></sequenceFlow>
     <userTask id="manualExecution" name="manuelle Abwicklung"></userTask>
     <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="whichFlight" targetRef="manualExecution"></sequenceFlow>
     <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="whichFlight" targetRef="sendBookingMail"></sequenceFlow>
@@ -79,9 +77,6 @@
       <bpmndi:BPMNShape bpmnElement="answerInvitation" id="BPMNShape_answerInvitation">
         <omgdc:Bounds height="55.0" width="105.0" x="690.0" y="270.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="950.0" y="372.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="answerInvitationBoundarytimer" id="BPMNShape_answerInvitationBoundarytimer">
         <omgdc:Bounds height="30.0" width="30.0" x="720.0" y="260.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
@@ -103,17 +98,8 @@
       <bpmndi:BPMNShape bpmnElement="answer" id="BPMNShape_answer">
         <omgdc:Bounds height="40.0" width="40.0" x="870.0" y="279.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="confirmArrival" id="BPMNShape_confirmArrival">
-        <omgdc:Bounds height="55.0" width="105.0" x="838.0" y="510.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
-        <omgdc:Bounds height="40.0" width="40.0" x="999.0" y="279.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="selectiveInvitation" id="BPMNShape_selectiveInvitation">
         <omgdc:Bounds height="55.0" width="105.0" x="1150.0" y="271.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="processInvitation" id="BPMNShape_processInvitation">
-        <omgdc:Bounds height="55.0" width="105.0" x="980.0" y="60.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
         <omgdc:Bounds height="35.0" width="35.0" x="1520.0" y="283.0"></omgdc:Bounds>
@@ -244,34 +230,31 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flight" id="BPMNEdge_flight">
         <omgdi:waypoint x="890.0" y="440.0"></omgdi:waypoint>
-        <omgdi:waypoint x="890.0" y="510.0"></omgdi:waypoint>
+        <omgdi:waypoint x="954.0" y="498.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1055.0" y="517.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="100.0" x="7.0" y="0.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="21.0" x="6.0" y="-10.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="car" id="BPMNEdge_car">
         <omgdi:waypoint x="910.0" y="420.0"></omgdi:waypoint>
         <omgdi:waypoint x="1089.0" y="420.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="100.0" x="-3.0" y="4.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="22.0" x="-3.0" y="4.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
-        <omgdi:waypoint x="943.0" y="537.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1035.0" y="537.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="specialFlight" id="BPMNEdge_specialFlight">
         <omgdi:waypoint x="1055.0" y="557.0"></omgdi:waypoint>
         <omgdi:waypoint x="1055.0" y="610.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="100.0" x="10.0" y="0.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="52.0" x="10.0" y="0.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="predefinedFlight" id="BPMNEdge_predefinedFlight">
         <omgdi:waypoint x="1075.0" y="537.0"></omgdi:waypoint>
         <omgdi:waypoint x="1245.0" y="537.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="100.0" x="-21.0" y="4.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="61.0" x="-21.0" y="4.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
