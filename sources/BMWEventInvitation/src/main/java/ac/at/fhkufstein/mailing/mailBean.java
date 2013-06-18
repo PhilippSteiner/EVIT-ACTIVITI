@@ -20,18 +20,35 @@ import javax.faces.context.FacesContext;
 public class mailBean extends MailService{
 
     private EmailTemplatesController emailcontroller;
-    public EmailTemplates email = new EmailTemplates();
-    private String emailto = "philipp.steiner@snw.at";
-    
-    
-    
-    public EmailTemplates getEmail() {
-        return email;
+    public String to;
+    public String subject;
+    public String message;
+
+    public String getTo() {
+        return to;
     }
 
-    public void setEmail(EmailTemplates email) {
-        this.email = email;
+    public void setTo(String to) {
+        this.to = to;
     }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
+   
 
    
     /**
@@ -49,7 +66,8 @@ public class mailBean extends MailService{
     
     public void send(){
         
-        super.sendMail(emailto, emailcontroller.getSelected().getSubject(), emailcontroller.getSelected().getEmailContent());
+        
+        MailService.sendMail(to, subject, message);
     }
     
 }

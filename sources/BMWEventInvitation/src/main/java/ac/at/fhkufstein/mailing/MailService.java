@@ -47,6 +47,7 @@ public class MailService {
      */
     public static boolean sendMail(String to, String subject, String message) {
         try {
+            
             Email mail = initMail();
 
             mail.addTo(to);
@@ -55,7 +56,6 @@ public class MailService {
             mail.setMsg(message);
 
             mail.send();
-
             return true;
         } catch (EmailException ex) {
             Logger.getLogger(MailService.class.getName()).log(Level.SEVERE, null, ex);
