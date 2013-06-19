@@ -25,8 +25,8 @@ import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
- 
-import javax.faces.event.ActionEvent; 
+
+import javax.faces.event.ActionEvent;
 
 /**
  *
@@ -260,4 +260,5 @@ public class Participants {
 	public void setU(List<BmwUser> u) {
 		this.u = u;
 	}
+
 }
