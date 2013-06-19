@@ -16,18 +16,18 @@
                          paginator="true"
                          rows="10"
                          rowsPerPageTemplate="10,20,30"
-                         
+
                          >
 
                 <p:ajax event="rowSelect"   update="createButton"/>
                 <p:ajax event="rowUnselect" update="createButton"/>
 
-				<p:column style="width:4%">  
-                <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">  
-    <f:param name="eventID" value="#{item.id}" />  
-</p:button>  
-        </p:column>  
-				
+                <p:column style="width:4%">
+                    <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">
+                        <f:param name="eventID" value="#{item.id}" />
+                    </p:button>
+                </p:column>
+
                 <p:column sortBy="#{item.name}" filterBy="#{item.name}">
                     <f:facet name="header">
                         <h:outputText value="Name"/>
@@ -62,9 +62,19 @@
                     </f:facet>
                     <h:outputText value="#{item.location}"/>
                 </p:column>
+
+                <p:column>
+                    <!--rendered="{!processBmwEventController.selected.released}" -->
+                    <p:commandButton value="Freigeben" update=":BmwEventCreateForm" rendered="#{true}"
+                                     actionListener="#{processBmwEventController.release(item)}" styleClass="ui-priority-primary"/>
+
+                    <!--rendered="{processBmwEventController.selected.released}" -->
+                    <h:outputText value="Freigegeben" rendered="#{false}" />
+                </p:column>
+
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwEventController.prepareCreate}" update=":BmwEventCreateForm" oncomplete="BmwEventCreateDialog.show()"/>
-                    
+
                 </f:facet>
 
             </p:dataTable>
@@ -72,7 +82,7 @@
         </p:panel>
 
     </h:form>
-    
-    
-	
+
+
+
 </ui:composition>

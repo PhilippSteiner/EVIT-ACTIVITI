@@ -6,9 +6,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/template.xhtml">
 	<ui:define name="body">
-				
+
 			  <ui:include src="menu.xhtml"></ui:include>
-			  
+
 		<h:form id="BmwUserListForm">
 
 			<p:panel header="Journalisten Einladen">
@@ -21,7 +21,7 @@
 							 rowsPerPageTemplate="10,20,30"
 							 >
 
-					<p:column selectionMode="multiple" style="width:2%" />  
+					<p:column selectionMode="multiple" style="width:2%" />
 
 					<p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
 						<f:facet name="header">
@@ -56,9 +56,9 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"  
-								 update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>--> 
-						<p:commandButton id="Submit" value="Speichern" action="#{Participants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>  
+						<!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"
+								 update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>-->
+						<p:commandButton id="Submit" value="Speichern" action="#{processParticipants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>
 
 
 
@@ -68,14 +68,14 @@
 
 
 
-				<p:dialog id="multiDialog" header="Teilnehmer Übersicht" widgetVar="multiCarDialog"  
-						  height="300" showEffect="fade" hideEffect="explode">  
-					<p:dataList id="displayMulti" value="#{Participants.selected}" var="i" >  
-						#{i.personenID.nameVollstaendig}  
-					</p:dataList>  
+				<p:dialog id="multiDialog" header="Teilnehmer Übersicht" widgetVar="multiCarDialog"
+						  height="300" showEffect="fade" hideEffect="explode">
+					<p:dataList id="displayMulti" value="#{Participants.selected}" var="i" >
+						#{i.personenID.nameVollstaendig}
+					</p:dataList>
 
 
-				</p:dialog>  
+				</p:dialog>
 			</p:panel>
 		</h:form>
 

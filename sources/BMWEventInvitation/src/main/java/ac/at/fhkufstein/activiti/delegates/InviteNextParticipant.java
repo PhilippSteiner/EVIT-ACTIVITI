@@ -11,7 +11,7 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.mailing.MailService;
-import ac.at.fhkufstein.persistence.PersistenceService;
+import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -49,7 +49,7 @@ public class InviteNextParticipant implements JavaDelegate {
         } else {
 
             // save next Participant
-            BmwParticipants participant = PersistenceService.getControllerInstance(BmwParticipantsController.class).prepareCreate(null);
+            BmwParticipants participant = PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).prepareCreate(null);
             participant.setEventId(event);
             participant.setUserId(user);
 

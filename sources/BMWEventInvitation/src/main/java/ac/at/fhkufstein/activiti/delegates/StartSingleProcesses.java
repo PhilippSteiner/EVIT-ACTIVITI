@@ -12,7 +12,7 @@ import ac.at.fhkufstein.bean.PersonenController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
-import ac.at.fhkufstein.persistence.PersistenceService;
+import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;

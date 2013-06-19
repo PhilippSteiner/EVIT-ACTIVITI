@@ -10,7 +10,7 @@ import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.mailing.MailService;
-import ac.at.fhkufstein.persistence.PersistenceService;
+import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;

@@ -5,7 +5,7 @@ import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
-import ac.at.fhkufstein.persistence.PersistenceService;
+import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -202,7 +202,7 @@ public class InvitationProcess {
 
     public static BmwUser getNextParticipant(BmwEvent event) {
 
-        EntityManager em = ((BmwParticipantsFacade) PersistenceService.getControllerInstance(BmwParticipantsController.class).getFacade()).getEntityManager();
+        EntityManager em = ((BmwParticipantsFacade) PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).getFacade()).getEntityManager();
 
         Query userQuery = em.createQuery("select u from BmwUser ORDER BY u.rating DESC");
         userQuery.setParameter("eventId", event.getId());
