@@ -28,6 +28,16 @@ public class Flight {
 	private BmwEventController bmwEventController;
 	private BmwEvent cev;
 	private List p;
+	private Integer eventID;
+
+	public Integer getEventID() {
+		return eventID;
+	}
+
+	public void setEventID(Integer eventID) {
+		this.eventID = eventID;
+	}
+	
 
 	public List getP() {
 		return p;
@@ -37,7 +47,6 @@ public class Flight {
 		this.p = p;
 	}
 	
-private Integer eventID;
 
 	
 
@@ -52,7 +61,7 @@ private Integer eventID;
 
 		try {
 			
-				 EntityManager em= ((BmwFlightFacade) bmwFlightController.getFacade()).getEntityManager();
+		         EntityManager em= ((BmwFlightFacade) bmwFlightController.getFacade()).getEntityManager();
 			 p = em.createNamedQuery("BmwFlight.findByEventId")
 			 .setParameter("eventId", cev)
 			 .getResultList();

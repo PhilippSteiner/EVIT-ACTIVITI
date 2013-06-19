@@ -35,6 +35,9 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
                         <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.CreateBmwEventTitle_urgencyDayLimit}" />
 
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_sendFollowup}" for="sendFollowup" />
+                        <p:inputText id="sendFollowup" value="#{bmwEventController.selected.sendFollowup}" title="#{bundle.CreateBmwEventTitle_sendFollowup}" />
+
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{bmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>

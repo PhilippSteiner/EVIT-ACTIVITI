@@ -197,6 +197,7 @@
                         <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}"/>
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_eid}" for="eid" />
+                        
                         <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
                             <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{bmwEventController.items}"
@@ -204,7 +205,6 @@
                                            itemValue="#{eidItem}"
                                            itemLabel="#{eidItem.name.toString()}"
                                            />
-                            <f:converter binding="#{bmwEventConverter}"/>
                         </p:selectOneMenu>
                             
                             

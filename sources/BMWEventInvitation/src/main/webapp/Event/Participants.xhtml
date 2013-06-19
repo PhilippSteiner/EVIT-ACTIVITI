@@ -13,40 +13,46 @@
 
 			<p:panel header="Teilnehmer">
 
-				<p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
-							 selection="#{Participants.selected}"
-							 rowKey="#{item.uid}"
+				<p:dataTable id="datalist" value="#{Participants.selectedp}" var="item"
+							 rowKey="#{item.id}"
+							 rowStyleClass="#{item.PState == 'eingeladen' ? 'red' : (item.PState == 'zugesagt' ? 'green' : (item.PState == 'auto' ? 'blue': ( item.PState == 'flug' ? 'yellow' : (item.PState == 'ticket' ? 'magenta' : null))))}"
+											  
 							 paginator="true"
 							 rows="10"
 							 rowsPerPageTemplate="10,20,30"
 							 >
 
-					<p:column selectionMode="multiple" style="width:2%" />  
 
-					<p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
+					<p:column sortBy="#{item.userId.personenID.vorname}" filterBy="#{item.userId.personenID.vorname}">
 						<f:facet name="header">
 							<h:outputText value="Vorname"/>
 						</f:facet>
-						<h:outputText value="#{item.personenID.vorname}"/>
+						<h:outputText value="#{item.userId.personenID.vorname}"/>
 					</p:column>
 
-					<p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+					<p:column sortBy="#{item.userId.personenID.nachname}" filterBy="#{item.userId.personenID.nachname}">
 						<f:facet name="header">
 							<h:outputText value="Nachname"/>
 						</f:facet>
-						<h:outputText value="#{item.personenID.nachname}"/>
+						<h:outputText value="#{item.userId.personenID.nachname}"/>
 					</p:column>
-					<p:column sortBy="#{item.personenID.firma}" filterBy="#{item.personenID.firma}">
+					<p:column sortBy="#{item.userId.personenID.firma}" filterBy="#{item.userId.personenID.firma}">
 						<f:facet name="header">
 							<h:outputText value="Firma"/>
 						</f:facet>
-						<h:outputText value="#{item.personenID.firma}"/>
+						<h:outputText value="#{item.userId.personenID.firma}"/>
 					</p:column>
-					<p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+					<p:column sortBy="#{item.userId.rating}" filterBy="#{item.userId.rating}">
 						<f:facet name="header">
 							<h:outputText value="Rating"/>
 						</f:facet>
-						<h:outputText value="#{item.rating}"/>
+						<h:outputText value="#{item.userId.rating}"/>
+					</p:column>
+					<p:column sortBy="#{item.PState}" filterBy="#{item.PState}">
+						<f:facet name="header">
+							<h:outputText value="Status"/>
+						</f:facet>
+						<h:outputText value="#{item.PState}"/>
 					</p:column>
 
 					<f:facet name="footer">
