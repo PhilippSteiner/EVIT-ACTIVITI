@@ -42,20 +42,32 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == false}]]></conditionExpression>
     </sequenceFlow>
     <userTask id="selectiveInvitation" name="Selektive Nachladung"></userTask>
-    <sequenceFlow id="flow15" name="normal" sourceRef="kindOfRejection" targetRef="evaluateEventStatus"></sequenceFlow>
+    <sequenceFlow id="flow15" name="normal" sourceRef="kindOfRejection" targetRef="evaluateEventStatus">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="flow17" sourceRef="selectiveInvitation" targetRef="inviteSelectedParticipant"></sequenceFlow>
     <serviceTask id="inviteSelectedParticipant" name="ausgewaehlten Teilnehmer nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteSelectedParticipant"></serviceTask>
     <endEvent id="endevent3" name="End"></endEvent>
     <sequenceFlow id="flow18" sourceRef="inviteSelectedParticipant" targetRef="endevent3"></sequenceFlow>
-    <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="selectiveInvitation"></sequenceFlow>
+    <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="selectiveInvitation">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
+    </sequenceFlow>
     <exclusiveGateway id="typeOfJourney" name="Type of Journey"></exclusiveGateway>
-    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="whichFlight"></sequenceFlow>
-    <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4"></sequenceFlow>
+    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="whichFlight">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == false}]]></conditionExpression>
+    </sequenceFlow>
     <endEvent id="endevent4" name="End"></endEvent>
     <exclusiveGateway id="whichFlight" name="whichFlight"></exclusiveGateway>
     <userTask id="manualExecution" name="manuelle Abwicklung"></userTask>
-    <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="whichFlight" targetRef="manualExecution"></sequenceFlow>
-    <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="whichFlight" targetRef="sendBookingMail"></sequenceFlow>
+    <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="whichFlight" targetRef="manualExecution">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="whichFlight" targetRef="sendBookingMail">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == true}]]></conditionExpression>
+    </sequenceFlow>
     <serviceTask id="sendBookingMail" name="Buchungsmail senden" activiti:class="ac.at.fhkufstein.activiti.delegates.SendBookingMail"></serviceTask>
     <userTask id="supplyFlightInfos" name="Flugdaten eingeben"></userTask>
     <sequenceFlow id="flow21" sourceRef="sendBookingMail" targetRef="supplyFlightInfos"></sequenceFlow>
@@ -141,9 +153,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="inviteSelectedParticipant" id="BPMNShape_inviteSelectedParticipant">
         <omgdc:Bounds height="61.0" width="105.0" x="1349.0" y="270.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="965.0" y="199.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="evaluateEventStatus" id="BPMNShape_evaluateEventStatus">
         <omgdc:Bounds height="55.0" width="105.0" x="965.0" y="199.0"></omgdc:Bounds>

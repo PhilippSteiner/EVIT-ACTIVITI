@@ -43,7 +43,7 @@ public class InvitationProcess {
         this.event = event;
         this.processDefinition = processDefinition;
 
-        if (event.getProcessId() > 0) {
+        if (event.getProcessId() != null) {
             setProcessInstance(
                     Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(event.getProcessId().toString()).singleResult());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
@@ -53,7 +53,7 @@ public class InvitationProcess {
 
     public void startProcess() throws Exception {
 
-        setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(PROCESS_FILE_LOCATION + processDefinition + SUFFIX));
+        setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
 
         // nur bei Hauptprozess
         if (processDefinition.equals(PROCESSES[0])) {
@@ -168,11 +168,9 @@ public class InvitationProcess {
         process.setVariable(InvitationProcess.DATABASE_PARTICIPANTID, participant.getId());
         //@todo get ACTIVITI_CANCEL_INVITATION_TIME from event
 
-        SimpleDateFormat dateFormat = InvitationProcess.getActivitiDateFormat();
-
         Long sendReminderTime = (event.getStartEventdate().getTime() - event.getUrgencyDayLimit() * 24 * 3600 * 1000);
 
-        process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, dateFormat.format(new Date(sendReminderTime)));
+        process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
 
@@ -198,8 +196,8 @@ public class InvitationProcess {
         return dueTime;
     }
 
-    public static SimpleDateFormat getActivitiDateFormat() {
-        return new SimpleDateFormat("yyyyy-MM-ddTHH:mm:ss"); // example: "2011-03-11T12:13:14"
+    public static String formatActivitiDate(Long time) {
+        return new SimpleDateFormat("yyyyy-MM-dd HH:mm:ss").format(new Date(time)).replace(" ", "T"); // example: "2011-03-11T12:13:14"
     }
 
     public static BmwUser getNextParticipant(BmwEvent event) {

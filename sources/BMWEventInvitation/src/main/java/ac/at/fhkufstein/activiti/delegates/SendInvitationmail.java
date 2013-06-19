@@ -46,7 +46,7 @@ public class SendInvitationmail implements JavaDelegate {
 
                 Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getUrgencyDayLimit());
 
-                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.getActivitiDateFormat().format(new Date(sendReminderTime)));
+                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
 
                 String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
@@ -62,7 +62,7 @@ public class SendInvitationmail implements JavaDelegate {
 
                 Long cancelInvitationTime = InvitationProcess.getDueTime(event, participant, event.getCancelInvitation());
 
-                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.getActivitiDateFormat().format(new Date(cancelInvitationTime)));
+                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(cancelInvitationTime));
 
                 String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
