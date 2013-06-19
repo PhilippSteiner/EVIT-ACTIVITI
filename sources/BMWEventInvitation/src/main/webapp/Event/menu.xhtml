@@ -6,7 +6,7 @@
 
     <ui:composition>
 		
-		<h2>#{bmwEventPicklist.current.name}</h2>
+		<h2>#{Participants.current.name}</h2>
 		<p:tabMenu activeIndex="0">  
     <p:menuitem value="Allgemeine Informationen" url="/faces/Event/index.xhtml?eventID=#{param.eventID}" icon="ui-icon-star"/>  
     <p:menuitem value="Teilnehmer" url="/faces/Event/Participants.xhtml?eventID=#{param.eventID}" icon="ui-icon-search"/>

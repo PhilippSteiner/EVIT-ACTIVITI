@@ -27,6 +27,7 @@ import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
  
 import javax.faces.event.ActionEvent; 
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -70,7 +71,9 @@ public class Participants {
 
 
 		try {
-
+			
+			
+			
 			bmwUserController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
 			PersonenController personenController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{personenController}", PersonenController.class);
 			bmwEventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
@@ -80,6 +83,7 @@ public class Participants {
 			this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
 
 			current = bmwEventController.getFacade().find(eventID);
+			
 			personenController.init();
 			//Hier muss noch was eingebaut werden wenn keine user existieren? Sonst crasht das programm
 
