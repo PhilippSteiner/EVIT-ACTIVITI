@@ -1,0 +1,17 @@
+/* 
+    Document   : journaliststyle
+    Created on : 18.06.2013, 21:17:09
+    Author     : Alex
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.ui-selectonemenu-panel .ui-widget-content .ui-corner-all .ui-helper-hidden .ui-shadow{
+    
+    z-index: 1;
+}
+

@@ -38,6 +38,12 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_sendFollowup}" for="sendFollowup" />
                         <p:inputText id="sendFollowup" value="#{bmwEventController.selected.sendFollowup}" title="#{bundle.CreateBmwEventTitle_sendFollowup}" />
 
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_bmwParticipants}" for="bmwParticipants" />
+                        <p:inputText id="bmwParticipants" value="#{bmwEventController.selected.bmwParticipants}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
+                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{bmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>
