@@ -85,8 +85,26 @@ public class doLogin {
 			 if(pw.equals(bmwUser.getPwd())){
 				 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("uid", bmwUser.getUid());
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", bmwUser.getRole());
-				
+				System.out.println("Role:"+bmwUser.getRole());
+				if(bmwUser.getRole()==null){
+					context.addMessage(null, new FacesMessage("Fehler", "Für diesen User ist keine Rolle Definiert"));  
+			return "#";
+				}else if(bmwUser.getRole()==1){
+					//is BMW User
 				return "/faces/index.xhtml";
+				}else if(bmwUser.getRole()==2){
+					//is Journalist
+				return "/faces/BMW_Journalist/journalistmenue.xhtml";
+				}else if(bmwUser.getRole()==3){
+					//is Travel Agency
+					
+				  context.addMessage(null, new FacesMessage("Fehler", "Es gibt noch keine Oberfläche für Reisebüros"));  
+				return "#";
+				}else{
+					//Unbekannte Rolle
+				  context.addMessage(null, new FacesMessage("Fehler", "Diese Rolle ("+bmwUser.getRole().toString()+") ist dem System nicht bekannt"));  
+				  return "#";
+				}
 				
 			 }else{
 				 
