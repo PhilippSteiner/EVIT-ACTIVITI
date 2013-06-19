@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            <h:form>
+                <p:layout fullPage="true">
+
+                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                        <!--<img src="img/bmw-logo.jpg" height="100%"/>BMW Events [Logo n Stuff]-->
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                        BMW Events [Legal Stuff, AGB's, Imprint]
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
+
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+                        <h:form>
+                            <p:dataTable id="events" var="event" value="#{JournalistBean.journalistEvents}">  
+
+                                <p:column headerText="Name">
+                                    <h:outputText value="#{event.name}" />
+                                </p:column>
+
+                                <p:column headerText="bis">
+                                    <h:outputText value="#{event.startEventdate.toString()}" />
+                                </p:column>
+
+                                <p:column headerText="von">
+                                    <h:outputText value="#{event.endEventdate.toString()}" />
+                                </p:column>
+
+                                <p:column style="width:4%">  
+                                    <p:commandButton id="selectButton" action="#{JournalistBean.didSelectEventRow()}"  icon="ui-icon-search">  
+                                        <f:setPropertyActionListener value="#{event}" target="#{JournalistBean.selectedBmwEvent}" />  
+                                    </p:commandButton>  
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>
+
+                    </p:layoutUnit>
+
+                </p:layout>
+            </h:form>
+        </h:body>
+
+    </f:view>
+</html>
+

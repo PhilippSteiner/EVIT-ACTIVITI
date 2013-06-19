@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+            
+            <h:outputStylesheet name="/resources/css/journaliststyle" />
+            
+            <h:form>
+
+            <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                    <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                    BMW Events [Legal Stuff, AGB's, Imprint]
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
+                    <p:menu style='width:95%'>
+                        
+                            <p:menuitem value="Kommende Events" url="#" />
+                            <p:menuitem value="Vergangene Events" url="#" />
+                            <p:menuitem value="E-Mail History" url="#" />
+                            <p:menuitem value="Files" url="#" />
+
+                      
+
+                    </p:menu>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <p:layout>
+                    <p:layoutUnit position="center" size="60%">
+                        <h2>#{JournalistBean.selectedBmwEvent.name}</h2>
+                        <h4>#{JournalistBean.von} - #{JournalistBean.bis} in #{JournalistBean.selectedBmwEvent.location}</h4>
+                        <img src="img/flyer.jpg" width="30%" style="float: left; padding-right: 20px; padding-bottom: 20px;"/><p>#{JournalistBean.selectedBmwEvent.description}</p>
+                    </p:layoutUnit>
+                        
+                    <p:layoutUnit position="east" size="40%">
+                    
+                        <ui:include src="#{JournalistBean.status}"/>
+                        <!--<ui:include src="/BMW_Journalist/zugesagt.xhtml"/>-->
+                        	
+                    </p:layoutUnit>
+                    </p:layout>
+                   
+                </p:layoutUnit>
+
+            </p:layout>
+
+            </h:form>
+            
+        </h:body>
+
+    </f:view>
+</html>
