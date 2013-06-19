@@ -42,7 +42,7 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == false}]]></conditionExpression>
     </sequenceFlow>
     <userTask id="selectiveInvitation" name="Selektive Nachladung"></userTask>
-    <sequenceFlow id="flow15" name="normal" sourceRef="kindOfRejection" targetRef="eventIsOpen"></sequenceFlow>
+    <sequenceFlow id="flow15" name="normal" sourceRef="kindOfRejection" targetRef="evaluateEventStatus"></sequenceFlow>
     <sequenceFlow id="flow17" sourceRef="selectiveInvitation" targetRef="inviteSelectedParticipant"></sequenceFlow>
     <serviceTask id="inviteSelectedParticipant" name="ausgewaehlten Teilnehmer nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteSelectedParticipant"></serviceTask>
     <endEvent id="endevent3" name="End"></endEvent>
@@ -65,6 +65,8 @@
     <sequenceFlow id="flow23" sourceRef="sendTicketNotification" targetRef="endevent5"></sequenceFlow>
     <endEvent id="endevent6" name="End"></endEvent>
     <sequenceFlow id="flow24" sourceRef="manualExecution" targetRef="endevent6"></sequenceFlow>
+    <serviceTask id="evaluateEventStatus" name="evaluateEventStatus" activiti:class="ac.at.fhkufstein.activiti.delegates.EvaluateEventStatus"></serviceTask>
+    <sequenceFlow id="flow25" sourceRef="evaluateEventStatus" targetRef="eventIsOpen"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Journalist_Invitation_Response">
     <bpmndi:BPMNPlane bpmnElement="Journalist_Invitation_Response" id="BPMNPlane_Journalist_Invitation_Response">
@@ -140,6 +142,12 @@
       <bpmndi:BPMNShape bpmnElement="inviteSelectedParticipant" id="BPMNShape_inviteSelectedParticipant">
         <omgdc:Bounds height="61.0" width="105.0" x="1349.0" y="270.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="965.0" y="199.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="evaluateEventStatus" id="BPMNShape_evaluateEventStatus">
+        <omgdc:Bounds height="55.0" width="105.0" x="965.0" y="199.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="195.0" y="297.0"></omgdi:waypoint>
         <omgdi:waypoint x="270.0" y="297.0"></omgdi:waypoint>
@@ -208,7 +216,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
         <omgdi:waypoint x="1019.0" y="279.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1019.0" y="185.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1017.0" y="254.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="12.0" width="33.0" x="10.0" y="-2.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
@@ -272,6 +280,10 @@
       <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
         <omgdi:waypoint x="1055.0" y="665.0"></omgdi:waypoint>
         <omgdi:waypoint x="1055.0" y="710.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="1017.0" y="199.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1019.0" y="185.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -14,7 +14,7 @@
   <bpmndi:BPMNDiagram id="BPMNDiagram_InvitationProcess">
     <bpmndi:BPMNPlane bpmnElement="InvitationProcess" id="BPMNPlane_InvitationProcess">
       <bpmndi:BPMNShape bpmnElement="createEvent" id="BPMNShape_createEvent">
-        <omgdc:Bounds height="55.0" width="105.0" x="340.0" y="240.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="380.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="addJournalists" id="BPMNShape_addJournalists">
         <omgdc:Bounds height="55.0" width="105.0" x="500.0" y="240.0"></omgdc:Bounds>
@@ -29,7 +29,7 @@
         <omgdc:Bounds height="55.0" width="105.0" x="830.0" y="240.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-        <omgdi:waypoint x="445.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="415.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="500.0" y="267.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
