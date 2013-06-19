@@ -18,8 +18,8 @@
                          rowsPerPageTemplate="10,20,30"
                          >
 
-                <p:ajax event="rowSelect"   update="viewButton"/>
-                <p:ajax event="rowUnselect" update="viewButton"/>
+                <p:ajax event="rowSelect"   update="viewButton editButton"/>
+                <p:ajax event="rowUnselect" update="viewButton editButton"/>
 
                
                 <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
@@ -50,7 +50,9 @@
                
                 <f:facet name="footer">
                     <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty bmwUserController.selected}"/>
-                    </f:facet>
+					<p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty bmwUserController.selected}"/>
+                    
+				</f:facet>
 
             </p:dataTable>
 
