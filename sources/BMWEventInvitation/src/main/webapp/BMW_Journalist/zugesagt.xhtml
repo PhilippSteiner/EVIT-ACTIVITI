@@ -1,0 +1,74 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>PrimeFaces</title>
+        </f:facet>
+    </h:head>
+
+    <h:body>
+
+        <h:outputStylesheet name="/resources/css/journaliststyle" />
+
+        <h:form>
+
+            <p:panel header="Bitte Anreiseoptionen wählen">
+
+                <p:tabView id="tabView">  
+
+                    <p:tab id="tab1" title="Fliegen">  
+
+                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+
+                            <p:selectOneMenu id="eid" value="#{JournalistBean.einladungauswahl}" onchange="submit()">
+                                <f:selectItems value="#{JournalistBean.eventFlightListString}"/>
+                            </p:selectOneMenu>
+
+                            <p:commandButton id="flugauswahlButton" value="Auswählen" oncomplete="#{JournalistBean.flugwaehlen()}"/>
+
+                        </h:panelGrid>
+
+                    </p:tab>  
+
+                    <p:tab id="tab2" title="Auto"> 
+
+                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+
+                            <h3>Sie wollen selbst mit dem Auto anreisen?</h3>
+
+                            <p:commandButton id="autoauswahlButton" value="Auswählen" oncomplete="#{JournalistBean.autoWaehlen()}"/>
+
+                        </h:panelGrid>
+
+                    </p:tab> 
+
+                </p:tabView>
+
+            </p:panel>
+
+            <!--<p:confirmDialog id="flugalert" message="Wollen Sie den Flug Minga - Wien am 21.02.13 buchen lassen?"  
+                             header="Fliegen" severity="alert" widgetVar="flugalert" style="z-index: 2000">  
+
+                <p:commandButton id="confirmflug" value="Abbrechen"  onclick="flugalert.hide()" />  
+                <p:commandButton id="declineflug" value="Bestätigen" onclick="flugalert.hide()"/>   
+
+            </p:confirmDialog> 
+            
+            <p:confirmDialog id="autoalert" message="Wollen sie wirklich mit dem Auto anreisen?"  
+                             header="Auto" severity="alert" widgetVar="autoalert" style="z-index: 2000">  
+
+                <p:commandButton id="confirmauto" value="Abbrechen"  onclick="autoalert.hide()" />  
+                <p:commandButton id="declineauto" value="Bestätigen" onclick="autoalert.hide()"/>   
+
+            </p:confirmDialog>-->
+
+        </h:form> 
+
+    </h:body>
+
+</html>
