@@ -6,7 +6,7 @@
     <application>
         <lifecycle>
             <phase-listener>
-                ac.at.fhkufstein.bmweventinvitation.DebugPhaseListener
+                ac.at.fhkufstein.login.login
             </phase-listener>
         </lifecycle>
         <resource-bundle>

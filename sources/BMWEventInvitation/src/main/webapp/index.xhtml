@@ -21,7 +21,8 @@
                 -) Prozessschema fertiggestellt <br/>
                 -) benötigte Felder in Datenbank bei Event: Frist Einladungsmail, Frist Urgenzmail</p>
             </p:panel>
-
+			UserID: #{login.uid}
+            <p:commandButton id="welcome" value="Logout" action="#{login.logout()}"></p:commandButton>
         </ui:define>
 
     </ui:composition>

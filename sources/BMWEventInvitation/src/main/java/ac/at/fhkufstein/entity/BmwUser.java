@@ -34,7 +34,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "BmwUser.findAll", query = "SELECT b FROM BmwUser b"),
     @NamedQuery(name = "BmwUser.findByUid", query = "SELECT b FROM BmwUser b WHERE b.uid = :uid"),
+    @NamedQuery(name = "BmwUser.findByPersonenID", query = "SELECT b FROM BmwUser b WHERE b.personenID = :personenID"),
     @NamedQuery(name = "BmwUser.findByPwd", query = "SELECT b FROM BmwUser b WHERE b.pwd = :pwd"),
+    @NamedQuery(name = "BmwUser.findByEmail", query = "SELECT b FROM BmwUser b WHERE b.email = :email"),
+    @NamedQuery(name = "BmwUser.findByUsername", query = "SELECT b FROM BmwUser b WHERE b.username = :username"),
     @NamedQuery(name = "BmwUser.findByRating", query = "SELECT b FROM BmwUser b WHERE b.rating = :rating"),
     @NamedQuery(name = "BmwUser.findBySeatingPriority", query = "SELECT b FROM BmwUser b WHERE b.seatingPriority = :seatingPriority")})
 public class BmwUser implements Serializable {
