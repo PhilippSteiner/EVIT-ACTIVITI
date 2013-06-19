@@ -45,7 +45,15 @@ public class Participants {
 	private List<BmwUser> u = new ArrayList<BmwUser>();
 	private BmwEvent current;
 	private BmwUser[] selected;
+	private BmwParticipants[] selectedp;
 
+	public BmwParticipants[] getSelectedp() {
+		return selectedp;
+	}
+
+	public void setSelectedp(BmwParticipants[] selectedp) {
+		this.selectedp = selectedp;
+	}
 	
 	//Current is the event itself
 	//selected are the participants
@@ -92,13 +100,16 @@ public class Participants {
 			System.out.println("Size:" + p.size());
 			
 			selected = new BmwUser[p.size()];
+			selectedp = new BmwParticipants[p.size()];
 			System.out.println("test");
 			Iterator<BmwParticipants> it = p.iterator();
+			
 			int ii=0;
 			
 			while (it.hasNext()) {
-				selected[ii]=it.next().getUserId();
-			
+				BmwParticipants x=it.next();
+				selected[ii]=x.getUserId();
+				selectedp[ii]=x;
 				//u.add((BmwUser) it.next().getUserId());
 				//System.out.println("Name"+it.next().getUserId().getPersonenID().getNameVollstaendig());
 				ii++;
@@ -146,29 +157,46 @@ public class Participants {
 		
 		System.out.println("Size:"+p.size());	
 		
-			Iterator<BmwParticipants> it = p.iterator();
-		
-			while (it.hasNext()) {
-				bmwParticipantsController.setSelected(it.next());
-				bmwParticipantsController.delete(null);
-				
-				System.out.println("deleted");
-			}
+			
 	
 			System.out.println("Anzahl Selected"+selected.length);
 			int i=0;
 			
 			while (i<selected.length) {
 				BmwUser b =selected[i];
+			
+				Iterator<BmwParticipants> it = p.iterator();
+		
+			while (it.hasNext()) {
+				//check if element is already in database, if yes, delete from array "selected"
+				if(b.getUid()==it.next().getUserId().getUid()){
+					selected[i]=null;
+				}
 				
+			}
+			
+			
+			
+			
+				i++;
+			}
+			
+			int ii=0;
+			
+			while (ii<selected.length) {
+				
+				if(selected[ii]!=null){
+				BmwUser b =selected[ii];
+			
 				BmwParticipants pc=bmwParticipantsController.prepareCreate(null);
 				pc.setUserId(b);
 				pc.setEventId(current);
+				pc.setPState("eingeladen");
 				System.out.println("Added:"+b.getPersonenID().getNameVollstaendig());
 				bmwParticipantsController.setSelected(pc);
 				bmwParticipantsController.saveNew(null);
-			
-				i++;
+				}
+			ii++;	
 			}
 		
 		//bmwUserController.setSelected();
@@ -212,8 +240,13 @@ public class Participants {
 
 	public void saveCurrent() {
 		//Saves the Event Itself
+		
+		
 		bmwEventController.setSelected(current);
+		
+		
 		bmwEventController.save(null);
+		
 		
 		//bmwUserController.setSelected();
 		System.out.println("yeah saveCurrent");

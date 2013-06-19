@@ -14,6 +14,11 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import javax.xml.bind.Unmarshaller;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+//import javax.media.jai.remote.Serializer;
+import java.io.Serializable;
 
 /**
  *
@@ -21,7 +26,7 @@ import javax.xml.bind.Unmarshaller;
  */
 @ManagedBean
 @ViewScoped
-public class MailConfigController {
+public class MailConfigController implements Serializable {
 
     private static String resourceFolder = MailConfigController.class.getResource("/"+MailConfigController.class.getName().replace(".", "/").replace(MailConfigController.class.getSimpleName(), "")).getFile();
     private final static String FILE = "mailconfig.xml";
@@ -40,7 +45,7 @@ public class MailConfigController {
 
             marshaller.marshal(config, new File(resourceFolder+FILE));
 
-        System.out.println("Mailconfiguration marhsalled");
+            System.out.println("Mailconfiguration marhsalled");
         } catch (JAXBException ex) {
             Logger.getLogger(MailConfigController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -56,7 +61,12 @@ public class MailConfigController {
 
             Unmarshaller unmarshaller = context.createUnmarshaller();
 
-            mailConfig = (MailConfig) unmarshaller.unmarshal(new File(resourceFolder+FILE));
+            File mailConfigFile;
+            if(!(mailConfigFile = new File(resourceFolder+FILE)).exists()) {
+
+                marshalConfig(MailConfig.getInstance());
+            }
+            mailConfig = (MailConfig) unmarshaller.unmarshal(mailConfigFile);
 
         } catch (JAXBException ex) {
             Logger.getLogger(MailConfigController.class.getName()).log(Level.SEVERE, null, ex);
