@@ -61,7 +61,7 @@ public class Flight {
 
 		try {
 			
-				 EntityManager em= ((BmwFlightFacade) bmwFlightController.getFacade()).getEntityManager();
+		         EntityManager em= ((BmwFlightFacade) bmwFlightController.getFacade()).getEntityManager();
 			 p = em.createNamedQuery("BmwFlight.findByEventId")
 			 .setParameter("eventId", cev)
 			 .getResultList();

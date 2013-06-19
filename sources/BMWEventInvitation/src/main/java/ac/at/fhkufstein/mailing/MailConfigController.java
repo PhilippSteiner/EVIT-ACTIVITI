@@ -17,7 +17,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
-import javax.media.jai.remote.Serializer;
+//import javax.media.jai.remote.Serializer;
 import java.io.Serializable;
 
 /**

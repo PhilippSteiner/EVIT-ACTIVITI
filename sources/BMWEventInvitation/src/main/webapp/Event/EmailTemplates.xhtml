@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+    
+    <ui:define name="body">
+				
+			  <ui:include src="menu.xhtml"></ui:include>
+
+    <h:form id="EmailTemplatesListForm">
+
+        <p:panel header="#{bundle.ListEmailTemplatesTitle}">
+            
+            <p:dataTable id="templatedatatable" value="#{emailTemplateBean.eventEmails}" var="item"
+                         emptyMessage="Keine Änderungen vorhanden!">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_id}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                
+                <p:column sortBy="#{item.subject}" filterBy="#{item.subject}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_subject}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.subject}"/>
+                </p:column>
+                <p:column sortBy="#{item.type}" filterBy="#{item.type}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_type}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.type}"/>
+                </p:column>
+                <p:column sortBy="#{item.emailContent}" filterBy="#{item.emailContent}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_emailContent}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.emailContent}"/>
+                </p:column>
+                <p:column sortBy="#{item.eid.name}" filterBy="#{item.eid.name}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_eid}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.eid.name}"/>
+                </p:column>
+            
+            </p:dataTable>
+            
+      
+        </p:panel>
+
+    </h:form>
+</ui:define>
+</ui:composition>

@@ -6,11 +6,14 @@ package ac.at.fhkufstein.activiti.delegates;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
+import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.bean.PersonenController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.persistence.PersistenceService;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -29,26 +32,20 @@ public class InviteSelectedParticipant implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
 
 
-        System.out.println("################# starting subprocesses #################");
+        System.out.println("################# manually invite next participant #################");
 
 
-        execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
-        BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
-        BmwEvent event = eventController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_EVENTID) )) );
+        BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
+        BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_NEXT_PARTICIPANTID));
 
+        // start new process
+        InvitationProcess.startSingleProcess(event, participant);
 
-        for(BmwParticipants participant : event.getBmwParticipantsCollection()) {
+        String nextParticipantInvited = "Der Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " wurde manuell nachgeladen.";
 
-            InvitationProcess process = new InvitationProcess( event, InvitationProcess.PROCESSES[1] );
-            process.setVariable(InvitationProcess.DATABASE_PARTICIPANTID, participant.getId());
-            //@todo get ACTIVITI_CANCEL_INVITATION_TIME from event
-            process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, "2011-03-11T12:13:14");
-            process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
-            process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
-            process.resumeProcess();
-
-
-        }
+        System.out.println(nextParticipantInvited);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(nextParticipantInvited));
 
     }
 }
