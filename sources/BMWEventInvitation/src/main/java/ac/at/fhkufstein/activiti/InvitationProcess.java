@@ -2,6 +2,7 @@ package ac.at.fhkufstein.activiti;
 
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.entity.ActivitiProcessHolder;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
@@ -37,15 +38,15 @@ public class InvitationProcess {
     private String processDefinition;
     private String processDefinitionId;
     private ProcessInstance processInstance;
-    private BmwEvent event;
+    private ActivitiProcessHolder processHolder;
 
-    public InvitationProcess(BmwEvent event, String processDefinition) {
-        this.event = event;
+    public InvitationProcess(ActivitiProcessHolder processHolder, String processDefinition) {
+        this.processHolder = processHolder;
         this.processDefinition = processDefinition;
 
-        if (event.getProcessId() != null) {
+        if (processHolder.getProcessId() != null) {
             setProcessInstance(
-                    Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(event.getProcessId().toString()).singleResult());
+                    Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
         }
@@ -57,17 +58,19 @@ public class InvitationProcess {
 
         // nur bei Hauptprozess
         if (processDefinition.equals(PROCESSES[0])) {
-            event.setProcessId(Integer.valueOf(getProcessInstance().getId()));
-            BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
-            eventController.setSelected(event);
-            eventController.save(null);
+            processHolder.setProcessId(Integer.valueOf(getProcessInstance().getId()));
+            PersistenceService.save(BmwEventController.class, processHolder);
         }
 
-        setVariable(DATABASE_EVENTID, event.getId());
+        if (processHolder instanceof BmwEvent) {
+            setVariable(DATABASE_EVENTID, processHolder.getId());
+        } else if (processHolder instanceof BmwParticipants) {
+            setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
+        }
 
         setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
-        System.out.println("Proccess Instance #" + event.getProcessId() + " started");
+        System.out.println("Proccess Instance #" + processHolder.getProcessId() + " started");
     }
 
     public void setVariable(String name, Object value) {
@@ -89,7 +92,7 @@ public class InvitationProcess {
 
     public String getNextFormKey() {
 
-        if (event.getProcessId() == null) {
+        if (processHolder.getProcessId() == null) {
             try {
                 startProcess();
             } catch (Exception ex) {
@@ -114,12 +117,12 @@ public class InvitationProcess {
     }
 
     public void resumeProcess() {
-        System.out.println("resume Process with Id " + event.getProcessId());
-        Services.getRuntimeService().signal(String.valueOf(event.getProcessId()));
+        System.out.println("resume Process with Id " + processHolder.getProcessId());
+        Services.getRuntimeService().signal(String.valueOf(processHolder.getProcessId()));
     }
 
     public boolean processStarted() {
-        return event.getProcessId() != null;
+        return processHolder.getProcessId() != null;
     }
 
     /**
@@ -141,7 +144,7 @@ public class InvitationProcess {
      */
     public String getCurrentActivity() {
         try {
-            return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(String.valueOf(event.getProcessId())).singleResult().getActivityId();
+            return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(String.valueOf(processHolder.getProcessId())).singleResult().getActivityId();
 
         } catch (NullPointerException ex) {
             return null;
@@ -164,13 +167,8 @@ public class InvitationProcess {
 
     public static InvitationProcess startSingleProcess(BmwEvent event, BmwParticipants participant) {
 
-        InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[1]);
-        process.setVariable(InvitationProcess.DATABASE_PARTICIPANTID, participant.getId());
-        //@todo get ACTIVITI_CANCEL_INVITATION_TIME from event
+        InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
 
-        Long sendReminderTime = (event.getStartEventdate().getTime() - event.getUrgencyDayLimit() * 24 * 3600 * 1000);
-
-        process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
 
@@ -185,11 +183,11 @@ public class InvitationProcess {
     public static long getDueTime(BmwEvent event, BmwParticipants participant, int days) throws Exception {
         Long dueTime;
 
-        if ((dueTime = event.getStartEventdate().getTime() /*participant invitationdate */ + days * 24 * 3600 * 1000) > event.getCloseInvitation().getTime()) {
+        if ((dueTime = participant.getInvitationDate().getTime() + days * 24 * 3600 * 1000) > event.getCloseInvitation().getTime()) {
             dueTime = event.getCloseInvitation().getTime();
         }
 
-        if(dueTime >= new Date().getTime()) {
+        if (dueTime >= new Date().getTime()) {
             throw new Exception("Zeitpunkt bereits vorüber.");
         }
 
@@ -226,5 +224,19 @@ public class InvitationProcess {
         }
 
         return null;
+    }
+
+    /**
+     * @return the processHolder
+     */
+    public ActivitiProcessHolder getProcessHolder() {
+        return processHolder;
+    }
+
+    /**
+     * @param processHolder the processHolder to set
+     */
+    public void setProcessHolder(ActivitiProcessHolder processHolder) {
+        this.processHolder = processHolder;
     }
 }

@@ -52,6 +52,8 @@ public class InviteNextParticipant implements JavaDelegate {
             BmwParticipants participant = PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).prepareCreate(null);
             participant.setEventId(event);
             participant.setUserId(user);
+            participant.setPState("invited");
+
 
             PersistenceService.save(BmwParticipantsController.class, participant);
 

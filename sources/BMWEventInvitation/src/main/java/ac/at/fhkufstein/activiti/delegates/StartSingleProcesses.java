@@ -31,7 +31,7 @@ public class StartSingleProcesses implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
 
 
-        System.out.println("################# starting subprocesses #################");
+        System.out.println("################# starting journalist processes #################");
 
 
         execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);

@@ -64,12 +64,10 @@
                 </p:column>
 
                 <p:column>
-                    <!--rendered="{!processBmwEventController.selected.released}" -->
-                    <p:commandButton value="Freigeben" update=":BmwEventCreateForm" rendered="#{true}"
+                    <p:commandButton value="Freigeben" update=":BmwEventCreateForm" rendered="#{!item.released}"
                                      actionListener="#{processBmwEventController.release(item)}" styleClass="ui-priority-primary"/>
 
-                    <!--rendered="{processBmwEventController.selected.released}" -->
-                    <h:outputText value="Freigegeben" rendered="#{false}" />
+                    <h:outputText value="Freigegeben" rendered="#{item.released}" />
                 </p:column>
 
                 <f:facet name="footer">

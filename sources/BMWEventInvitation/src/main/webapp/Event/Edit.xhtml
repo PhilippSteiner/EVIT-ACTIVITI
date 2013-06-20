@@ -40,12 +40,10 @@
 
 
                     <p:column>
-                        <!--rendered="{!processBmwEventController.selected.released}" -->
-                        <p:commandButton value="Freigeben" update="display" rendered="#{true}"
-                                         actionListener="#{processBmwEventController.release(bmwEventController.selected)}" styleClass="ui-priority-primary"/>
+                        <p:commandButton value="Freigeben" update="display" rendered="#{!Participants.current.released}"
+                                         actionListener="#{processBmwEventController.release(Participants.current)}" styleClass="ui-priority-primary"/>
 
-                        <!--rendered="{processBmwEventController.selected.released}" -->
-                        <h:outputText value="Freigegeben" rendered="#{false}" />
+                        <h:outputText value="Freigegeben" rendered="#{Participants.current.released}" />
                     </p:column>
 
                 </p:panelGrid>

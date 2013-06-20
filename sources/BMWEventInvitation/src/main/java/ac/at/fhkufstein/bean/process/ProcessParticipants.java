@@ -34,7 +34,7 @@ public class ProcessParticipants {
 
             MessageService.showInfo("Der Prozess wird fortgefahren.");
         } else {
-            MessageService.showError("Der Prozess kann nicht fortgesetzt werden.");
+            MessageService.showError("Der Prozess kann nicht fortgesetzt werden." + (process.getCurrentActivity() != null ? " current Activity: "+process.getCurrentActivity()  : ""));
         }
     }
 }
