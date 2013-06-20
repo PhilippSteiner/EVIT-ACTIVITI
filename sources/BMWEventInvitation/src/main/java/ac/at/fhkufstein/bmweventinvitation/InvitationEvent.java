@@ -6,7 +6,7 @@ package ac.at.fhkufstein.bmweventinvitation;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
-import ac.at.fhkufstein.persistence.PersistenceService;
+import ac.at.fhkufstein.service.PersistenceService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
@@ -21,7 +21,7 @@ public class InvitationEvent {
 
     public InvitationEvent() {
 
-        BmwEventController eventController = PersistenceService.getControllerInstance(BmwEventController.class);
+        BmwEventController eventController = PersistenceService.getManagedBeanInstance(BmwEventController.class);
 
 
         process = new InvitationProcess( eventController.getFacade().find(2), InvitationProcess.PROCESSES[0] );

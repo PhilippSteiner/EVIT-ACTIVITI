@@ -46,7 +46,7 @@
 
 
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{bmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>
+                    <p:commandButton actionListener="#{processBmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="BmwEventCreateDialog.hide()"/>
                 </h:panelGroup>
 
