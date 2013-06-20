@@ -9,10 +9,14 @@ import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.mailing.MailService;
+import ac.at.fhkufstein.service.PersistenceService;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.Persistence;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 
@@ -28,13 +32,39 @@ public class InviteNextParticipant implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
 
 
-        System.out.println("################# sending invitation mails #################");
+        System.out.println("################# invite next participant #################");
 
 
         execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
-        BmwParticipantsController participantController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-        BmwParticipants participant = participantController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID) )) );
+        BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
-//        MailService.sendMail(null, null, null);
+        BmwUser user = InvitationProcess.getNextParticipant(event);
+
+        if (user == null) {
+            String noUserMessage = "Es befindet sich kein User mehr in der Warteschlange.";
+
+            System.out.println(noUserMessage);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(noUserMessage));
+        } else {
+
+            // save next Participant
+            BmwParticipants participant = PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).prepareCreate(null);
+            participant.setEventId(event);
+            participant.setUserId(user);
+            participant.setPState("invited");
+
+
+            PersistenceService.save(BmwParticipantsController.class, participant);
+
+            // start new process
+            InvitationProcess.startSingleProcess(event, participant);
+
+            String nextParticipantInvited = "Der Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " wurde nachgeladen.";
+
+            System.out.println(nextParticipantInvited);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(nextParticipantInvited));
+        }
     }
 }

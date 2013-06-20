@@ -6,11 +6,13 @@ package ac.at.fhkufstein.activiti.delegates;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
+import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.bean.PersonenController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -29,7 +31,7 @@ public class StartSingleProcesses implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
 
 
-        System.out.println("################# starting subprocesses #################");
+        System.out.println("################# starting journalist processes #################");
 
 
         execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
@@ -39,14 +41,7 @@ public class StartSingleProcesses implements JavaDelegate {
 
         for(BmwParticipants participant : event.getBmwParticipantsCollection()) {
 
-            InvitationProcess process = new InvitationProcess( event, InvitationProcess.PROCESSES[1] );
-            process.setVariable(InvitationProcess.DATABASE_PARTICIPANTID, participant.getId());
-            //@todo get ACTIVITI_CANCEL_INVITATION_TIME from event
-            process.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, "2011-03-11T12:13:14");
-            process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
-            process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
-            process.resumeProcess();
-
+            InvitationProcess.startSingleProcess(event, participant);
 
         }
 

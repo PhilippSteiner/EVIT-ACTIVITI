@@ -5,6 +5,7 @@
 package ac.at.fhkufstein.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,7 +38,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "BmwParticipants.findByPState", query = "SELECT b FROM BmwParticipants b WHERE b.pState = :pState"),
     @NamedQuery(name = "BmwParticipants.findByRepId", query = "SELECT b FROM BmwParticipants b WHERE b.repId = :repId"),
     @NamedQuery(name = "BmwParticipants.findByBmwAuth", query = "SELECT b FROM BmwParticipants b WHERE b.bmwAuth = :bmwAuth")})
-public class BmwParticipants implements Serializable {
+public class BmwParticipants implements Serializable, ActivitiProcessHolder {
+    @Column(name = "invitation_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date invitationDate;
     @Column(name = "processId")
     private Integer processId;
     private static final long serialVersionUID = 1L;
@@ -157,5 +163,19 @@ public class BmwParticipants implements Serializable {
     public void setProcessId(Integer processId) {
         this.processId = processId;
     }
-    
+
+    /**
+     * @return the invitationDate
+     */
+    public Date getInvitationDate() {
+        return invitationDate;
+    }
+
+    /**
+     * @param invitationDate the invitationDate to set
+     */
+    public void setInvitationDate(Date invitationDate) {
+        this.invitationDate = invitationDate;
+    }
+
 }

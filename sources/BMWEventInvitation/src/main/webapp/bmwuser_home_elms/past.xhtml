@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="BmwEventListForm">
+    <ui:composition>
+    
+    				
+					<p:panel header="Vergangene Events">
 
-        <p:panel header="#{bundle.ListBmwEventTitle}">
-
-            <p:dataTable id="datalist" value="#{bmwEventController.items}" var="item"
+            <p:dataTable id="datalist_past" value="#{Events.past()}" var="item"
                          selectionMode="single" selection="#{bmwEventController.selected}"
                          rowKey="#{item.id}"
                          paginator="true"
                          rows="10"
                          rowsPerPageTemplate="10,20,30"
-
+                         
                          >
 
-                <p:ajax event="rowSelect"   update="createButton"/>
-                <p:ajax event="rowUnselect" update="createButton"/>
 
-                <p:column style="width:4%">
-                    <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">
-                        <f:param name="eventID" value="#{item.id}" />
-                    </p:button>
-                </p:column>
-
+				<p:column style="width:4%">  
+                <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">  
+    <f:param name="eventID" value="#{item.id}" />  
+</p:button>  
+        </p:column>  
+				
                 <p:column sortBy="#{item.name}" filterBy="#{item.name}">
                     <f:facet name="header">
                         <h:outputText value="Name"/>
@@ -62,25 +61,11 @@
                     </f:facet>
                     <h:outputText value="#{item.location}"/>
                 </p:column>
-
-                <p:column>
-                    <p:commandButton value="Freigeben" update=":BmwEventCreateForm" rendered="#{!item.released}"
-                                     actionListener="#{processBmwEventController.release(item)}" styleClass="ui-priority-primary"/>
-
-                    <h:outputText value="Freigegeben" rendered="#{item.released}" />
-                </p:column>
-
                 <f:facet name="footer">
-                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{bmwEventController.prepareCreate}" update=":BmwEventCreateForm" oncomplete="BmwEventCreateDialog.show()"/>
-
+                    
                 </f:facet>
 
             </p:dataTable>
-
-        </p:panel>
-
-    </h:form>
-
-
-
+					</p:panel>
 </ui:composition>
+</html>

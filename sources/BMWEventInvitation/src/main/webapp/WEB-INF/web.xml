@@ -17,9 +17,13 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+<error-page>
+<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+<location>/faces/login.xhtml</location>
+</error-page>
     <session-config>
         <session-timeout>
-            30
+            3000
         </session-timeout>
     </session-config>
     <welcome-file-list>
