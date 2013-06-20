@@ -6,9 +6,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/template.xhtml">
 	<ui:define name="body">
-				
-			  <ui:include src="menu.xhtml"></ui:include>
-			  
+
+			<h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+        <p:tabMenu activeIndex="1">  
+       <ui:include src="menu.xhtml"></ui:include>
+        </p:tabMenu>
+
 		<h:form id="BmwUserListForm">
 
 			<p:panel header="Teilnehmer">
@@ -16,7 +19,7 @@
 				<p:dataTable id="datalist" value="#{Participants.selectedp}" var="item"
 							 rowKey="#{item.id}"
 							 rowStyleClass="#{item.PState == 'eingeladen' ? 'red' : (item.PState == 'zugesagt' ? 'green' : (item.PState == 'auto' ? 'blue': ( item.PState == 'flug' ? 'yellow' : (item.PState == 'ticket' ? 'magenta' : null))))}"
-											  
+
 							 paginator="true"
 							 rows="10"
 							 rowsPerPageTemplate="10,20,30"
@@ -56,9 +59,9 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"  
-								 update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>--> 
-						<p:commandButton id="Submit" value="Speichern" action="#{Participants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>  
+						<!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"
+								 update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>-->
+						<p:commandButton id="Submit" value="Speichern" action="#{processParticipants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>
 
 
 
@@ -68,14 +71,14 @@
 
 
 
-				<p:dialog id="multiDialog" header="Teilnehmer Übersicht" widgetVar="multiCarDialog"  
-						  height="300" showEffect="fade" hideEffect="explode">  
-					<p:dataList id="displayMulti" value="#{Participants.selected}" var="i" >  
-						#{i.personenID.nameVollstaendig}  
-					</p:dataList>  
+				<p:dialog id="multiDialog" header="Teilnehmer Übersicht" widgetVar="multiCarDialog"
+						  height="300" showEffect="fade" hideEffect="explode">
+					<p:dataList id="displayMulti" value="#{Participants.selected}" var="i" >
+						#{i.personenID.nameVollstaendig}
+					</p:dataList>
 
 
-				</p:dialog>  
+				</p:dialog>
 			</p:panel>
 		</h:form>
 

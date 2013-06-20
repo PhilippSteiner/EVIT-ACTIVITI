@@ -5,82 +5,82 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/template.xhtml">
-	<ui:define name="body">
-				
-			  <ui:include src="menu.xhtml"></ui:include>
-			  
-		<h:form id="BmwUserListForm">
+    <ui:define name="body">
 
-			<p:panel header="Journalisten Einladen">
+        	<h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+        <p:tabMenu activeIndex="2">  
+       <ui:include src="menu.xhtml"></ui:include>
+        </p:tabMenu>
 
-				<p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
-							 selection="#{Participants.selected}"
-							 rowKey="#{item.uid}"
-							 paginator="true"
-							 rows="10"
-							 rowsPerPageTemplate="10,20,30"
-							 >
+        <h:form id="BmwUserListForm">
+            <p:growl id="growl" showDetail="true" sticky="true" />
+            <p:panel header="Journalisten Einladen">
 
-					<p:column selectionMode="multiple" style="width:2%" />  
+                <p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
+                             selection="#{Participants.selected}"
+                             rowKey="#{item.uid}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30"
+                             >
 
-					<p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
-						<f:facet name="header">
-							<h:outputText value="Vorname"/>
-						</f:facet>
-						<h:outputText value="#{item.personenID.vorname}"/>
-					</p:column>
+                    <p:column selectionMode="multiple" style="width:2%" />
 
-					<p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
-						<f:facet name="header">
-							<h:outputText value="Nachname"/>
-						</f:facet>
-						<h:outputText value="#{item.personenID.nachname}"/>
-					</p:column>
-					<p:column sortBy="#{item.personenID.firma}" filterBy="#{item.personenID.firma}">
-						<f:facet name="header">
-							<h:outputText value="Firma"/>
-						</f:facet>
-						<h:outputText value="#{item.personenID.firma}"/>
-					</p:column>
-					<p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
-						<f:facet name="header">
-							<h:outputText value="Rating"/>
-						</f:facet>
-						<h:outputText value="#{item.rating}"/>
-					</p:column>
-					<p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
-						<f:facet name="header">
-							<h:outputText value="Rating"/>
-						</f:facet>
-						<h:outputText value="#{item.rating}"/>
-					</p:column>
+                    <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
+                        <f:facet name="header">
+                            <h:outputText value="Vorname"/>
+                        </f:facet>
+                        <h:outputText value="#{item.personenID.vorname}"/>
+                    </p:column>
 
-					<f:facet name="footer">
-						<!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"  
-								 update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>--> 
-						<p:commandButton id="Submit" value="Speichern" action="#{Participants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>  
+                    <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+                        <f:facet name="header">
+                            <h:outputText value="Nachname"/>
+                        </f:facet>
+                        <h:outputText value="#{item.personenID.nachname}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.personenID.firma}" filterBy="#{item.personenID.firma}">
+                        <f:facet name="header">
+                            <h:outputText value="Firma"/>
+                        </f:facet>
+                        <h:outputText value="#{item.personenID.firma}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                        <f:facet name="header">
+                            <h:outputText value="Rating"/>
+                        </f:facet>
+                        <h:outputText value="#{item.rating}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                        <f:facet name="header">
+                            <h:outputText value="Rating"/>
+                        </f:facet>
+                        <h:outputText value="#{item.rating}"/>
+                    </p:column>
 
+                    <f:facet name="footer">
+                        <!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"
+                                         update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>-->
+                        <p:commandButton id="Submit" value="Speichern" action="#{processParticipants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>
+                    </f:facet>
 
-
-					</f:facet>
-
-				</p:dataTable>
-
-
-
-				<p:dialog id="multiDialog" header="Teilnehmer Übersicht" widgetVar="multiCarDialog"  
-						  height="300" showEffect="fade" hideEffect="explode">  
-					<p:dataList id="displayMulti" value="#{Participants.selected}" var="i" >  
-						#{i.personenID.nameVollstaendig}  
-					</p:dataList>  
+                </p:dataTable>
 
 
-				</p:dialog>  
-			</p:panel>
-		</h:form>
+
+                <p:dialog id="multiDialog" header="Teilnehmer Übersicht" widgetVar="multiCarDialog"
+                          height="300" showEffect="fade" hideEffect="explode">
+                    <p:dataList id="displayMulti" value="#{Participants.selected}" var="i" >
+                        #{i.personenID.nameVollstaendig}
+                    </p:dataList>
+
+
+                </p:dialog>
+            </p:panel>
+        </h:form>
 
     </ui:define>
 
 
-    </ui:composition>
+</ui:composition>
 
