@@ -26,5 +26,5 @@ public class BmwEventFacade extends AbstractFacade<BmwEvent> {
     public BmwEventFacade() {
         super(BmwEvent.class);
     }
-    
+
 }

@@ -29,7 +29,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.joda.time.DateTime;
 
 
 
@@ -57,7 +56,9 @@ import org.joda.time.DateTime;
     @NamedQuery(name = "BmwEvent.findByUserCreated", query = "SELECT b FROM BmwEvent b WHERE b.userCreated = :userCreated"),
     @NamedQuery(name = "BmwEvent.findByProgress", query = "SELECT b FROM BmwEvent b WHERE b.progress = :progress"),
     @NamedQuery(name = "BmwEvent.findByProcessId", query = "SELECT b FROM BmwEvent b WHERE b.processId = :processId")})
-public class BmwEvent implements Serializable {
+public class BmwEvent implements Serializable, ActivitiProcessHolder {
+    @Column(name = "released")
+    private Boolean released = false;
     @Column(name = "sendFollowup")
     private Integer sendFollowup;
     @Column(name = "bmwParticipants")
@@ -401,5 +402,19 @@ public class BmwEvent implements Serializable {
 
     public void setTravelAgency(BmwUser travelAgency) {
         this.travelAgency = travelAgency;
+    }
+
+    /**
+     * @return the released
+     */
+    public Boolean getReleased() {
+        return released;
+    }
+
+    /**
+     * @param released the released to set
+     */
+    public void setReleased(Boolean released) {
+        this.released = released;
     }
 }
