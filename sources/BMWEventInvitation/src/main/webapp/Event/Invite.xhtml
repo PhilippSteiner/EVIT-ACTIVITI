@@ -10,7 +10,7 @@
 			  <ui:include src="menu.xhtml"></ui:include>
 			  
 		<h:form id="BmwUserListForm">
-
+<p:growl id="growl" showDetail="true" sticky="true" />  
 			<p:panel header="Journalisten Einladen">
 
 				<p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
@@ -58,7 +58,7 @@
 					<f:facet name="footer">
 						<!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"  
 								 update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>--> 
-						<p:commandButton id="Submit" value="Speichern" action="#{Participants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>  
+						<p:commandButton id="Submit" value="Speichern" action="#{Participants.saveSelected()}" oncomplete="cityDialog.show()" update=":BmwUserListForm:growl" style="margin-top:5px"/>  
 
 
 

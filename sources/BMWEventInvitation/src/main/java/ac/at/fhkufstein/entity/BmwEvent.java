@@ -44,6 +44,8 @@ import org.joda.time.DateTime;
     @NamedQuery(name = "BmwEvent.findAll", query = "SELECT b FROM BmwEvent b"),
     @NamedQuery(name = "BmwEvent.findById", query = "SELECT b FROM BmwEvent b WHERE b.id = :id"),
     @NamedQuery(name = "BmwEvent.findByName", query = "SELECT b FROM BmwEvent b WHERE b.name = :name"),
+    @NamedQuery(name = "BmwEvent.upcoming", query = "SELECT b FROM BmwEvent b WHERE b.startEventdate> :now"),
+    @NamedQuery(name = "BmwEvent.past", query = "SELECT b FROM BmwEvent b WHERE b.endEventdate< :now"),
     @NamedQuery(name = "BmwEvent.findByStartEventdate", query = "SELECT b FROM BmwEvent b WHERE b.startEventdate = :startEventdate"),
     @NamedQuery(name = "BmwEvent.findByEndEventdate", query = "SELECT b FROM BmwEvent b WHERE b.endEventdate = :endEventdate"),
     @NamedQuery(name = "BmwEvent.findByMaxParticipants", query = "SELECT b FROM BmwEvent b WHERE b.maxParticipants = :maxParticipants"),

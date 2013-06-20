@@ -11,7 +11,14 @@
             <h:outputText value="#{bundle.AppName}"></h:outputText>
         </ui:define>
         <ui:define name="body">
+			
+			<ui:include src="/bmwuser_home_elms/upcoming.xhtml"/>
+			<ui:include src="/bmwuser_home_elms/past.xhtml"/>
             <p:panel header="#{bundle.Welcome}">
+					
+					
+
+				
                 <p><h:outputText value="#{bundle.WelcomeMessage}"></h:outputText></p>
                 <p>Comments(Philipp): <br/>
                 -) Personen Ansicht angepasst, alle nicht benötigten spalten aus der Ansicht entfernt <br/>
@@ -22,6 +29,8 @@
                 -) Prozessschema fertiggestellt <br/>
                 -) benötigte Felder in Datenbank bei Event: Frist Einladungsmail, Frist Urgenzmail</p>
             </p:panel>
+			
+		
 			UserID: #{login.uid}
             <p:commandButton id="welcome" value="Logout" action="#{login.logout()}"></p:commandButton>
         </ui:define>

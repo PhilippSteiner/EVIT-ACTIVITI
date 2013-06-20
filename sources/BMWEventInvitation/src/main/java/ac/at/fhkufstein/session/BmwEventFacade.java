@@ -19,7 +19,7 @@ public class BmwEventFacade extends AbstractFacade<BmwEvent> {
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 
