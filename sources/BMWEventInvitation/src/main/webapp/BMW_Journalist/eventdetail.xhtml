@@ -14,56 +14,123 @@
         </h:head>
 
         <h:body>
-            
+
             <h:outputStylesheet name="/resources/css/journaliststyle" />
-            
-            <h:form>
 
-            <p:layout fullPage="true">
+            <h:form id="form">
 
-                <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                    <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
-                </p:layoutUnit>
+                <p:layout fullPage="true">
 
-                <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                    BMW Events [Legal Stuff, AGB's, Imprint]
-                </p:layoutUnit>
+                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                        <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
+                    </p:layoutUnit>
 
-                <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
-                    <p:menu style='width:95%'>
-                        
+                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                        BMW Events [Legal Stuff, AGB's, Imprint]
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
+                        <p:menu style='width:95%'>
+
                             <p:menuitem value="Kommende Events" url="#" />
                             <p:menuitem value="Vergangene Events" url="#" />
                             <p:menuitem value="E-Mail History" url="#" />
                             <p:menuitem value="Files" url="#" />
 
-                      
 
-                    </p:menu>
-                </p:layoutUnit>
 
-                <p:layoutUnit position="center">
-                    <p:layout>
-                    <p:layoutUnit position="center" size="60%">
-                        <h2>#{JournalistBean.selectedBmwEvent.name}</h2>
-                        <h4>#{JournalistBean.von} - #{JournalistBean.bis} in #{JournalistBean.selectedBmwEvent.location}</h4>
-                        <img src="img/flyer.jpg" width="30%" style="float: left; padding-right: 20px; padding-bottom: 20px;"/><p>#{JournalistBean.selectedBmwEvent.description}</p>
+                        </p:menu>
                     </p:layoutUnit>
-                        
-                    <p:layoutUnit position="east" size="40%">
-                    
-                        <ui:include src="#{JournalistBean.status}"/>
-                        <!--<ui:include src="/BMW_Journalist/zugesagt.xhtml"/>-->
-                        	
-                    </p:layoutUnit>
-                    </p:layout>
-                   
-                </p:layoutUnit>
 
-            </p:layout>
+                    <p:layoutUnit position="center">
+                        <p:layout>
+                            <p:layoutUnit position="center" size="50%">
+                                <h2>#{JournalistBean.selectedBmwEvent.name}</h2>
+                                <h4>#{JournalistBean.von} - #{JournalistBean.bis} in #{JournalistBean.selectedBmwEvent.location}</h4>
+                                <img src="img/flyer.jpg" width="30%" style="float: left; padding-right: 20px; padding-bottom: 20px;"/><p>#{JournalistBean.selectedBmwEvent.description}</p>
+                            </p:layoutUnit>
+
+                            <p:layoutUnit position="east" size="50%">
+
+                                    <p:wizard id="mywizard" widgetVar="wiz"
+                                              flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
+
+                                        <p:tab id="wiz1" title="Einladung" >
+
+                                            <p:panel header="Bitte Einladung beantworten">
+                                                <h:panelGrid columns="4">
+
+                                                    <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
+                                                                     valueChangeListener="#{ResponseBean.stateChangeListener}" style="width: 150px;">
+                                                        <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                                        <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
+                                                        <p:ajax event="change"/>
+                                                    </p:selectOneMenu>
+
+                                                    <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
+
+                                                </h:panelGrid>
+
+                                            </p:panel>
+                                        </p:tab>
+
+                                        <p:tab id="wiz2" title="Anreise" >
+
+                                            <p:panel header="Bitte Anreiseoptionen wählen">
+
+                                                <p:tabView id="tabView">  
+
+                                                    <p:tab id="tab1" title="Fliegen">  
+
+                                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+
+                                                            <p:selectOneMenu id="eid" value="#{ResponseBean.flugauswahl}" onchange="submit()">
+                                                                <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                                                <f:selectItems value="#{ResponseBean.verfuegbareFluege}"/>
+                                                            </p:selectOneMenu>
+
+                                                            <p:commandButton value="Auswählen" action="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
+
+                                                        </h:panelGrid>
+
+                                                    </p:tab>  
+
+                                                    <p:tab id="tab2" title="Selbstanreise"> 
+
+                                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+
+                                                            <h3>Sie wollen wirklich selbst anreisen?</h3>
+
+                                                        </h:panelGrid>
+
+                                                        <p:commandButton value="Auswählen" action="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
+
+                                                    </p:tab> 
+
+                                                </p:tabView>
+
+                                            </p:panel>
+
+                                        </p:tab>
+
+                                        <p:tab id="wiz3" title="Anreisedokumente" >
+
+                                            <h3>Noch keine Anreisedokumente verfügbar</h3>
+
+                                        </p:tab>
+
+                                    </p:wizard>
+                                
+                            </p:layoutUnit>
+                            
+                        </p:layout>
+
+                    </p:layoutUnit>
+
+                </p:layout>
 
             </h:form>
-            
+
         </h:body>
 
     </f:view>

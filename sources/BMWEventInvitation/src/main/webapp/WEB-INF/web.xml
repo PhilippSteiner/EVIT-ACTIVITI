@@ -24,7 +24,7 @@
     </session-config>
     <welcome-file-list>
 
-        <!--BMW_Journalist/journalistmenue-->
+        <!--BMW_Journalisten/journalistmenue-->
 
         <welcome-file>faces/BMW_Journalist/journalistmenue.xhtml</welcome-file>
 

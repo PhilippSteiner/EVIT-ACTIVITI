@@ -24,6 +24,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
 @ManagedBean(name = "JournalistBean")
@@ -43,26 +45,29 @@ public class JournalistBean {
     private Integer UserID;
     private String von;
     private String bis;
-    private List PartipantsStati;
-    private List EventFlightListString;
     private String status;
-    private String einladungauswahl;
+    //select stuff
+    private List<SelectItem> auswahlmoeglichkeiten;
+    private List<SelectItem> verfuegbareFluege;
+    private String auswahl;
     private String flugauswahl;
-    private Map<String, String> einladungsauswahlmöglichkeiten = new HashMap<String, String>();
 
     public JournalistBean() {
 
-        
-        einladungsauswahlmöglichkeiten.put("Vertretung", "Vertretung");
-        einladungsauswahlmöglichkeiten.put("Absagen", "Absagen");
-        einladungsauswahlmöglichkeiten.put("Zusagen", "Zusagen");
-        einladungsauswahlmöglichkeiten.put("Bitte Auswählen", "Bitte Auswählen");
-        
+        //some inits
+
 
         bmwUserController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
 
         bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
 
+        auswahlmoeglichkeiten = new ArrayList<SelectItem>();
+        verfuegbareFluege = new ArrayList<SelectItem>();
+
+        auswahlmoeglichkeiten.add(new SelectItem("Zusagen"));
+        auswahlmoeglichkeiten.add(new SelectItem("Absagen"));
+        auswahlmoeglichkeiten.add(new SelectItem("Vertretung schicken"));
+        
         //FacesContext facesContext = FacesContext.getCurrentInstance();
         //this.UserID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
         this.UserID = 1317;
@@ -76,27 +81,20 @@ public class JournalistBean {
             JournalistParticipants = em.createNamedQuery("BmwParticipants.findByUserId")
                     .setParameter("userId", cev)
                     .getResultList();
-            System.out.println("fuckin size" + JournalistParticipants.size());
+            
+            System.out.println("Constructor: User Participants Anzahl: " + JournalistParticipants.size());
 
             Iterator<BmwParticipants> it = JournalistParticipants.iterator();
 
             this.journalistEvents = new ArrayList<BmwEvent>();
-            this.EventFlightListString = new ArrayList<String>();
 
             while (it.hasNext()) {
 
                 BmwEvent currentBMWEvent = it.next().getEventId();
 
-                System.out.println("fuking event name: " + currentBMWEvent.getName() + "at");
-
-                /*String von = "" + currentBMWEvent.getStartEventdate().getDay() + "" + currentBMWEvent.getStartEventdate().getMonth() + "" + currentBMWEvent.getStartEventdate().getYear();
-                 String bis = "" + currentBMWEvent.getEndEventdate().getDay() + "" + currentBMWEvent.getEndEventdate().getMonth() + "" + currentBMWEvent.getEndEventdate().getYear();*/
-
-                //System.out.println("fuking event name: " +currentEvent.getName()+"at");
+                System.out.println("Constructor: JournalistenEvent : " + currentBMWEvent.getName());
 
                 this.journalistEvents.add(currentBMWEvent);
-
-                System.out.println("fuking event name again: " + currentBMWEvent.getName());
 
             }
 
@@ -111,14 +109,6 @@ public class JournalistBean {
 
     public void setJournalistParticipants(List JournalistParticipants) {
         this.JournalistParticipants = JournalistParticipants;
-    }
-
-    public List getPartipantsStati() {
-        return PartipantsStati;
-    }
-
-    public void setPartipantsStati(List PartipantsStati) {
-        this.PartipantsStati = PartipantsStati;
     }
 
     public List<BmwEvent> getJournalistEvents() {
@@ -153,20 +143,29 @@ public class JournalistBean {
         this.bis = bis;
     }
 
-    public String getStatus() {
-        return status;
+    public List<SelectItem> getAuswahlmoeglichkeiten() {
+        return auswahlmoeglichkeiten;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setAuswahlmoeglichkeiten(List<SelectItem> auswahlmoeglichkeiten) {
+        this.auswahlmoeglichkeiten = auswahlmoeglichkeiten;
     }
 
-    public String getEinladungauswahl() {
-        return einladungauswahl;
+    public List<SelectItem> getVerfuegbareFluege() {
+        return verfuegbareFluege;
     }
 
-    public void setEinladungauswahl(String einladungauswahl) {
-        this.einladungauswahl = einladungauswahl;
+    public void setVerfuegbareFluege(List<SelectItem> verfuegbareFluege) {
+        this.verfuegbareFluege = verfuegbareFluege;
+    }
+
+    public String getAuswahl() {
+        return auswahl;
+    }
+
+    public void setAuswahl(String auswahl) {
+        this.auswahl = auswahl;
+        
     }
 
     public String getFlugauswahl() {
@@ -177,22 +176,6 @@ public class JournalistBean {
         this.flugauswahl = flugauswahl;
     }
 
-    public Map<String, String> getEinladungsauswahlmöglichkeiten() {
-        return einladungsauswahlmöglichkeiten;
-    }
-
-    public void setEinladungsauswahlmöglichkeiten(Map<String, String> einladungsauswahlmöglichkeiten) {
-        this.einladungsauswahlmöglichkeiten = einladungsauswahlmöglichkeiten;
-    }
-
-    public List getEventFlightListString() {
-        return EventFlightListString;
-    }
-
-    public void setEventFlightListString(List EventFlightListString) {
-        this.EventFlightListString = EventFlightListString;
-    }
-
     //######################################################################################################################################
     //######################################################################################################################################
     //######################################################################################################################################
@@ -201,6 +184,7 @@ public class JournalistBean {
     //######################################################################################################################################
     //######################################################################################################################################
     //######################################################################################################################################
+    
     public String didSelectEventRow() {
 
         System.out.println("Selected Event from did select: " + this.selectedBmwEvent.getName());
@@ -208,37 +192,15 @@ public class JournalistBean {
         this.von = "" + this.selectedBmwEvent.getStartEventdate().getDay() + "." + this.selectedBmwEvent.getStartEventdate().getMonth();
         this.bis = "" + this.selectedBmwEvent.getEndEventdate().getDay() + "." + this.selectedBmwEvent.getEndEventdate().getMonth() + "." + this.selectedBmwEvent.getEndEventdate().getYear();
 
-        this.fetchJournalistStatus();
         this.getAllFlightsForEvent();
 
         return "eventdetail";
 
     }
 
-    public void fetchJournalistStatus() {
-
-        bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-
-        EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-
-        this.PartipantsStati = em.createNamedQuery("BmwParticipants.findByEventId")
-                .setParameter("id", this.selectedBmwEvent)
-                .getResultList();
-
-        BmwParticipants currentParticipant = (BmwParticipants) PartipantsStati.get(0);
-
-        this.status = currentParticipant.getPState();
-
-        System.out.println("state: " + this.status);
-
-        this.status = "/BMW_Journalist/" + currentParticipant.getPState() + ".xhtml";
-    }
-
     public void einladungBeantworten() {
 
-        System.out.println("Einladung beant mit : " + this.einladungauswahl);
-
-        
+        System.out.println("Einladung beant mit: " + this.auswahl);
 
     }
 
@@ -268,14 +230,23 @@ public class JournalistBean {
 
         System.out.println("Flights " + currentFlightList.size());
 
-        this.EventFlightListString.add("Bitte Flug auswählen");
 
         for (int i = 0; i < currentFlightList.size(); i++) {
             String dateString = "" + currentFlightList.get(i).getDepartureTime().getDay() + "." + currentFlightList.get(i).getDepartureTime().getMonth() + "." + currentFlightList.get(i).getDepartureTime().getYear();
             String addstring = "" + currentFlightList.get(i).getDepartureLocation() + "-" + currentFlightList.get(i).getArrivalLocation() + ", " + dateString;
 
-            this.EventFlightListString.add(addstring);
+            this.verfuegbareFluege.add(new SelectItem(addstring));
 
         }
     }
+    
+        
+        public void stateChangeListener(ValueChangeEvent event) {
+        
+        System.out.println("Listener Beantwortet mit: "+this.auswahl);
+    
+    }
+
+    
+
 }
