@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{bundle.EmailTemplatesTitle}"/>
+    </ui:define>
+
+    <ui:define name="body">
+
+        <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+        <p:tabMenu activeIndex="4">  
+            <ui:include src="../Event/menu.xhtml"></ui:include>
+        </p:tabMenu>
+        <ui:include src="List.xhtml"/>
+        <ui:include src="View.xhtml"/>
+        <ui:include src="Edit.xhtml"/>
+        <ui:include src="Create.xhtml"/>
+
+    </ui:define>
+
+</ui:composition>

@@ -179,41 +179,7 @@
                 </h:form>
             </p:panel>
             
-            <p:panel header="Templates erstellen">
-                <h:form id="emailTemplate">
-                    <h:panelGroup id="emailTemplateGroup">
-                        <p:panelGrid columns="2" rendered="#{emailTemplatesController.selected != null}">
-                            
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{emailTemplatesController.selected.id}" title="#{bundle.CreateEmailTemplatesTitle_id}" required="true" requiredMessage="#{bundle.CreateEmailTemplatesRequiredMessage_id}"/>
-
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_subject}" for="subject" />
-                        <p:inputText id="subject" value="#{emailTemplatesController.selected.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" />
-
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_type}" for="type" />
-                        <p:inputText id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.CreateEmailTemplatesTitle_type}" />
-
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
-                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}"/>
-
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_eid}" for="eid" />
-                        
-                        <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{bmwEventController.items}"
-                                           var="eidItem"
-                                           itemValue="#{eidItem}"
-                                           itemLabel="#{eidItem.name.toString()}"
-                                           />
-                        </p:selectOneMenu>
-                            
-                            
-                        </p:panelGrid>
-                        <p:commandButton actionListener="#{emailTemplatesController.saveNew}" value="#{bundle.Save}" update="emailTemplateGroup" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
-                    </h:panelGroup>
-                   
-                </h:form>
-            </p:panel>
+            
 
 
 

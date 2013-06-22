@@ -18,6 +18,9 @@
                         <h:outputLabel value="#{bundle.EditBmwUserLabel_uid}" for="uid" />
                         <h:outputText id="uid" value="#{bmwUserController.selected.uid}" />
 
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_username}" for="username" />
+                        <p:inputText id="username" value="#{bmwUserController.selected.username}" title="#{bundle.EditBmwUserTitle_username}" />
+                        
                         <p:outputLabel value="#{bundle.EditBmwUserLabel_pwd}" for="pwd" />
                         <p:inputText id="pwd" value="#{bmwUserController.selected.pwd}" title="#{bundle.EditBmwUserTitle_pwd}" />
 
