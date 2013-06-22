@@ -7,7 +7,10 @@
                 template="/template.xhtml">
 	<ui:define name="body">
 
-			  <ui:include src="menu.xhtml"></ui:include>
+			<h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+        <p:tabMenu activeIndex="1">  
+       <ui:include src="menu.xhtml"></ui:include>
+        </p:tabMenu>
 
 		<h:form id="BmwUserListForm">
 
