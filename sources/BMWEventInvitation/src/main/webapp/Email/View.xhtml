@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmailTemplatesViewDlg" widgetVar="EmailTemplatesViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewEmailTemplatesTitle}">
+
+            <h:form id="EmailTemplatesViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{emailTemplatesController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_id}"/>
+                        <h:outputText value="#{emailTemplatesController.selected.id}" title="#{bundle.ViewEmailTemplatesTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_subject}"/>
+                        <h:outputText value="#{emailTemplatesController.selected.subject}" title="#{bundle.ViewEmailTemplatesTitle_subject}"/>
+
+                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_type}"/>
+                        <h:outputText value="#{emailTemplatesController.selected.type}" title="#{bundle.ViewEmailTemplatesTitle_type}"/>
+
+                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_emailContent}"/>
+                        <h:outputText value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.ViewEmailTemplatesTitle_emailContent}"/>
+
+                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_eid}"/>
+                        <h:outputText value="#{emailTemplatesController.selected.eid.name}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="EmailTemplatesViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

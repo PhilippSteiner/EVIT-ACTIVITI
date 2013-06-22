@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "EmailTemplates.findAll", query = "SELECT e FROM EmailTemplates e"),
+    @NamedQuery(name = "EmailTemplates.findByEventId", query = "SELECT e FROM EmailTemplates e WHERE e.eid = :eid"),
     @NamedQuery(name = "EmailTemplates.findById", query = "SELECT e FROM EmailTemplates e WHERE e.id = :id"),
     @NamedQuery(name = "EmailTemplates.findBySubject", query = "SELECT e FROM EmailTemplates e WHERE e.subject = :subject"),
     @NamedQuery(name = "EmailTemplates.findByType", query = "SELECT e FROM EmailTemplates e WHERE e.type = :type")})
