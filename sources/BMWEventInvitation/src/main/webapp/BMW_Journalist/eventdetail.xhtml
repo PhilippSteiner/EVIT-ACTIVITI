@@ -15,8 +15,6 @@
 
         <h:body>
 
-            <h:outputStylesheet name="/resources/css/journaliststyle" />
-
             <h:form id="form">
 
                 <p:layout fullPage="true">
@@ -32,7 +30,7 @@
                     <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
                         <p:menu style='width:95%'>
 
-                            <p:menuitem value="Kommende Events" url="#" />
+                            <p:menuitem value="Kommende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
                             <p:menuitem value="Vergangene Events" url="#" />
                             <p:menuitem value="E-Mail History" url="#" />
                             <p:menuitem value="Files" url="#" />
@@ -61,7 +59,7 @@
                                                 <h:panelGrid columns="4">
 
                                                     <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
-                                                                     valueChangeListener="#{ResponseBean.stateChangeListener}" style="width: 150px;">
+                                                                     valueChangeListener="#{ResponseBean.stateFlugChangeListener}" style="width: 150px;">
                                                         <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
                                                         <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
                                                         <p:ajax event="change"/>
@@ -89,7 +87,7 @@
                                                                 <f:selectItems value="#{ResponseBean.verfuegbareFluege}"/>
                                                             </p:selectOneMenu>
 
-                                                            <p:commandButton value="Auswählen" action="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
+                                                            <p:commandButton value="Auswählen" onclick="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
 
                                                         </h:panelGrid>
 
@@ -103,7 +101,7 @@
 
                                                         </h:panelGrid>
 
-                                                        <p:commandButton value="Auswählen" action="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
+                                                        <p:commandButton value="Auswählen" onclick="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
 
                                                     </p:tab> 
 

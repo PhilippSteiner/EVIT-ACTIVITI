@@ -12,6 +12,9 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwFlight;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.login.doLogin;
+import ac.at.fhkufstein.login.login;
+import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwEventFacade;
 import ac.at.fhkufstein.session.BmwFlightFacade;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -29,7 +33,7 @@ import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
 @ManagedBean(name = "JournalistBean")
-@RequestScoped
+@SessionScoped
 //@PersistenceContext
 public class JournalistBean {
 
@@ -45,7 +49,7 @@ public class JournalistBean {
     private Integer UserID;
     private String von;
     private String bis;
-    private String status;
+    //private String status;
     //select stuff
     private List<SelectItem> auswahlmoeglichkeiten;
     private List<SelectItem> verfuegbareFluege;
@@ -70,7 +74,12 @@ public class JournalistBean {
         
         //FacesContext facesContext = FacesContext.getCurrentInstance();
         //this.UserID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
-        this.UserID = 1317;
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+        
+        this.UserID = currentlogin.getUid();
+        
+        System.out.println("User ID: "+this.UserID);
+        
         //1317
 
         cev = bmwUserController.getFacade().find(UserID);
@@ -192,7 +201,7 @@ public class JournalistBean {
         this.von = "" + this.selectedBmwEvent.getStartEventdate().getDay() + "." + this.selectedBmwEvent.getStartEventdate().getMonth();
         this.bis = "" + this.selectedBmwEvent.getEndEventdate().getDay() + "." + this.selectedBmwEvent.getEndEventdate().getMonth() + "." + this.selectedBmwEvent.getEndEventdate().getYear();
 
-        this.getAllFlightsForEvent();
+        //this.getAllFlightsForEvent();
 
         return "eventdetail";
 
