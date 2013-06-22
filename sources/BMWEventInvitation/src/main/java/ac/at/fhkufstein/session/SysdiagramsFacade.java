@@ -19,12 +19,12 @@ public class SysdiagramsFacade extends AbstractFacade<Sysdiagrams> {
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 
     public SysdiagramsFacade() {
         super(Sysdiagrams.class);
     }
-    
+
 }

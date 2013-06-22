@@ -19,12 +19,12 @@ public class EmailTemplatesFacade extends AbstractFacade<EmailTemplates> {
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 
     public EmailTemplatesFacade() {
         super(EmailTemplates.class);
     }
-    
+
 }
