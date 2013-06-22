@@ -58,6 +58,8 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
     private Integer repId;
     @Column(name = "bmw_auth")
     private Integer bmwAuth;
+    @Column(name = "rep_comment")
+    private String repComment;
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     @ManyToOne(optional = false)
     private BmwUser userId;
@@ -106,6 +108,14 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
     public void setBmwAuth(Integer bmwAuth) {
         this.bmwAuth = bmwAuth;
     }
+
+	public String getRepComment() {
+		return repComment;
+	}
+
+	public void setRepComment(String repComment) {
+		this.repComment = repComment;
+	}
 
     public BmwUser getUserId() {
         return userId;
