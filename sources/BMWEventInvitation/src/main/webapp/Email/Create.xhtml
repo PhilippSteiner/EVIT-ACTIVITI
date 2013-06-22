@@ -11,34 +11,23 @@
         <p:dialog id="EmailTemplatesCreateDlg" widgetVar="EmailTemplatesCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateEmailTemplatesTitle}">
 
             <h:form id="EmailTemplatesCreateForm">
-                #{emailTemplatesController.prepareCreate(null)}
+                
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{emailTemplatesController.selected != null}">
 
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{emailTemplatesController.selected.id}" title="#{bundle.CreateEmailTemplatesTitle_id}" required="true" requiredMessage="#{bundle.CreateEmailTemplatesRequiredMessage_id}"/>
-
+                  
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_subject}" for="subject" />
-                        <p:inputText id="subject" value="#{emailTemplatesController.selected.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" />
+                        <p:inputText id="subject" value="#{emailTemplateBean.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" />
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_type}" for="type" />
-                        <p:inputText id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.CreateEmailTemplatesTitle_type}" />
+                        <p:inputText id="type" value="#{emailTemplateBean.type}" title="#{bundle.CreateEmailTemplatesTitle_type}" />
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
-                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
+                        <p:editor id="emailContent" value="#{emailTemplateBean.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
 
-                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_eid}" for="eid" />
-                        <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{bmwEventController.items}"
-                                           var="eidItem"
-                                           itemValue="#{eidItem}"
-                                           itemLabel="#{eidItem.name.toString()}"
-                                           />
-                            <f:converter binding="#{bmwEventConverter}"/>
-                        </p:selectOneMenu>
+                    
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{emailTemplatesController.saveNew}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
+                    <p:commandButton actionListener="#{emailTemplateBean.saveNew}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EmailTemplatesCreateDialog.hide()"/>
                 </h:panelGroup>
 
