@@ -34,7 +34,7 @@
     </sequenceFlow>
     <exclusiveGateway id="answer" name="answer"></exclusiveGateway>
     <sequenceFlow id="flow11" sourceRef="answerInvitation" targetRef="answer"></sequenceFlow>
-    <sequenceFlow id="flow12" name="Zusage" sourceRef="answer" targetRef="typeOfJourney">
+    <sequenceFlow id="flow12" name="Zusage" sourceRef="answer" targetRef="supplyTravelInfos">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == true}]]></conditionExpression>
     </sequenceFlow>
     <exclusiveGateway id="kindOfRejection" name="kindOfRejection"></exclusiveGateway>
@@ -79,6 +79,8 @@
     <sequenceFlow id="flow24" sourceRef="manualExecution" targetRef="endevent6"></sequenceFlow>
     <serviceTask id="evaluateEventStatus" name="evaluateEventStatus" activiti:class="ac.at.fhkufstein.activiti.delegates.EvaluateEventStatus"></serviceTask>
     <sequenceFlow id="flow25" sourceRef="evaluateEventStatus" targetRef="eventIsOpen"></sequenceFlow>
+    <userTask id="supplyTravelInfos" name="Reiseinformationen eingeben"></userTask>
+    <sequenceFlow id="flow26" sourceRef="supplyTravelInfos" targetRef="typeOfJourney"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Journalist_Invitation_Response">
     <bpmndi:BPMNPlane bpmnElement="Journalist_Invitation_Response" id="BPMNPlane_Journalist_Invitation_Response">
@@ -125,10 +127,10 @@
         <omgdc:Bounds height="40.0" width="40.0" x="999.0" y="279.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="typeOfJourney" id="BPMNShape_typeOfJourney">
-        <omgdc:Bounds height="40.0" width="40.0" x="870.0" y="400.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="870.0" y="517.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent4" id="BPMNShape_endevent4">
-        <omgdc:Bounds height="35.0" width="35.0" x="1089.0" y="403.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="873.0" y="710.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="whichFlight" id="BPMNShape_whichFlight">
         <omgdc:Bounds height="40.0" width="40.0" x="1035.0" y="517.0"></omgdc:Bounds>
@@ -156,6 +158,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="evaluateEventStatus" id="BPMNShape_evaluateEventStatus">
         <omgdc:Bounds height="55.0" width="105.0" x="965.0" y="199.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="supplyTravelInfos" id="BPMNShape_supplyTravelInfos">
+        <omgdc:Bounds height="58.0" width="117.0" x="832.0" y="400.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="195.0" y="297.0"></omgdi:waypoint>
@@ -246,18 +251,17 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flight" id="BPMNEdge_flight">
-        <omgdi:waypoint x="890.0" y="440.0"></omgdi:waypoint>
-        <omgdi:waypoint x="954.0" y="498.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1055.0" y="517.0"></omgdi:waypoint>
+        <omgdi:waypoint x="910.0" y="537.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1035.0" y="537.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="12.0" width="21.0" x="6.0" y="-10.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="car" id="BPMNEdge_car">
-        <omgdi:waypoint x="910.0" y="420.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1089.0" y="420.0"></omgdi:waypoint>
+        <omgdi:waypoint x="890.0" y="557.0"></omgdi:waypoint>
+        <omgdi:waypoint x="890.0" y="710.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="22.0" x="-3.0" y="4.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="22.0" x="-29.0" y="-8.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="specialFlight" id="BPMNEdge_specialFlight">
@@ -293,6 +297,10 @@
       <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
         <omgdi:waypoint x="1017.0" y="199.0"></omgdi:waypoint>
         <omgdi:waypoint x="1019.0" y="185.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="890.0" y="458.0"></omgdi:waypoint>
+        <omgdi:waypoint x="890.0" y="517.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
