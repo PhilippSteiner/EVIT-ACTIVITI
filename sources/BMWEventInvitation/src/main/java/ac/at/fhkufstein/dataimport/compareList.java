@@ -76,6 +76,7 @@ public class compareList {
         for (Personen up : newList) {
             BmwUser bmwUser = new BmwUser();
             bmwUser.setPersonenID(up);
+            bmwUser.setRole(2);
             bmwUser.setPwd(getRandomPassword());
             bmwUserController.prepareCreate(null);
             bmwUserController.setSelected(bmwUser);
