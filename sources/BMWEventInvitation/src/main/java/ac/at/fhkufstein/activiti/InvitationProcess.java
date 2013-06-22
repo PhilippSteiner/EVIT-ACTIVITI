@@ -168,6 +168,7 @@ public class InvitationProcess {
     public static InvitationProcess startSingleProcess(BmwEvent event, BmwParticipants participant) {
 
         InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
+        process.setVariable(DATABASE_EVENTID, event.getId());
 
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
