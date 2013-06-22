@@ -37,8 +37,9 @@ public class Participants implements Serializable{
 	private List<BmwUser> u = new ArrayList<BmwUser>();//List of Users
 	private BmwEvent current;//Current Event
 	private BmwUser[] selected; //Selected Participants
-	private BmwParticipants[] selectedp; //Selected Participants
-    
+	private ArrayList<BmwParticipants> selectedp; //Selected Participants
+    private ParticipantDataModel selectedParticipant;
+	private BmwParticipants selectedPart;
     
     //	public EntityManager em;
 	/**
@@ -79,7 +80,8 @@ public class Participants implements Serializable{
             
 			//Set Size for Arrays
 			selected = new BmwUser[p.size()];
-			selectedp = new BmwParticipants[p.size()];
+			selectedp = new ArrayList();
+			//selectedp = new BmwParticipants[p.size()];
             
 			//Iterate alle Participants
 			Iterator<BmwParticipants> it = p.iterator();
@@ -88,10 +90,11 @@ public class Participants implements Serializable{
 			while (it.hasNext()) {
 				BmwParticipants x = it.next();
 				selected[ii] = x.getUserId();//Write in Vars
-				selectedp[ii] = x;
+				selectedp.add(x);
+				//selectedp[ii] = x;
 				ii++;
 			}
-            
+            selectedParticipant=new ParticipantDataModel(selectedp);
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
@@ -178,13 +181,32 @@ public class Participants implements Serializable{
 	public void setU(List<BmwUser> u) {
 		this.u = u;
 	}
-    
-    
-	public BmwParticipants[] getSelectedp() {
+
+	public ArrayList<BmwParticipants> getSelectedp() {
 		return selectedp;
 	}
-    
-	public void setSelectedp(BmwParticipants[] selectedp) {
+
+	public void setSelectedp(ArrayList<BmwParticipants> selectedp) {
 		this.selectedp = selectedp;
 	}
+
+	public ParticipantDataModel getSelectedParticipant() {
+		return selectedParticipant;
+	}
+
+	public void setSelectedParticipant(ParticipantDataModel selectedParticipant) {
+		this.selectedParticipant = selectedParticipant;
+	}
+
+	public BmwParticipants getSelectedPart() {
+		return selectedPart;
+	}
+
+	public void setSelectedPart(BmwParticipants selectedPart) {
+		this.selectedPart = selectedPart;
+	}
+    
+    
+
+	
 }
