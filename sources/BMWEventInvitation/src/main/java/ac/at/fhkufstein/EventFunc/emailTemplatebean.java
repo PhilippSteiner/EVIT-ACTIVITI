@@ -9,12 +9,14 @@ import ac.at.fhkufstein.bean.EmailTemplatesController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.session.EmailTemplatesFacade;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
@@ -23,8 +25,8 @@ import javax.persistence.EntityManager;
  * @author Philipp
  */
 @ManagedBean(name="emailTemplateBean")
-@RequestScoped
-public class emailTemplatebean {
+@ViewScoped
+public class emailTemplatebean implements Serializable{
 
     private EmailTemplatesController emailController;
     private BmwEventController bmweventController;
@@ -124,25 +126,5 @@ public class emailTemplatebean {
     
     
     
-    /*
-    public List<EmailTemplates> getEmails(){
-    
-        return emailController.getItems();
-    }
-    
-    public List<EmailTemplates> getEventEmails(){
-        
-        list = new ArrayList<EmailTemplates>();
-        
-        for(EmailTemplates e : emailController.getItems()){
-            if(eventID == e.getEid().getId()){
-                list.add(e);
-            }
-        }
-        
-      
-        
-        return list;
-    }
-    */
+   
 }
