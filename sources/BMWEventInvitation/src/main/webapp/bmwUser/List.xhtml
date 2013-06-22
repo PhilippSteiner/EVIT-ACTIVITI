@@ -39,6 +39,12 @@
                     </f:facet>
                     <h:outputText value="#{item.pwd}"/>
                 </p:column>
+                <p:column sortBy="#{item.role}" filterBy="#{item.role}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwUserTitle_role}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.role}"/>
+                </p:column>
                 <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
