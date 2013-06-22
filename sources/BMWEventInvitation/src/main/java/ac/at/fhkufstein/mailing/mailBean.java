@@ -47,27 +47,27 @@ public class mailBean extends MailService{
     public void setMessage(String message) {
         this.message = message;
     }
-    
-   
 
-   
+
+
+
     /**
      * Creates a new instance of mailBean
      */
     public mailBean() {
         emailcontroller = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{emailTemplatesController}", EmailTemplatesController.class);
-        
+
     }
-    
+
     public List<EmailTemplates> getEmails(){
-    
+
         return emailcontroller. getItems();
     }
-    
+
     public void send(){
-        
-        
-        MailService.sendMail(to, subject, message);
+
+
+        MailService.sendMail(to, subject, message, MailType.MAIL_TYPE_TEST);
     }
-    
+
 }
