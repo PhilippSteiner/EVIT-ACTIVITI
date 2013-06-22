@@ -15,9 +15,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid  columns="2" rendered="#{emailTemplatesController.selected != null}">
 
-                        <h:outputLabel value="#{bundle.EditEmailTemplatesLabel_id}" for="id" />
-                        <h:outputText id="id" value="#{emailTemplatesController.selected.id}" />
-
+                  
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_subject}" for="subject" />
                         <p:inputText id="subject" value="#{emailTemplatesController.selected.subject}" title="#{bundle.EditEmailTemplatesTitle_subject}" />
 
@@ -27,16 +25,7 @@
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_emailContent}" for="emailContent" />
                         <p:inputTextarea rows="4" cols="30" id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}" />
 
-                        <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_eid}" for="eid" />
-                        <p:selectOneMenu id="eid" value="#{emailTemplatesController.selected.eid}" required="true" requiredMessage="#{bundle.EditEmailTemplatesRequiredMessage_eid}">
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{bmwEventController.items}"
-                                           var="eidItem"
-                                           itemValue="#{eidItem}"
-                                           itemLabel="#{eidItem.name.toString()}"
-                                           />
-                            <f:converter binding="#{bmwEventConverter}"/>
-                        </p:selectOneMenu>
+                    
                     </p:panelGrid>
                     <p:commandButton actionListener="#{emailTemplatesController.save}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesEditDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EmailTemplatesEditDialog.hide()"/>

@@ -12,6 +12,10 @@
 
     <ui:define name="body">
 
+        <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+        <p:tabMenu activeIndex="4">  
+            <ui:include src="../Event/menu.xhtml"></ui:include>
+        </p:tabMenu>
         <ui:include src="List.xhtml"/>
         <ui:include src="View.xhtml"/>
         <ui:include src="Edit.xhtml"/>

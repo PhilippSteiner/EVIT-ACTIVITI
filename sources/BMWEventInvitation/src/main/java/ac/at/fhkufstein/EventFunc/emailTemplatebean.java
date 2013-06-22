@@ -34,7 +34,56 @@ public class emailTemplatebean implements Serializable{
     private Integer eventID;
     private List<EmailTemplates> list;
     private String subject;
+    private String type;
+    private String emailContent;
+    
+    
 
+    
+    
+    /**
+     * Creates a new instance of emailTemplatebean
+     */
+    public emailTemplatebean() {
+        
+        emailController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{emailTemplatesController}", EmailTemplatesController.class);
+        bmweventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
+
+        bmwevent = bmweventController.getFacade().find(eventID);
+        System.out.println(bmwevent);
+        try {
+
+			EntityManager em = ((EmailTemplatesFacade) emailController.getFacade()).getEntityManager();
+                        list = em.createNamedQuery("EmailTemplates.findByEventId")
+					.setParameter("eid", bmwevent)
+					.getResultList();
+			
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+        
+    }
+    
+    public void saveNew(){
+		
+				EmailTemplates el = emailController.prepareCreate(null);//Save new Flight
+				el.setEid(bmwevent);//Correct Event ID
+                                el.setEmailContent(emailContent);
+                                el.setSubject(subject);
+                                el.setType(type);
+                                  
+				emailController.setSelected(el);
+				emailController.saveNew(null);//save to database
+				
+				FacesContext context = FacesContext.getCurrentInstance();
+
+				context.addMessage(null, new FacesMessage("Email Template hinzugefügt", "Aktualisieren sie die Seite um die Änderungen zu sehen")); //Send message 
+				
+	}
+    
     public Integer getEventID() {
         return eventID;
     }
@@ -74,55 +123,6 @@ public class emailTemplatebean implements Serializable{
     public void setEmailContent(String emailContent) {
         this.emailContent = emailContent;
     }
-    private String type;
-    private String emailContent;
-    
-    /**
-     * Creates a new instance of emailTemplatebean
-     */
-    public emailTemplatebean() {
-        
-        emailController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{emailTemplatesController}", EmailTemplatesController.class);
-        bmweventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
-        
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
-
-        bmwevent = bmweventController.getFacade().find(eventID);
-        
-        try {
-
-			EntityManager em = ((EmailTemplatesFacade) emailController.getFacade()).getEntityManager();
-                        list = em.createNamedQuery("EmailTemplates.findByEventId")
-					.setParameter("eid", bmwevent)
-					.getResultList();
-			
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-        
-    }
-    
-    public void saveNew(){
-		
-				EmailTemplates el = emailController.prepareCreate(null);//Save new Flight
-				el.setEid(bmwevent);//Correct Event ID
-				el.setEmailContent(emailContent);
-                                el.setSubject(subject);
-                                el.setType(type);
-                               
-                                
-                                
-				emailController.setSelected(el);
-				emailController.saveNew(null);//save to database
-				
-				FacesContext context = FacesContext.getCurrentInstance();
-
-				context.addMessage(null, new FacesMessage("Email Template hinzugefügt", "Aktualisieren sie die Seite um die Änderungen zu sehen")); //Send message 
-				
-	}
-    
-    
     
     
     
