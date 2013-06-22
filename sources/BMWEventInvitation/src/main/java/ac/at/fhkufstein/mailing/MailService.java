@@ -111,26 +111,15 @@ public class MailService {
             emailHistory.setEmailFrom(mail.getFromAddress().getAddress());
 
             if (!mail.getToAddresses().isEmpty()) {
+
+                emailHistory.setEmailTo(getInternetAddressString(mail.getToAddresses()));
+
                 emailHistory.setUserTo(getUserByMail(((InternetAddress) mail.getToAddresses().get(0)).getAddress()));
             }
 
-            StringBuilder cc = new StringBuilder();
-            for (Iterator it = mail.getCcAddresses().iterator(); it.hasNext();) {
-                if (cc.length() > 0) {
-                    cc.append("; ");
-                }
-                cc.append(((InternetAddress) it.next()).getAddress());
-            }
-            emailHistory.setEmailCc(cc.toString());
 
-            StringBuilder bcc = new StringBuilder();
-            for (Iterator it = mail.getBccAddresses().iterator(); it.hasNext();) {
-                if (bcc.length() > 0) {
-                    bcc.append("; ");
-                }
-                bcc.append(((InternetAddress) it.next()).getAddress());
-            }
-            emailHistory.setEmailBcc(bcc.toString());
+            emailHistory.setEmailCc(getInternetAddressString(mail.getCcAddresses()));
+            emailHistory.setEmailBcc(getInternetAddressString(mail.getBccAddresses()));
 
             emailHistory.setDatetimeSent(new Date());
             emailHistory.setSentStatus(MAIL_STATUS_SENT);
@@ -142,6 +131,7 @@ public class MailService {
 
             emailHistoryController.saveNew(null);
 
+            MessageService.showInfo("Die Mail wurde erfolgreich gespeichert.");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -149,7 +139,19 @@ public class MailService {
             MessageService.showError("Die Mail konnte nicht gespeichert werden.");
         }
 
-        MessageService.showInfo("Die Mail wurde erfolgreich gespeichert.");
+    }
+
+    private static String getInternetAddressString(List<InternetAddress> addresses) {
+        StringBuilder addressString = new StringBuilder();
+
+        for (Iterator it = addresses.iterator(); it.hasNext();) {
+            if (addressString.length() > 0) {
+                addressString.append("; ");
+            }
+            addressString.append(((InternetAddress) it.next()).getAddress());
+        }
+
+        return addressString.toString();
     }
 
     private static BmwUser getUserByMail(String mailAddress) {
