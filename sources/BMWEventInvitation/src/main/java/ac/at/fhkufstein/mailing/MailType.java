@@ -11,7 +11,9 @@ package ac.at.fhkufstein.mailing;
 public enum MailType {
 
     MAIL_TYPE_INVITATION("Einladung"),
-    MAIL_TYPE_REMINDER("Urgenzmail"),
+    MAIL_TYPE_RESET("Passwort Reset"),
+    MAIL_TYPE_LOGIN("Login"),
+    MAIL_TYPE_REMINDER("Urgenz"),
     MAIL_TYPE_TEST("Test");
 
     private MailType(final String text) {

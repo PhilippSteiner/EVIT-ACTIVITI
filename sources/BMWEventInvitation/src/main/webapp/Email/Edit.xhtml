@@ -20,10 +20,14 @@
                         <p:inputText id="subject" value="#{emailTemplatesController.selected.subject}" title="#{bundle.EditEmailTemplatesTitle_subject}" />
 
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_type}" for="type" />
-                        <p:inputText id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.EditEmailTemplatesTitle_type}" />
-
+                         <p:selectOneMenu id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.EditEmailTemplatesTitle_type}">
+                            <f:selectItem itemLabel="Einladung" itemValue="Einladung"/>
+                            <f:selectItem itemLabel="Urgenz" itemValue="Urgenz"/>
+                            <f:selectItem itemLabel="Follo-up" itemValue="Follow-up"/>
+                        </p:selectOneMenu>
+                        
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_emailContent}" for="emailContent" />
-                        <p:inputTextarea rows="4" cols="30" id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}" />
+                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}" />
 
                     
                     </p:panelGrid>
