@@ -7,10 +7,11 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-        ID: #{param.eventID}
+        
 
         <h:form id="BmwEventEditForm">
             <p:growl id="growl" showDetail="true" sticky="true" />
+            <p:panel header="Eventinfo">
             <h:panelGroup id="display">
                 <p:panelGrid  columns="2">
 
@@ -44,16 +45,19 @@
                     <p:outputLabel value="#{bundle.EditBmwEventLabel_responsibleUser}" for="responsibleUser" />
                     <p:inputText id="responsibleUser" value="#{Event.current.responsibleUser}" title="#{bundle.EditBmwEventTitle_responsibleUser}" />
 
-                    <p:column>
-                        <p:commandButton value="Freigeben" update="display" rendered="#{!Event.current.released}"
-                                         actionListener="#{processBmwEventController.release(Event.current)}" styleClass="ui-priority-primary"/>
-
-                        <h:outputText value="Freigegeben" rendered="#{Event.current.released}" />
-                    </p:column>
+                  
 
                 </p:panelGrid>
+                <p:panelGrid columns="2" style="margin-top: 10px">
+                    <p:commandButton id="Submit" value="Speichern" actionListener="#{Event.saveCurrent()}"  update="growl" />
+                    <p:commandButton value="Freigeben" update="display" rendered="#{!Event.current.released}" actionListener="#{processBmwEventController.release(Event.current)}" styleClass="ui-priority-primary"/>
+
+                        <h:outputText value="Freigegeben" rendered="#{Event.current.released}" />
+                </p:panelGrid>
             </h:panelGroup>
-            <p:commandButton id="Submit" value="Speichern" actionListener="#{Event.saveCurrent()}"  update="growl" style="margin-top:5px"/>
+               
+                
+            </p:panel>
         </h:form>
 
 

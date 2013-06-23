@@ -17,11 +17,15 @@
 
                   
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_subject}" for="subject" />
-                        <p:inputText id="subject" value="#{emailTemplateBean.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" />
+                        <p:inputText id="subject" value="#{emailTemplateBean.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" required="true" requiredMessage="Bitte Betreff ausfüllen!"/>
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_type}" for="type" />
-                        <p:inputText id="type" value="#{emailTemplateBean.type}" title="#{bundle.CreateEmailTemplatesTitle_type}" />
-
+                        
+                        <p:selectOneMenu id="type" value="#{emailTemplateBean.type}" title="#{bundle.CreateEmailTemplatesTitle_type}">
+                            <f:selectItems value="#{mailBean.types}"/>
+                            
+                        </p:selectOneMenu>
+                        
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
                         <p:editor id="emailContent" value="#{emailTemplateBean.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
 
