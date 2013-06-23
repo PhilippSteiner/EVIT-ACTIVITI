@@ -33,4 +33,24 @@ public class NotificationService {
             MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
         }
     }
+    
+    public static void parseTemplate(BmwUser[] b, EmailTemplates e) {
+
+        for (BmwUser u : b) {
+            
+            StringTemplate template = new StringTemplate(e.getEmailContent());
+            template.setAttribute("email", u.getPersonenID().getEMail1());
+            template.setAttribute("password", u.getPwd());
+            template.setAttribute("username", u.getUsername());
+            template.setAttribute("vorname", u.getPersonenID().getVorname());
+            template.setAttribute("nachname", u.getPersonenID().getNachname());
+            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
+            //System.out.println(template.toString());
+            String mailcontent = template.toString();
+            
+            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+        }
+    }
+    
+    
 }

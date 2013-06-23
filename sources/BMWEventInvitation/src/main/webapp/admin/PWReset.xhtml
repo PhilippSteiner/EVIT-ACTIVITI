@@ -11,13 +11,14 @@
             <h:outputText value="#{bundle.AppName}"></h:outputText>
         </ui:define>
         <ui:define name="body">
-
-            <p:tabMenu activeIndex="1">
-                <p:menuitem value="Allgemeine Einstellungen" url="/faces/admin/index.xhtml"></p:menuitem>
-                <p:menuitem value="Passwörter zurücksetzen" url="/faces/admin/PWReset.xhtml"></p:menuitem>
-                <p:menuitem value="Registration versenden" url="/faces/admin/SendLogin.xhtml"></p:menuitem>
-                <p:menuitem value="E-mail Templates" url="/faces/admin/CreateTemplates.xhtml"></p:menuitem>
-            </p:tabMenu>
+            <h:form>
+                <p:tabMenu activeIndex="1">
+                    <p:menuitem value="Allgemeine Einstellungen" url="/faces/admin/index.xhtml"></p:menuitem>
+                    <p:menuitem value="Passwort zurücksetzen" url="/faces/admin/PWReset.xhtml"></p:menuitem>
+                    <p:menuitem value="Registration versenden" url="/faces/admin/SendLogin.xhtml"></p:menuitem>
+                    <p:menuitem value="E-mail Templates" url="/faces/admin/CreateTemplates.xhtml"></p:menuitem>
+                </p:tabMenu>
+            </h:form>
             <h:form>
                 <p:panel header="Passwörter Zurücksetzen">
 
@@ -50,11 +51,11 @@
                             </f:facet>
                             <h:outputText value="#{item.personenID.firma}"/>
                         </p:column>
-                        <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                        <p:column sortBy="#{item.personenID.EMail1}" filterBy="#{item.personenID.EMail1}">
                             <f:facet name="header">
-                                <h:outputText value="Rating"/>
+                                <h:outputText value="E-mail"/>
                             </f:facet>
-                            <h:outputText value="#{item.rating}"/>
+                            <h:outputText value="#{item.personenID.EMail1}"/>
                         </p:column>
                         <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
                             <f:facet name="header">
@@ -63,23 +64,20 @@
                             <h:outputText value="#{item.rating}"/>
                         </p:column>
 
-                        <f:facet name="footer">
 
-                            <p:commandButton id="Submit" value="Speichern" action="#{resetPassword.resetSendPassword()}"  style="margin-top:5px"/>
-                        </f:facet>
+
 
                     </p:dataTable>
+                    <p:panelGrid columns="3"  style="margin-top:10px;border-style: none" cellpadding="5">
+                        <h:outputText value="E-mail mit Passwort an Benutzer senden: "/>   
+                        <p:selectBooleanCheckbox value="#{resetPassword.sendemail}" style="text-align: center; "/>
 
+                        <p:commandButton id="submit" value="Zurücksetzen" action="#{resetPassword.resetSendPassword()}"  style="margin-top:5px"/>
+                    </p:panelGrid>
 
                 </p:panel>
 
-
-
             </h:form>
-
-
-
-
 
         </ui:define>
 
