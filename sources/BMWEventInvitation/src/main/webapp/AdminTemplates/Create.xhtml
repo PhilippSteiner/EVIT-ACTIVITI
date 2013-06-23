@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="EmailTemplatesCreateDlg" widgetVar="EmailTemplatesCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateEmailTemplatesTitle}">
+
+            <h:form id="EmailTemplatesCreateForm">
+                
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{emailTemplatesController.selected != null}">
+
+                  
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_subject}" for="subject" />
+                        <p:inputText id="subject" value="#{adminTemplateBean.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" required="true" requiredMessage="Bitte Betreff ausfüllen!"/>
+
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_type}" for="type" />
+                        
+                        <p:selectOneMenu id="type" value="#{adminTemplateBean.type}" title="#{bundle.CreateEmailTemplatesTitle_type}">
+                            <f:selectItems value="#{mailBean.types}"/>
+                            
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
+                        <p:editor id="emailContent" value="#{adminTemplateBean.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
+
+                    
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{adminTemplateBean.saveNew}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="EmailTemplatesCreateDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
