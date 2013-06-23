@@ -72,7 +72,8 @@ public class MailService {
             mail.addTo(to);
 
             mail.setSubject(subject);
-            mail.setMsg(message);
+            //mail.setMsg(message);
+            mail.setContent(message, "text/html; charset=utf-8");//Für HTML und Textemails
 
             mail.send();
 

@@ -18,6 +18,7 @@ import org.apache.commons.lang.RandomStringUtils;
 /**
  *
  * @author Philipp
+ * Managed Bean zum zurücksetzen des Passwortes einzelner bzw. mehrerer BMWUser und aussendemöglickeit via E-Mail
  */
 @ManagedBean(name="resetPassword")
 @RequestScoped
@@ -37,7 +38,7 @@ public class ResetPassword implements Serializable{
     
         resetPasswordTemplate.setSubject("Password Reset");
         resetPasswordTemplate.setType("Password Reset");
-        resetPasswordTemplate.setEmailContent("<html>Sehr geehrte Damen und Herren,<div><br/></div><div>Anbei befindet sich Ihr neues Passwort und ihr Benutzername.</div><div><br/></div><div>Benutzer: $email$</div><div>Passwort: $password$</div><div><br/></div><div>Mit freundlichen Grüßen,</div><div>BMW Group Austria</div></html>");
+        resetPasswordTemplate.setEmailContent("<html><body>Sehr geehrte Damen und Herren,<div><br/></div><div>Anbei befindet sich Ihr neues Passwort und ihr Benutzername.</div><div><br/></div><div>Benutzer: $email$</div><div>Passwort: $password$</div><div><br/></div><div>Mit freundlichen Grüßen,</div><div>BMW Group Austria</div></body></html>");
     
     }
     
@@ -48,6 +49,7 @@ public class ResetPassword implements Serializable{
                 a.setPwd(getRandomPassword());
                 bmwUserController.setSelected(a);
                 bmwUserController.save(null);
+                System.out.println("Passwort zurückgesetzt");
                 
                 
             }
