@@ -7,13 +7,15 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
+        
+        <p:dialog id="EmailTemplatesEditDlg" widgetVar="EmailTemplatesEditDialog" modal="true" resizable="true" appendToBody="true" header="#{bundle.EditEmailTemplatesTitle}">
 
-        <p:dialog id="EmailTemplatesEditDlg" widgetVar="EmailTemplatesEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditEmailTemplatesTitle}">
-
-            <h:form id="EmailTemplatesEditForm">
-
-                <h:panelGroup id="display">
-                    <p:panelGrid  columns="2" rendered="#{emailTemplatesController.selected != null}">
+            <h:form id="EmailTemplatesEditForm" >
+               
+                <h:panelGroup id="display" >
+                 
+                   
+                    <p:panelGrid  id="panelgrid" columns="2" rendered="#{emailTemplatesController.selected != null}" >
 
                   
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_subject}" for="subject" />
@@ -28,7 +30,7 @@
                         
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_emailContent}" for="emailContent" />
                         <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}" />
-
+                        <p:resizable for="emailContent"/>
                     
                     </p:panelGrid>
                     <p:commandButton actionListener="#{emailTemplatesController.save}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesEditDialog);"/>
