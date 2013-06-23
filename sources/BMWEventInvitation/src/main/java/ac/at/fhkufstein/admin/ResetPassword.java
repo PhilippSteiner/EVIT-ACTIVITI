@@ -7,6 +7,7 @@ package ac.at.fhkufstein.admin;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.EmailTemplates;
+import ac.at.fhkufstein.mailing.NotificationService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -25,6 +26,7 @@ public class ResetPassword implements Serializable{
     private BmwUserController bmwUserController;
     private BmwUser[] selected;
     private EmailTemplates resetPasswordTemplate = new EmailTemplates();
+    private boolean sendemail;
     
     /**
      * Creates a new instance of ResetPassword
@@ -35,7 +37,7 @@ public class ResetPassword implements Serializable{
     
         resetPasswordTemplate.setSubject("Password Reset");
         resetPasswordTemplate.setType("Password Reset");
-        resetPasswordTemplate.setEmailContent("Sehr geehrte Damen und Herren, Anbei ihr Passwort: $password$");
+        resetPasswordTemplate.setEmailContent("<html>Sehr geehrte Damen und Herren,<div><br/></div><div>Anbei befindet sich Ihr neues Passwort und ihr Benutzername.</div><div><br/></div><div>Benutzer: $email$</div><div>Passwort: $password$</div><div><br/></div><div>Mit freundlichen Grüßen,</div><div>BMW Group Austria</div></html>");
     
     }
     
@@ -46,7 +48,13 @@ public class ResetPassword implements Serializable{
                 a.setPwd(getRandomPassword());
                 bmwUserController.setSelected(a);
                 bmwUserController.save(null);
+                
+                
             }
+            
+            if(sendemail){
+                    NotificationService.parseTemplate(selected, resetPasswordTemplate);
+                }
         
         }
 
@@ -58,6 +66,14 @@ public class ResetPassword implements Serializable{
         StringBuilder password = new StringBuilder(8);
         password.append(RandomStringUtils.randomAlphanumeric(8));
         return password.toString();
+    }
+
+    public boolean isSendemail() {
+        return sendemail;
+    }
+
+    public void setSendemail(boolean sendemail) {
+        this.sendemail = sendemail;
     }
     
     

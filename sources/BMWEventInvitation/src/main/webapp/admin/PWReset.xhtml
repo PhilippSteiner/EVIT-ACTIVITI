@@ -63,23 +63,20 @@
                             <h:outputText value="#{item.rating}"/>
                         </p:column>
 
-                        <f:facet name="footer">
+                        
 
-                            <p:commandButton id="Submit" value="Speichern" action="#{resetPassword.resetSendPassword()}"  style="margin-top:5px"/>
-                        </f:facet>
 
                     </p:dataTable>
-
-
+                    <p:panelGrid columns="3"  style="margin-top:10px;border-style: none" cellpadding="5">
+                            <h:outputText value="E-mail mit Passwort an Benutzer senden: "/>   
+                            <p:selectBooleanCheckbox value="#{resetPassword.sendemail}" style="text-align: center; "/>
+                            
+                            <p:commandButton id="submit" value="Zurücksetzen" action="#{resetPassword.resetSendPassword()}"  style="margin-top:5px"/>
+                            </p:panelGrid>
+                      
                 </p:panel>
 
-
-
             </h:form>
-
-
-
-
 
         </ui:define>
 
