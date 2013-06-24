@@ -6,10 +6,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/template.xhtml">
     <ui:define name="body">
-       <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
-        <p:tabMenu activeIndex="5">  
-            <ui:include src="menu.xhtml"></ui:include>
-        </p:tabMenu>
+        <h:form>
+            <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+            <p:tabMenu activeIndex="5">  
+                <ui:include src="menu.xhtml"></ui:include>
+            </p:tabMenu>
+        </h:form>
         <h:form enctype="multipart/form-data">  
 
             <p:fileUpload fileUploadListener="#{fileupload.handleFileUpload}"  
@@ -22,32 +24,32 @@
             <p:growl id="messages" showDetail="true"/>  
 
         </h:form>  
-	   <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">  
-    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />  
-</p:dialog>  
-  
-	   <h:form>  
-		   <p:dataTable var="File" value="#{fileupload.getEventFolder()}">  
-        <p:column headerText="Files">  
-            <h:outputText value="#{File.name}" />  
-        </p:column>  
-			   <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
-        icon="ui-icon-arrowthichk-s">  
-					   <p:fileDownload value="#{fileupload.getCurrentEventFile(File.name)}" />  
-</p:commandButton>  </p:column>
-  
- 
-    </p:dataTable>  
-</h:form> 
+        <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">  
+            <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />  
+        </p:dialog>  
 
- <script type="text/javascript">  
-function start() {  
-    statusDialog.show();  
-}  
+        <h:form>  
+            <p:dataTable var="File" value="#{fileupload.getEventFolder()}">  
+                <p:column headerText="Files">  
+                    <h:outputText value="#{File.name}" />  
+                </p:column>  
+                <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
+                                                                 icon="ui-icon-arrowthichk-s">  
+                        <p:fileDownload value="#{fileupload.getCurrentEventFile(File.name)}" />  
+                    </p:commandButton>  </p:column>
+
+
+            </p:dataTable>  
+        </h:form> 
+
+        <script type="text/javascript">  
+            function start() {  
+                statusDialog.show();  
+            }  
   
-function stop() {  
-    statusDialog.hide();  
-}  
+            function stop() {  
+                statusDialog.hide();  
+            }  
         </script> 
     </ui:define>
 

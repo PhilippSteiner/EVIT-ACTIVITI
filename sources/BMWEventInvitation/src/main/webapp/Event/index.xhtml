@@ -13,15 +13,16 @@
     </ui:define>
 
     <ui:define name="body" style="text-align: center">
-        <h:outputText style="font-size: x-large; text-align: center" value="#{Participants.current.name}"></h:outputText>
-        <p:tabMenu activeIndex="0">  
-      <ui:include src="menu.xhtml"></ui:include>
-        </p:tabMenu>
+        <h:form>
+            <h:outputText style="font-size: x-large; text-align: center" value="#{Participants.current.name}"></h:outputText>
+            <p:tabMenu activeIndex="0">  
+                <ui:include src="menu.xhtml"></ui:include>
+            </p:tabMenu>
 
 
 
-        <ui:include src="Edit.xhtml"></ui:include>
-
+            <ui:include src="Edit.xhtml"></ui:include>
+        </h:form>
         <!--
         <h:form id="form">  
 <p:tabView id="tabView" dynamic="true" cache="true">  
@@ -55,4 +56,3 @@
     </ui:define>
 
 </ui:composition>
-    

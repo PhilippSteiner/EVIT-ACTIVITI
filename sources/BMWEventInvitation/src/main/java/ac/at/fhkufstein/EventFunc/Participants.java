@@ -255,7 +255,7 @@ public class Participants implements Serializable {
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		context.addMessage(null, new FacesMessage("Successful", "Teilnehmer gespeichert")); //Send message
+		context.addMessage(null, new FacesMessage("Event", "Teilnehmer gespeichert")); //Send message
 
 
 	}

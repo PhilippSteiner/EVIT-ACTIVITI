@@ -68,7 +68,7 @@ public class EventTemplate {
         followup.setEmailContent("Anbei finden Sie Eventinformationen");
         
         templateController.prepareCreate(null);
-        templateController.setSelected(urgenz);
+        templateController.setSelected(followup);
         templateController.saveNew(null);
     }
     
