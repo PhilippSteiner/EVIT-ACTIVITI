@@ -12,10 +12,10 @@
         </ui:define>
         <ui:define name="body">
             <h:form id="loginform" >
+                <p:growl id="growl" showDetail="true"/>
             <p:panel header="Login BMW Eventmanagement" style="width: 300px; text-align: center;margin: 0 auto;margin-top: 150px">
                 
                 <p:panelGrid styleClass="noBorder" columns="2" style="width: min-content">
-
 
 
                     <h:outputText value="Benutzername: " />
@@ -28,7 +28,7 @@
 
 
                 </p:panelGrid>
-                <p:commandButton id="welcome" value="Login" action="#{login.login()}" update="loginform" style="margin-top: 20px"></p:commandButton>
+                <p:commandButton id="welcome" value="Login" action="#{login.login()}" update="loginform,growl" style="margin-top: 20px"></p:commandButton>
             
                 </p:panel>
                 </h:form>

@@ -11,7 +11,7 @@
         <p:dialog id="BmwEventCreateDlg" widgetVar="BmwEventCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateBmwEventTitle}">
 
             <h:form id="BmwEventCreateForm">
-
+                <p:growl id="growl" showDetail="true"/>
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{bmwEventController.selected != null}">
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_name}" for="name" />
