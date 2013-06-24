@@ -63,6 +63,8 @@ public class ProcessBmwEventController implements Serializable {
             EventTemplate a = PersistenceService.getManagedBeanInstance(EventTemplate.class);
             a.createTemplate(eventController.getSelected());
             startEventProcess(eventController.getSelected());
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.addMessage(null, new FacesMessage("Event erstellen", "Event erfolgreich erstellt!"));
 
         } catch (NamingException ex) {
             Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);

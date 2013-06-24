@@ -7,6 +7,7 @@ package ac.at.fhkufstein.EventFunc;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -73,9 +74,10 @@ public class Event implements Serializable{
 
 	public void saveCurrent() {
 		//Saves the Event Itself //For Edit form
-
+                FacesContext facesContext = FacesContext.getCurrentInstance();
 		bmwEventController.setSelected(current);
 		bmwEventController.save(null);
+                facesContext.addMessage(null, new FacesMessage("Event", "Eventinfo gespeichert!"));
 
 	}
 

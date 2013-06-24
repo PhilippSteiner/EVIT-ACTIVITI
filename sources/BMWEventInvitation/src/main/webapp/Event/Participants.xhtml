@@ -5,98 +5,100 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/template.xhtml">
-	<ui:define name="body">
+    <ui:define name="body">
+        <h:form>
+            <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+            <p:tabMenu activeIndex="1">  
+                <ui:include src="menu.xhtml"></ui:include>
+            </p:tabMenu>
+        </h:form>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true"/>  
+            <p:panel header="Teilnehmer">
 
-			<h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
-        <p:tabMenu activeIndex="1">  
-       <ui:include src="menu.xhtml"></ui:include>
-        </p:tabMenu>
+                <p:dataTable id="datalist" value="#{Participants.selectedParticipant}" var="item"
+                             selectionMode="single" selection="#{Participants.selectedPart}"
 
-		<h:form id="form">
- <p:growl id="growl" showDetail="true"/>  
-			<p:panel header="Teilnehmer">
+                             rowStyleClass="#{item.PState == 'eingeladen' ? 'red' : (item.PState == 'zugesagt' ? 'green' : (item.PState == 'auto' ? 'blue': ( item.PState == 'flug' ? 'yellow' : (item.PState == 'ticket' ? 'magenta' : null))))}"
 
-				<p:dataTable id="datalist" value="#{Participants.selectedParticipant}" var="item"
-							 selectionMode="single" selection="#{Participants.selectedPart}"
-							 
-							 rowStyleClass="#{item.PState == 'eingeladen' ? 'red' : (item.PState == 'zugesagt' ? 'green' : (item.PState == 'auto' ? 'blue': ( item.PState == 'flug' ? 'yellow' : (item.PState == 'ticket' ? 'magenta' : null))))}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30"
+                             >
 
-							 paginator="true"
-							 rows="10"
-							 rowsPerPageTemplate="10,20,30"
-							 >
+                    <p:ajax event="rowSelect" update=":form:dialog :form:growl" oncomplete="carDialog.show()" />  
+                    <p:ajax event="rowUnselect" update=":form:growl"/>  
 
-<p:ajax event="rowSelect" update=":form:dialog :form:growl" oncomplete="carDialog.show()" />  
-        <p:ajax event="rowUnselect" update=":form:growl"/>  
-		
-					<p:column sortBy="#{item.userId.personenID.vorname}" filterBy="#{item.userId.personenID.vorname}">
-						<f:facet name="header">
-							<h:outputText value="Vorname"/>
-						</f:facet>
-						<h:outputText value="#{item.userId.personenID.vorname}"/>
-					</p:column>
+                    <p:column sortBy="#{item.userId.personenID.vorname}" filterBy="#{item.userId.personenID.vorname}">
+                        <f:facet name="header">
+                            <h:outputText value="Vorname"/>
+                        </f:facet>
+                        <h:outputText value="#{item.userId.personenID.vorname}"/>
+                    </p:column>
 
-					<p:column sortBy="#{item.userId.personenID.nachname}" filterBy="#{item.userId.personenID.nachname}">
-						<f:facet name="header">
-							<h:outputText value="Nachname"/>
-						</f:facet>
-						<h:outputText value="#{item.userId.personenID.nachname}"/>
-					</p:column>
-					<p:column sortBy="#{item.userId.personenID.firma}" filterBy="#{item.userId.personenID.firma}">
-						<f:facet name="header">
-							<h:outputText value="Firma"/>
-						</f:facet>
-						<h:outputText value="#{item.userId.personenID.firma}"/>
-					</p:column>
-					<p:column sortBy="#{item.userId.rating}" filterBy="#{item.userId.rating}">
-						<f:facet name="header">
-							<h:outputText value="Rating"/>
-						</f:facet>
-						<h:outputText value="#{item.userId.rating}"/>
-					</p:column>
-					<p:column sortBy="#{item.PState}" filterBy="#{item.PState}">
-						<f:facet name="header">
-							<h:outputText value="Status"/>
-						</f:facet>
-						<h:outputText value="#{item.PState}"/>
-					</p:column>
+                    <p:column sortBy="#{item.userId.personenID.nachname}" filterBy="#{item.userId.personenID.nachname}">
+                        <f:facet name="header">
+                            <h:outputText value="Nachname"/>
+                        </f:facet>
+                        <h:outputText value="#{item.userId.personenID.nachname}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.userId.personenID.firma}" filterBy="#{item.userId.personenID.firma}">
+                        <f:facet name="header">
+                            <h:outputText value="Firma"/>
+                        </f:facet>
+                        <h:outputText value="#{item.userId.personenID.firma}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.userId.rating}" filterBy="#{item.userId.rating}">
+                        <f:facet name="header">
+                            <h:outputText value="Rating"/>
+                        </f:facet>
+                        <h:outputText value="#{item.userId.rating}"/>
+                    </p:column>
+                    <p:column sortBy="#{item.PState}" filterBy="#{item.PState}">
+                        <f:facet name="header">
+                            <h:outputText value="Status"/>
+                        </f:facet>
+                        <h:outputText value="#{item.PState}"/>
+                    </p:column>
 
-				</p:dataTable>
+                </p:dataTable>
 
-			</p:panel>
- 
- <p:dialog id="dialog" header="Journalist Details" widgetVar="carDialog" resizable="false"  
-                showEffect="fade" hideEffect="explode">  
-  
-	 <h:panelGrid id="display" columns="2" cellpadding="4" rendered="#{Participants.selectedPart.PState == 'vertretung' ? 'true' :'false'}">  
+            </p:panel>
 
-            <h:outputLabel value="Vertretung:" for="vertretung" />  
-            <p:autoComplete id="vertretung" value="#{Participants.rep}"   
-							completeMethod="#{Participants.autoComplete}"/>  
-  
-        </h:panelGrid>  
-	  <h:outputLabel value="Status Ändern" for="state" />  
-	  <p:selectOneMenu id="state" value="#{Participants.pcState}">  
-                <f:selectItem itemLabel="Status Wählen" itemValue="0" />  
-                <f:selectItem itemLabel="Eingeladen" itemValue="eingeladen" />  
-				<f:selectItem itemLabel="Zugesagt" itemValue="zugesagt" />  
-				<f:selectItem itemLabel="Vertretung" itemValue="vertretung" />
-				<f:selectItem itemLabel="Auto" itemValue="auto"/>
-				<f:selectItem itemLabel="Flug" itemValue="flug"/>
-				<f:selectItem itemLabel="Ticket" itemValue="ticket"/>
-                
-            </p:selectOneMenu>  
-  
-	  <p:commandButton value="Speichern" actionListener="#{Participants.saveRepresentant}" oncomplete="carDialog.hide()" update=":form growl" />  
-    </p:dialog>  
- 
-		</h:form>
+            <p:dialog id="dialog" header="Journalist Details" widgetVar="carDialog" resizable="false"  
+                      showEffect="fade" hideEffect="explode">  
 
-			
-    
-			
+                <p:panelGrid id="display" columns="2" cellpadding="4" rendered="#{Participants.selectedPart.PState == 'vertretung' ? 'true' :'false'}">  
+
+                    <h:outputLabel value="Vertretung:" for="vertretung" />  
+                    <p:autoComplete id="vertretung" value="#{Participants.rep}"   
+                                    completeMethod="#{Participants.autoComplete}"/>  
+
+                </p:panelGrid>  
+                <p:panelGrid columns="3">
+                    <h:outputLabel value="Status Ändern" for="state" />  
+                    <p:selectOneMenu id="state" value="#{Participants.pcState}">  
+                        <f:selectItem itemLabel="Status Wählen" itemValue="0" />  
+                        <f:selectItem itemLabel="Eingeladen" itemValue="eingeladen" />  
+                        <f:selectItem itemLabel="Zugesagt" itemValue="zugesagt" />  
+                        <f:selectItem itemLabel="Vertretung" itemValue="vertretung" />
+                        <f:selectItem itemLabel="Auto" itemValue="auto"/>
+                        <f:selectItem itemLabel="Flug" itemValue="flug"/>
+                        <f:selectItem itemLabel="Ticket" itemValue="ticket"/>
+
+                    </p:selectOneMenu>  
+
+                    <p:commandButton value="Speichern" actionListener="#{Participants.saveRepresentant}" oncomplete="carDialog.hide()" update=":form growl" />  
+                </p:panelGrid>
+            </p:dialog>  
+
+        </h:form>
+
+
+
+
     </ui:define>
 
 
-    </ui:composition>
+</ui:composition>
 
