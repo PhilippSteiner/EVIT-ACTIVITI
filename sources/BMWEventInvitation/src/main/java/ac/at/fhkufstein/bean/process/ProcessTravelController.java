@@ -6,7 +6,9 @@ package ac.at.fhkufstein.bean.process;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
+import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
+import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwEventFacade;
@@ -34,11 +36,11 @@ import javax.transaction.Transaction;
  *
  * @author mike
  */
-@ManagedBean(name = "processBmwEventController")
+@ManagedBean(name = "processTravelController")
 @ViewScoped
-public class ProcessBmwEventController implements Serializable {
+public class ProcessTravelController implements Serializable {
 
-    private static final String ACTIVITI_RELEASE_ACTIVITY = "releaseEvent";
+    private static final String ACTIVITI_FLIGHTDATA_ACTIVITY = "supplyFlightInfos";
     @Resource
     UserTransaction ut;
 
@@ -56,22 +58,22 @@ public class ProcessBmwEventController implements Serializable {
                 em.persist(eventController.getSelected());
                 transaction.commit();
             } catch (Exception ex) {
-                Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
                 transaction.rollback();
             }
 
             startEventProcess(eventController.getSelected());
 
         } catch (NamingException ex) {
-            Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotSupportedException ex) {
-            Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SystemException ex) {
-            Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
-            Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalStateException ex) {
-            Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -99,29 +101,31 @@ public class ProcessBmwEventController implements Serializable {
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess für dieses Event wurde gestartet.");
         } catch (Exception ex) {
-            Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
 
             MessageService.showError(FacesContext.getCurrentInstance(), "Der Prozess für dieses Event konnte nicht gestartet werden.");
 
         }
     }
 
-    public void release(BmwEvent event) {
+    public void processFlightData(BmwParticipants participant) {
 
 
-        InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
+        InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
 
-        if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_RELEASE_ACTIVITY)) {
+        if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_FLIGHTDATA_ACTIVITY)) {
 
-            event.setReleased(true);
-            PersistenceService.save(BmwEventController.class, event);
+
+
+            participant.setPState("ticket");
+            PersistenceService.save(BmwParticipantsController.class, participant);
 
             process.resumeProcess();
 
-            MessageService.showInfo(FacesContext.getCurrentInstance(), "Das Event wurde freigegeben.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Die Flugdaten wurden eingegeben.");
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess wurde fortgefahren.");
         } else {
-            MessageService.showError(FacesContext.getCurrentInstance(), "Das Event konnte nicht freigegeben werden.");
+            MessageService.showError(FacesContext.getCurrentInstance(), "Die Flugdaten konnten nicht eingegeben werden.");
             MessageService.showError(FacesContext.getCurrentInstance(), "Der Prozess konnte nicht fortgesetzt werden.");
         }
     }

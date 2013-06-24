@@ -12,10 +12,6 @@
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow6" sourceRef="startSubprocesses" targetRef="endevent1"></sequenceFlow>
     <sequenceFlow id="flow7" sourceRef="releaseEvent" targetRef="startSubprocesses"></sequenceFlow>
-    <textAnnotation id="textannotation1">
-      <text>Enter your text here</text>
-    </textAnnotation>
-    <association id="association1" sourceRef="textannotation1" targetRef="startSubprocesses"></association>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_InvitationProcess">
     <bpmndi:BPMNPlane bpmnElement="InvitationProcess" id="BPMNPlane_InvitationProcess">
@@ -34,9 +30,6 @@
       <bpmndi:BPMNShape bpmnElement="startSubprocesses" id="BPMNShape_startSubprocesses">
         <omgdc:Bounds height="55.0" width="111.0" x="830.0" y="240.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="textannotation1" id="BPMNShape_textannotation1">
-        <omgdc:Bounds height="50.0" width="100.0" x="891.0" y="160.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="415.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="500.0" y="267.0"></omgdi:waypoint>
@@ -52,10 +45,6 @@
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="765.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="830.0" y="267.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="association1" id="BPMNEdge_association1">
-        <omgdi:waypoint x="941.0" y="210.0"></omgdi:waypoint>
-        <omgdi:waypoint x="885.0" y="240.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -16,23 +16,25 @@
 
         <p:dataTable id="events" var="event" value="#{travelagencyController.events}">
 
-                                <p:column headerText="Name">
-                                    <h:outputText value="#{event.name}" />
-                                </p:column>
+            <p:column style="width:4%">
+                <p:button outcome="/Travelagency/flights" value="Flüge" icon="ui-icon-search">
+                    <f:param name="eventId" value="#{event.id}" />
+                </p:button>
+            </p:column>
 
-                                <p:column headerText="bis">
-                                    <h:outputText value="#{event.startEventdate.toString()}" />
-                                </p:column>
+            <p:column headerText="Name">
+                <h:outputText value="#{event.name}" />
+            </p:column>
 
-                                <p:column headerText="von">
-                                    <h:outputText value="#{event.endEventdate.toString()}" />
-                                </p:column>
+            <p:column headerText="von">
+                <h:outputText value="#{event.startEventdate.toString()}" />
+            </p:column>
 
-                                <p:column style="width:4%">
+            <p:column headerText="bis">
+                <h:outputText value="#{event.endEventdate.toString()}" />
+            </p:column>
 
-                                    
-                                </p:column>
-                            </p:dataTable>
+        </p:dataTable>
 
 
 

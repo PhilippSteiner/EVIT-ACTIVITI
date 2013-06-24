@@ -76,7 +76,7 @@ public class MailService {
 
             mail.send();
 
-            MessageService.showInfo("Die Mail wurde gesendet.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Die Mail wurde gesendet.");
 
             saveMailInHistory(mail, message, mailType);
 
@@ -84,7 +84,7 @@ public class MailService {
         } catch (EmailException ex) {
             Logger.getLogger(MailService.class.getName()).log(Level.SEVERE, null, ex);
 
-            MessageService.showError("Die Mail konnte nicht gesendet werden.");
+            MessageService.showError(FacesContext.getCurrentInstance(), "Die Mail konnte nicht gesendet werden.");
         }
 
         return false;
@@ -131,12 +131,12 @@ public class MailService {
 
             emailHistoryController.saveNew(null);
 
-            MessageService.showInfo("Die Mail wurde erfolgreich gespeichert.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Die Mail wurde erfolgreich gespeichert.");
 
         } catch (Exception ex) {
             ex.printStackTrace();
 
-            MessageService.showError("Die Mail konnte nicht gespeichert werden.");
+            MessageService.showError(FacesContext.getCurrentInstance(), "Die Mail konnte nicht gespeichert werden.");
         }
 
     }
@@ -179,7 +179,7 @@ public class MailService {
                         .getSingleResult();
 
                 user = ((BmwUserFacade) userController.getFacade()).getEntityManager().createNamedQuery("BmwUser.findByPersonenID", BmwUser.class)
-                        .setParameter("personenID", person.getPersonalID())
+                        .setParameter("personenID", person)
                         .getSingleResult();
 
                 return user;
