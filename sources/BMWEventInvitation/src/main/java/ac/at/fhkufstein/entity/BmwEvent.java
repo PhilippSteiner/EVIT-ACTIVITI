@@ -60,7 +60,7 @@ public class BmwEvent implements Serializable, ActivitiProcessHolder {
     @Column(name = "released")
     private Boolean released = false;
     @Column(name = "sendFollowup")
-    private Integer sendFollowup;
+    private Integer sendFollowup = 3;
     @Column(name = "bmwParticipants")
     private Integer bmwParticipants;
     @Size(max = 255)

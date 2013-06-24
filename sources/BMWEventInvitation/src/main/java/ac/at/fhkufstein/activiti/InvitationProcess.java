@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.activiti.engine.runtime.Execution;
 
 public class InvitationProcess {
 
@@ -69,7 +70,7 @@ public class InvitationProcess {
         if (processHolder instanceof BmwEvent) {
             BmwEvent event = (BmwEvent) processHolder;
             setVariable(DATABASE_EVENTID, processHolder.getId());
-            setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate( event.getEndEventdate().getTime()+getDaysInMilliSeconds(event.getSendFollowup() )));
+            setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate(event.getEndEventdate().getTime() + getDaysInMilliSeconds(event.getSendFollowup())));
         } else if (processHolder instanceof BmwParticipants) {
             setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
         }
@@ -99,7 +100,7 @@ public class InvitationProcess {
     public String getNextFormKey() {
 
 
-            resumeProcess();
+        resumeProcess();
 
         String formKey;
 
@@ -145,6 +146,7 @@ public class InvitationProcess {
             return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(String.valueOf(processHolder.getProcessId())).singleResult().getActivityId();
 
         } catch (NullPointerException ex) {
+            ex.printStackTrace();
             return null;
         }
     }
@@ -180,14 +182,17 @@ public class InvitationProcess {
     }
 
     public static void signalEvent(ProcessInstance processInstance, String reference) {
-        String executionId = Services.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult().getId();
-        Services.getRuntimeService().signalEventReceived(reference, executionId);
+        for (Execution exec : Services.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getProcessInstanceId()).signalEventSubscriptionName(reference).list()) {
+            Services.getRuntimeService().signalEventReceived(reference, exec.getId());
+            System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
+        }
+
     }
 
     public static long getDueTime(BmwEvent event, BmwParticipants participant, int days) throws Exception {
         Long dueTime;
 
-        if ((dueTime = participant.getInvitationDate().getTime() + getDaysInMilliSeconds(days) ) > event.getCloseInvitation().getTime()) {
+        if ((dueTime = participant.getInvitationDate().getTime() + getDaysInMilliSeconds(days)) > event.getCloseInvitation().getTime()) {
             dueTime = event.getCloseInvitation().getTime();
         }
 
