@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>PrimeFaces</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <h:form id="megaform">
+
+                <p:layout fullPage="true">
+
+                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
+                        <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
+                        BMW Events [Legal Stuff, AGB's, Imprint]
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
+                        <p:menu style='width:95%'>
+
+                            <p:menuitem value="Bevorstehende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
+                            <p:menuitem value="Vergangene Events" outcome="/BMW_Journalist/pastevents.xhtml" />
+                            <p:menuitem value="E-Mail History" outcome="/BMW_Journalist/history.xhtml" />
+
+                        </p:menu>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="center">
+
+                        <h:form id="bigform">
+
+                            <ui:include src="/BMW_Journalist/#{ResponseBean.eventdetailview}.xhtml" />
+
+                        </h:form>
+
+                    </p:layoutUnit>
+
+                </p:layout>
+                
+            </h:form>
+        </h:body>
+
+</html>
