@@ -39,10 +39,9 @@ public class JournalistBean {
 
     private BmwUserController bmwUserController;
     private BmwParticipantsController bmwParticipantsController;
-    private BmwFlightController bmwFlightController;
     private BmwEventController bmwEventController;
     private BmwUser cev;
-    private List JournalistParticipants;
+    private List <BmwParticipants>JournalistParticipants;
     private List<BmwEvent> journalistEvents;
     //private JournalistEvent selectedEvent;
     private BmwEvent selectedBmwEvent;
@@ -52,7 +51,6 @@ public class JournalistBean {
     //private String status;
     //select stuff
     private List<SelectItem> auswahlmoeglichkeiten;
-    private List<SelectItem> verfuegbareFluege;
     private String auswahl;
     private String flugauswahl;
 
@@ -66,7 +64,6 @@ public class JournalistBean {
         bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
 
         auswahlmoeglichkeiten = new ArrayList<SelectItem>();
-        verfuegbareFluege = new ArrayList<SelectItem>();
 
         auswahlmoeglichkeiten.add(new SelectItem("Zusagen"));
         auswahlmoeglichkeiten.add(new SelectItem("Absagen"));
@@ -74,42 +71,7 @@ public class JournalistBean {
         
         //FacesContext facesContext = FacesContext.getCurrentInstance();
         //this.UserID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
-        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
         
-        this.UserID = currentlogin.getUid();
-        
-        System.out.println("User ID: "+this.UserID);
-        
-        //1317
-
-        cev = bmwUserController.getFacade().find(UserID);
-
-        try {
-
-            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-            JournalistParticipants = em.createNamedQuery("BmwParticipants.findByUserId")
-                    .setParameter("userId", cev)
-                    .getResultList();
-            
-            System.out.println("Constructor: User Participants Anzahl: " + JournalistParticipants.size());
-
-            Iterator<BmwParticipants> it = JournalistParticipants.iterator();
-
-            this.journalistEvents = new ArrayList<BmwEvent>();
-
-            while (it.hasNext()) {
-
-                BmwEvent currentBMWEvent = it.next().getEventId();
-
-                System.out.println("Constructor: JournalistenEvent : " + currentBMWEvent.getName());
-
-                this.journalistEvents.add(currentBMWEvent);
-
-            }
-
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
     }
 
     public List getJournalistParticipants() {
@@ -121,6 +83,9 @@ public class JournalistBean {
     }
 
     public List<BmwEvent> getJournalistEvents() {
+        
+        this.defineMyEvents();
+        
         return journalistEvents;
     }
 
@@ -160,14 +125,7 @@ public class JournalistBean {
         this.auswahlmoeglichkeiten = auswahlmoeglichkeiten;
     }
 
-    public List<SelectItem> getVerfuegbareFluege() {
-        return verfuegbareFluege;
-    }
-
-    public void setVerfuegbareFluege(List<SelectItem> verfuegbareFluege) {
-        this.verfuegbareFluege = verfuegbareFluege;
-    }
-
+   
     public String getAuswahl() {
         return auswahl;
     }
@@ -201,9 +159,11 @@ public class JournalistBean {
         this.von = "" + this.selectedBmwEvent.getStartEventdate().getDay() + "." + this.selectedBmwEvent.getStartEventdate().getMonth();
         this.bis = "" + this.selectedBmwEvent.getEndEventdate().getDay() + "." + this.selectedBmwEvent.getEndEventdate().getMonth() + "." + this.selectedBmwEvent.getEndEventdate().getYear();
 
-        //this.getAllFlightsForEvent();
-
-        return "eventdetail";
+        ResponseBean responseBean = PersistenceService.getManagedBeanInstance(ResponseBean.class);
+        
+        responseBean.setEventdetailview("eventdetail");
+        
+        return "eventdetailframe";
 
     }
 
@@ -224,30 +184,6 @@ public class JournalistBean {
 
 
     }
-
-    public void getAllFlightsForEvent() {
-
-        this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
-
-        EntityManager em = ((BmwFlightFacade) bmwFlightController.getFacade()).getEntityManager();
-
-
-
-        List<BmwFlight> currentFlightList = em.createNamedQuery("BmwFlight.findByEventId")
-                .setParameter("eventId", this.selectedBmwEvent)
-                .getResultList();
-
-        System.out.println("Flights " + currentFlightList.size());
-
-
-        for (int i = 0; i < currentFlightList.size(); i++) {
-            String dateString = "" + currentFlightList.get(i).getDepartureTime().getDay() + "." + currentFlightList.get(i).getDepartureTime().getMonth() + "." + currentFlightList.get(i).getDepartureTime().getYear();
-            String addstring = "" + currentFlightList.get(i).getDepartureLocation() + "-" + currentFlightList.get(i).getArrivalLocation() + ", " + dateString;
-
-            this.verfuegbareFluege.add(new SelectItem(addstring));
-
-        }
-    }
     
         
         public void stateChangeListener(ValueChangeEvent event) {
@@ -256,6 +192,64 @@ public class JournalistBean {
     
     }
 
+    public void defineMyEvents(){
     
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+        
+        this.UserID = currentlogin.getUid();
+        
+        System.out.println("User ID: "+this.UserID);
+        
+        //1317
+
+        cev = bmwUserController.getFacade().find(UserID);
+
+        try {
+
+            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+            JournalistParticipants = em.createNamedQuery("BmwParticipants.findByUserId")
+                    .setParameter("userId", cev)
+                    .getResultList();
+            
+            System.out.println("Constructor: User Participants Anzahl: " + JournalistParticipants.size());
+
+            this.journalistEvents = new ArrayList<BmwEvent>();
+            
+            for(int k = 0; k < JournalistParticipants.size() ; k++){
+                
+                BmwEvent currentBMWEvent = JournalistParticipants.get(k).getEventId();
+                
+                System.out.println("Constructor: State of Participant : " + JournalistParticipants.get(k).getPState());
+                
+                if(!((JournalistParticipants.get(k).getPState().toString().equals("abgesagt"))
+                     || (JournalistParticipants.get(k).getPState().toString().equals("vertretung")))){
+                
+                    System.out.println("Constructor: Add Event : " + currentBMWEvent.getName());
+                    
+                    this.journalistEvents.add(currentBMWEvent);
+                }
+               
+                
+            }
+            
+            /*Iterator<BmwParticipants> it = JournalistParticipants.iterator();
+
+            this.journalistEvents = new ArrayList<BmwEvent>();
+
+            while (it.hasNext()) {
+
+                BmwEvent currentBMWEvent = it.next().getEventId();
+
+                System.out.println("Constructor: JournalistenEvent : " + currentBMWEvent.getName());
+
+                this.journalistEvents.add(currentBMWEvent);
+
+            }*/
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    
+    }
 
 }

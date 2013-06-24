@@ -9,6 +9,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
@@ -33,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "BmwEmailHistory.findAll", query = "SELECT b FROM BmwEmailHistory b"),
     @NamedQuery(name = "BmwEmailHistory.findById", query = "SELECT b FROM BmwEmailHistory b WHERE b.id = :id"),
     @NamedQuery(name = "BmwEmailHistory.findByUserFrom", query = "SELECT b FROM BmwEmailHistory b WHERE b.userFrom = :userFrom"),
+    @NamedQuery(name = "BmwEmailHistory.findByUserTo", query = "SELECT b FROM BmwEmailHistory b WHERE b.userTo = :userTo"),
     @NamedQuery(name = "BmwEmailHistory.findByEmailSubject", query = "SELECT b FROM BmwEmailHistory b WHERE b.emailSubject = :emailSubject"),
     @NamedQuery(name = "BmwEmailHistory.findByEmailType", query = "SELECT b FROM BmwEmailHistory b WHERE b.emailType = :emailType"),
     @NamedQuery(name = "BmwEmailHistory.findByEmailTo", query = "SELECT b FROM BmwEmailHistory b WHERE b.emailTo = :emailTo"),
@@ -45,8 +48,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BmwEmailHistory implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Basic(optional = false)
+//    @NotNull
     @Column(name = "id")
     private Integer id;
     @Column(name = "user_from")
@@ -221,5 +225,5 @@ public class BmwEmailHistory implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwEmailHistory[ id=" + id + " ]";
     }
-    
+
 }

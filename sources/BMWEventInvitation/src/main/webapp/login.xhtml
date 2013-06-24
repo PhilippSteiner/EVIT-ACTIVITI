@@ -11,21 +11,27 @@
             <h:outputText value="#{bundle.AppName}"></h:outputText>
         </ui:define>
         <ui:define name="body">
-		
-        <h:form>
-			 <p:growl id="growl" showDetail="true" sticky="true" />  
-            
-            <h:outputText value="Benutzername: " />   <br/>
-            <p:inputText value="#{login.user}" />  <br/>
+            <h:form id="loginform" >
+            <p:panel header="Login BMW Eventmanagement" style="width: 300px; text-align: center;margin: 0 auto;margin-top: 100px">
+                
+                <p:panelGrid columns="2" style="width: min-content">
 
-            <h:outputText value="Passwort: " />  <br/>
-            <p:password value="#{login.pw}" />   <br/>
-            
-            <p:commandButton id="welcome" value="Login" action="#{login.login()}" update="growl"></p:commandButton>
-            
-        </h:form>
-        
 
+
+                    <h:outputText value="Benutzername: " />
+                    <p:inputText value="#{login.user}" />
+
+                    <h:outputText value="Passwort: " />
+                    <p:password value="#{login.pw}" />
+
+                    
+
+
+                </p:panelGrid>
+                <p:commandButton id="welcome" value="Login" action="#{login.login()}" update="loginform" style="margin-top: 20px"></p:commandButton>
+            
+                </p:panel>
+                </h:form>
         </ui:define>
 
     </ui:composition>

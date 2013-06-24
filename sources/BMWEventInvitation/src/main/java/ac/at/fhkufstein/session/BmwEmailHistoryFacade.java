@@ -19,7 +19,7 @@ public class BmwEmailHistoryFacade extends AbstractFacade<BmwEmailHistory> {
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 

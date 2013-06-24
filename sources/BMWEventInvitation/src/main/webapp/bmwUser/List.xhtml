@@ -27,11 +27,23 @@
                     </f:facet>
                     <h:outputText value="#{item.uid}"/>
                 </p:column>
+                <p:column sortBy="#{item.username}" filterBy="#{item.username}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwUserTitle_username}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.username}"/>
+                </p:column>
                 <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
                     </f:facet>
                     <h:outputText value="#{item.pwd}"/>
+                </p:column>
+                <p:column sortBy="#{item.role}" filterBy="#{item.role}">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle.ListBmwUserTitle_role}"/>
+                    </f:facet>
+                    <h:outputText value="#{item.role}"/>
                 </p:column>
                 <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
                     <f:facet name="header">

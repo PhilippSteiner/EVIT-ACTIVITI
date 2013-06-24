@@ -5,7 +5,6 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-    <f:view contentType="text/html">
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
@@ -16,31 +15,7 @@
         <h:body>
 
             <h:form id="form">
-
-                <p:layout fullPage="true">
-
-                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                        <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                        BMW Events [Legal Stuff, AGB's, Imprint]
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
-                        <p:menu style='width:95%'>
-
-                            <p:menuitem value="Kommende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
-                            <p:menuitem value="Vergangene Events" url="#" />
-                            <p:menuitem value="E-Mail History" url="#" />
-                            <p:menuitem value="Files" url="#" />
-
-
-
-                        </p:menu>
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="center">
+                
                         <p:layout>
                             <p:layoutUnit position="center" size="50%">
                                 <h2>#{JournalistBean.selectedBmwEvent.name}</h2>
@@ -50,86 +25,86 @@
 
                             <p:layoutUnit position="east" size="50%">
 
-                                    <p:wizard id="mywizard" widgetVar="wiz"
-                                              flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
+                                <p:wizard id="mywizard" widgetVar="wiz"
+                                          flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
 
-                                        <p:tab id="wiz1" title="Einladung" >
+                                    <p:tab id="wiz1" title="Einladung" >
 
-                                            <p:panel header="Bitte Einladung beantworten">
-                                                <h:panelGrid columns="4">
+                                        <p:panel header="Bitte Einladung beantworten">
+                                            <h:panelGrid columns="4">
 
-                                                    <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
-                                                                     valueChangeListener="#{ResponseBean.stateFlugChangeListener}" style="width: 150px;">
-                                                        <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
-                                                        <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
-                                                        <p:ajax event="change"/>
-                                                    </p:selectOneMenu>
+                                                <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
+                                                                 valueChangeListener="#{ResponseBean.stateFlugChangeListener}" style="width: 150px;">
+                                                    <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                                    <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
+                                                    <p:ajax event="change"/>
+                                                </p:selectOneMenu>
 
-                                                    <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
+                                                <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
 
-                                                </h:panelGrid>
+                                            </h:panelGrid>
 
-                                            </p:panel>
-                                        </p:tab>
+                                        </p:panel>
+                                    </p:tab>
 
-                                        <p:tab id="wiz2" title="Anreise" >
+                                    <p:tab id="wiz2" title="Anreise" >
 
-                                            <p:panel header="Bitte Anreiseoptionen wählen">
+                                        <p:panel header="Bitte Anreiseoptionen wählen">
 
-                                                <p:tabView id="tabView">  
+                                            <p:tabView id="tabView">  
 
-                                                    <p:tab id="tab1" title="Fliegen">  
+                                                <p:tab id="tab1" title="Fliegen">  
 
-                                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 
-                                                            <p:selectOneMenu id="eid" value="#{ResponseBean.flugauswahl}" onchange="submit()">
-                                                                <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
-                                                                <f:selectItems value="#{ResponseBean.verfuegbareFluege}"/>
-                                                            </p:selectOneMenu>
+                                                        <p:selectOneMenu id="eid" value="#{ResponseBean.flugauswahl}" onchange="submit()">
+                                                            <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                                            <f:selectItems value="#{ResponseBean.verfuegbareFluege}"/>
+                                                        </p:selectOneMenu>
 
-                                                            <p:commandButton value="Auswählen" onclick="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
+                                                        <p:commandButton value="Auswählen" onclick="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
 
-                                                        </h:panelGrid>
+                                                    </h:panelGrid>
 
-                                                    </p:tab>  
+                                                </p:tab>  
 
-                                                    <p:tab id="tab2" title="Selbstanreise"> 
+                                                <p:tab id="tab2" title="Selbstanreise"> 
 
-                                                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                                                    <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 
-                                                            <h3>Sie wollen wirklich selbst anreisen?</h3>
+                                                        <h3>Sie wollen wirklich selbst anreisen?</h3>
 
-                                                        </h:panelGrid>
+                                                    </h:panelGrid>
 
-                                                        <p:commandButton value="Auswählen" onclick="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
+                                                    <p:commandButton value="Auswählen" onclick="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
 
-                                                    </p:tab> 
+                                                </p:tab> 
 
-                                                </p:tabView>
+                                            </p:tabView>
 
-                                            </p:panel>
+                                        </p:panel>
 
-                                        </p:tab>
+                                    </p:tab>
 
-                                        <p:tab id="wiz3" title="Anreisedokumente" >
+                                    <p:tab id="wiz3" title="Eventdokumente/ Flugticket" >
 
-                                            <h3>Noch keine Anreisedokumente verfügbar</h3>
+                                        <p:panel header="Eventdokumente">
+                                            <h6>Noch keine Eventdokumente verfügbar.</h6>
+                                        </p:panel>
 
-                                        </p:tab>
+                                        <p:panel header="Flugticket">
+                                            <h6>Noch kein Flugticket verfügbar.</h6>
+                                        </p:panel>
 
-                                    </p:wizard>
-                                
+                                    </p:tab>
+
+                                </p:wizard>
+
                             </p:layoutUnit>
-                            
+
                         </p:layout>
-
-                    </p:layoutUnit>
-
-                </p:layout>
-
+                            
             </h:form>
-
         </h:body>
 
-    </f:view>
 </html>

@@ -9,21 +9,25 @@
         <title>Wizard Example</title>
     </h:head>
     <h:body>
-        
-        <h3>Bitte Daten der Vertretung wählen</h3>
+       
+
+        <h4>Bitte Daten der Vertretung wählen</h4>
         
         <h:panelGrid columns="2">
-            
+                
             <h:outputLabel value="Vorname: "/>
-            <p:inputText value="#{ResponseBean.vorname}" required="true"/>
+            <p:inputText id="invorname" value="#{ResponseBean.vorname}" required="true" valueChangeListener="#{ResponseBean.firstNameChanged}" />
+            
             <h:outputLabel value="Nachname: "/>
-            <p:inputText value="#{ResponseBean.nachname}" required="true"/>
+            <p:inputText id="innachname" value="#{ResponseBean.nachname}" required="true"/>
+            
             <h:outputLabel value="Email: "/>
-            <p:inputText value="#{ResponseBean.email}" required="true"/>
+            <p:inputText id="inemail" value="#{ResponseBean.email}" required="true"/>
             
         </h:panelGrid>
         
-        <p:commandButton value="Bestätigen" onclick="#{ResponseBean.vertretungAngeben()}" update=":form:mywizard"></p:commandButton>
-    
+        <p:commandButton value="Bestätigen" onclick="#{ResponseBean.vertretungAngeben()}" update=":megaform:bigform:form:mywizard"></p:commandButton>
+        
     </h:body>
+    
 </html>
