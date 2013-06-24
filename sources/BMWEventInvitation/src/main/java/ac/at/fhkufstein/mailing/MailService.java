@@ -180,7 +180,7 @@ public class MailService {
                         .getSingleResult();
 
                 user = ((BmwUserFacade) userController.getFacade()).getEntityManager().createNamedQuery("BmwUser.findByPersonenID", BmwUser.class)
-                        .setParameter("personenID", person.getPersonalID())
+                        .setParameter("personenID", person)
                         .getSingleResult();
 
                 return user;
