@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BmwUser.findByRating", query = "SELECT b FROM BmwUser b WHERE b.rating = :rating"),
     @NamedQuery(name = "BmwUser.findBySeatingPriority", query = "SELECT b FROM BmwUser b WHERE b.seatingPriority = :seatingPriority")})
 public class BmwUser implements Serializable {
+    @Column(name = "loginSent")
+    private Boolean loginSent = false;
     @Size(max = 255)
     @Column(name = "username")
     private String username;
@@ -181,6 +183,15 @@ public class BmwUser implements Serializable {
         return "ac.at.fhkufstein.entity.BmwUser[ uid=" + uid + " ]";
     }
 
+    public Boolean getLoginSent() {
+        return loginSent;
+    }
+
+    public void setLoginSent(Boolean loginSent) {
+        this.loginSent = loginSent;
+    }
+    
+    
     public String getUsername() {
         return username;
     }

@@ -31,6 +31,7 @@
                                  paginator="true"
                                  rows="10"
                                  rowsPerPageTemplate="10,20,30"
+                                 rowStyleClass="#{item.loginSent == true ? 'green' : 'white'}"
                                  >
 
                         <p:column selectionMode="multiple" style="width:2%" />
@@ -71,10 +72,11 @@
 
 
                     </p:dataTable>
-                    <p:panelGrid columns="2"  style="margin-top:10px;border-style: none" cellpadding="5">
+                    <p:panelGrid styleClass="noBorder" columns="3"  style="margin-top:10px;border-style: none" cellpadding="5">
                         <h:outputText value="Registration an Benutzer versenden:  "/>   
 
-                        <p:commandButton id="submit" value="Registration versenden" action="#{sendLogin.sendLogin()}"  update="growl" style="margin-top:5px"/>
+                        <p:commandButton id="submit" value="Registration versenden" action="#{sendLogin.sendLogin()}"  update="growl"/>
+                        <h:outputText value="Grün hinterlegte Benutzern wurden die Benutzerdaten bereits zugesendet!"/>
                     </p:panelGrid>
 
                 </p:panel>
