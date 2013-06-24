@@ -41,72 +41,7 @@ import javax.transaction.Transaction;
 public class ProcessTravelController implements Serializable {
 
     private static final String ACTIVITI_FLIGHTDATA_ACTIVITY = "supplyFlightInfos";
-    @Resource
-    UserTransaction ut;
 
-    public void saveNew(ActionEvent event) {
-        try {
-
-            BmwEventController eventController = PersistenceService.getManagedBeanInstance(BmwEventController.class);
-
-            // to get the id of the inserted event immediately a transacion has to be executed
-            UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
-            transaction.begin();
-
-            try {
-                EntityManager em = ((BmwEventFacade) eventController.getFacade()).getEntityManager();
-                em.persist(eventController.getSelected());
-                transaction.commit();
-            } catch (Exception ex) {
-                Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-                transaction.rollback();
-            }
-
-            startEventProcess(eventController.getSelected());
-
-        } catch (NamingException ex) {
-            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotSupportedException ex) {
-            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SystemException ex) {
-            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalStateException ex) {
-            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    public void save(ActionEvent event) {
-
-        BmwEventController eventController = PersistenceService.getManagedBeanInstance(BmwEventController.class);
-
-        eventController.save(event);
-
-        if (eventController.getSelected().getProcessId() == null) {
-            startEventProcess(eventController.getSelected());
-        }
-
-    }
-
-    private void startEventProcess(BmwEvent event) {
-        try {
-
-            if (event.getId() == null) {
-                throw new Exception("Das Event wurde noch nicht gespeichert.");
-            }
-
-            new InvitationProcess(event, InvitationProcess.PROCESSES[0]).startProcess();
-
-            MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess für dieses Event wurde gestartet.");
-        } catch (Exception ex) {
-            Logger.getLogger(ProcessTravelController.class.getName()).log(Level.SEVERE, null, ex);
-
-            MessageService.showError(FacesContext.getCurrentInstance(), "Der Prozess für dieses Event konnte nicht gestartet werden.");
-
-        }
-    }
 
     public void processFlightData(BmwParticipants participant) {
 
@@ -114,8 +49,6 @@ public class ProcessTravelController implements Serializable {
         InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
 
         if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_FLIGHTDATA_ACTIVITY)) {
-
-
 
             participant.setPState("ticket");
             PersistenceService.save(BmwParticipantsController.class, participant);

@@ -22,8 +22,6 @@ import org.activiti.engine.delegate.JavaDelegate;
  *
  * @author mike
  */
-@ManagedBean
-@RequestScoped
 public class SendTicketNotification implements JavaDelegate {
 
     @Override

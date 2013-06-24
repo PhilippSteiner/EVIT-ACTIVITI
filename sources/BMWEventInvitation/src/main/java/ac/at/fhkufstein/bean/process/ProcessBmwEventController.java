@@ -5,6 +5,8 @@
 package ac.at.fhkufstein.bean.process;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
+import static ac.at.fhkufstein.activiti.InvitationProcess.ACTIVITI_SIGNAL_VARIABLES_DEFINED;
+import static ac.at.fhkufstein.activiti.InvitationProcess.signalEvent;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.service.MessageService;
@@ -95,7 +97,8 @@ public class ProcessBmwEventController implements Serializable {
                 throw new Exception("Das Event wurde noch nicht gespeichert.");
             }
 
-            new InvitationProcess(event, InvitationProcess.PROCESSES[0]).startProcess();
+            InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
+            signalEvent(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED);
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess für dieses Event wurde gestartet.");
         } catch (Exception ex) {

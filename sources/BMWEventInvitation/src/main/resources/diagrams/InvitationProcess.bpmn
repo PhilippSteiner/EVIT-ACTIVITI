@@ -1,50 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <signal id="variablesDefined" name="variablesDefined"></signal>
   <process id="InvitationProcess" name="Invitation Process" isExecutable="true">
     <startEvent id="createEvent" name="Event erstellen" activiti:formKey="editEvent.xhtml"></startEvent>
-    <userTask id="addJournalists" name="Journalisten hinzufügen" activiti:formKey="addJournalists.xhtml"></userTask>
-    <sequenceFlow id="flow2" sourceRef="createEvent" targetRef="addJournalists"></sequenceFlow>
-    <userTask id="releaseEvent" name="Event freigeben" activiti:formKey="releaseEvent.xhtml"></userTask>
+    <userTask id="addJournalists" name="Journalisten hinzufügen" activiti:formKey="addJournalists.xhtml">
+      <documentation>Benutzeraktivität zum Einladen von Journalisten zum Event
+Ist erfüllt sobald mindestens ein Journalist von einem Bmw Mitarbeiter eingeladen wurde.</documentation>
+    </userTask>
+    <sequenceFlow id="flow2" sourceRef="createEvent" targetRef="variablesDefinedSignal"></sequenceFlow>
+    <userTask id="releaseEvent" name="Event freigeben" activiti:formKey="releaseEvent.xhtml">
+      <documentation>Benutzeraktivität für die Freigabe des Events
+Wird vom Bmw Mitarbeiter ausgeführt</documentation>
+    </userTask>
     <sequenceFlow id="flow3" sourceRef="addJournalists" targetRef="releaseEvent"></sequenceFlow>
     <serviceTask id="startSubprocesses" name="Journalistenprozesse starten" activiti:class="ac.at.fhkufstein.activiti.delegates.StartSingleProcesses">
-      <documentation>Journalistenprozesse werden gestartet</documentation>
+      <documentation>Die einzelnen Journalistenprozesse werden gestartet. Für jeden eingeladenen Teilnehmer wird eine Prozessinstanz initiiert.
+Diese Instanzen laufen unabhängig von diesem Prozess, d.h. dieser Prozess muss nicht auf die Beendingung der Journalistenprozesse warten.</documentation>
     </serviceTask>
     <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="flow6" sourceRef="startSubprocesses" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="startSubprocesses" targetRef="timerintermediatecatchevent1"></sequenceFlow>
     <sequenceFlow id="flow7" sourceRef="releaseEvent" targetRef="startSubprocesses"></sequenceFlow>
+    <intermediateCatchEvent id="timerintermediatecatchevent1" name="Zeitpunkt des Eventendes">
+      <timerEventDefinition>
+        <timeDate>${followUpTime}</timeDate>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <serviceTask id="notificateForFollowUpActions" name="Für FollowUp Aktionen benachrichtigen" activiti:class="ac.at.fhkufstein.activiti.delegates.NotificateForFollowUpActions"></serviceTask>
+    <sequenceFlow id="flow8" sourceRef="timerintermediatecatchevent1" targetRef="notificateForFollowUpActions"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="notificateForFollowUpActions" targetRef="endevent1"></sequenceFlow>
+    <intermediateCatchEvent id="variablesDefinedSignal" name="Variablen definiert">
+      <signalEventDefinition signalRef="variablesDefined"></signalEventDefinition>
+    </intermediateCatchEvent>
+    <sequenceFlow id="flow10" sourceRef="variablesDefinedSignal" targetRef="addJournalists"></sequenceFlow>
+    <textAnnotation id="textannotation1">
+      <text>Startevent des Event-Einladungsprozesses.
+Wird bei Erstellung eines Events im Hauptsystem gestartet, dabei werden alle benötigten Variablen definiert und gesetzt.</text>
+    </textAnnotation>
+    <association id="association1" sourceRef="textannotation1" targetRef="createEvent"></association>
+    <textAnnotation id="textannotation2">
+      <text>Benutzeraktivität zum Einladen von Journalisten zum Event.
+Ist erfüllt sobald mindestens ein Journalist von einem Bmw Mitarbeiter eingeladen wurde.</text>
+    </textAnnotation>
+    <association id="association2" sourceRef="textannotation2" targetRef="addJournalists"></association>
+    <textAnnotation id="textannotation3">
+      <text>Benutzeraktivität für die Freigabe des Events
+Wird vom Bmw Mitarbeiter ausgeführt
+</text>
+    </textAnnotation>
+    <association id="association3" sourceRef="textannotation3" targetRef="releaseEvent"></association>
+    <textAnnotation id="textannotation4">
+      <text>Die einzelnen Journalistenprozesse werden gestartet. Für jeden eingeladenen Teilnehmer wird eine Prozessinstanz initiiert.
+Diese Instanzen laufen unabhängig von diesem Prozess, d.h. dieser Prozess muss nicht auf die Beendingung der Journalistenprozesse warten.
+ </text>
+    </textAnnotation>
+    <association id="association4" sourceRef="textannotation4" targetRef="startSubprocesses"></association>
+    <textAnnotation id="textannotation5">
+      <text>Dieses Zeiterfassungsevent wartet auf den Zeitpunkt, bis das reale Event beendet wurde. 
+Der Zeitpunkt wurde bei Start des Events durch eine Variable festgesetzt oder während des Prozesses neu definiert.
+Ist der Zeitpunkt vorüber, wird der Prozess fortgefahren.</text>
+    </textAnnotation>
+    <association id="association5" sourceRef="textannotation5" targetRef="timerintermediatecatchevent1"></association>
+    <textAnnotation id="textannotation6">
+      <text>Der verantwortliche Bmw Mitarbeiter erhält eine Erinnerung, dass er die Aktionen der Eventaufbereitung einleiten muss.</text>
+    </textAnnotation>
+    <association id="association6" sourceRef="textannotation6" targetRef="notificateForFollowUpActions"></association>
+    <textAnnotation id="textannotation7">
+      <text>Der Eventprozess ist beendet.</text>
+    </textAnnotation>
+    <association id="association7" sourceRef="textannotation7" targetRef="endevent1"></association>
+    <textAnnotation id="textannotation8">
+      <text>Signal Event, das darauf wartet bis das Hauptsystem die Werte der benötigten Variablen an den Prozess weitergegeben hat.</text>
+    </textAnnotation>
+    <association id="association8" sourceRef="textannotation8" targetRef="signalintermediatecatchevent1"></association>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_InvitationProcess">
     <bpmndi:BPMNPlane bpmnElement="InvitationProcess" id="BPMNPlane_InvitationProcess">
       <bpmndi:BPMNShape bpmnElement="createEvent" id="BPMNShape_createEvent">
-        <omgdc:Bounds height="35.0" width="35.0" x="380.0" y="250.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="-40.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="addJournalists" id="BPMNShape_addJournalists">
-        <omgdc:Bounds height="55.0" width="105.0" x="500.0" y="240.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="210.0" y="240.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="releaseEvent" id="BPMNShape_releaseEvent">
-        <omgdc:Bounds height="55.0" width="105.0" x="660.0" y="240.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="240.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="990.0" y="250.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1100.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="startSubprocesses" id="BPMNShape_startSubprocesses">
-        <omgdc:Bounds height="55.0" width="111.0" x="830.0" y="240.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="111.0" x="620.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="timerintermediatecatchevent1" id="BPMNShape_timerintermediatecatchevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="810.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="notificateForFollowUpActions" id="BPMNShape_notificateForFollowUpActions">
+        <omgdc:Bounds height="71.0" width="105.0" x="930.0" y="232.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation1" id="BPMNShape_textannotation1">
+        <omgdc:Bounds height="103.0" width="150.0" x="-120.0" y="84.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation2" id="BPMNShape_textannotation2">
+        <omgdc:Bounds height="101.0" width="149.0" x="120.0" y="80.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation3" id="BPMNShape_textannotation3">
+        <omgdc:Bounds height="71.0" width="125.0" x="330.0" y="380.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation4" id="BPMNShape_textannotation4">
+        <omgdc:Bounds height="141.0" width="175.0" x="500.0" y="40.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation5" id="BPMNShape_textannotation5">
+        <omgdc:Bounds height="121.0" width="171.0" x="660.0" y="365.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation6" id="BPMNShape_textannotation6">
+        <omgdc:Bounds height="91.0" width="131.0" x="844.0" y="96.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation7" id="BPMNShape_textannotation7">
+        <omgdc:Bounds height="50.0" width="100.0" x="1001.0" y="391.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="variablesDefinedSignal" id="BPMNShape_variablesDefinedSignal">
+        <omgdc:Bounds height="35.0" width="35.0" x="100.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation8" id="BPMNShape_textannotation8">
+        <omgdc:Bounds height="81.0" width="127.0" x="-20.0" y="365.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
-        <omgdi:waypoint x="415.0" y="267.0"></omgdi:waypoint>
-        <omgdi:waypoint x="500.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-5.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="100.0" y="267.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
-        <omgdi:waypoint x="605.0" y="267.0"></omgdi:waypoint>
-        <omgdi:waypoint x="660.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="315.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="267.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="941.0" y="267.0"></omgdi:waypoint>
-        <omgdi:waypoint x="990.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="731.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="267.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
-        <omgdi:waypoint x="765.0" y="267.0"></omgdi:waypoint>
-        <omgdi:waypoint x="830.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="515.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="620.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="845.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="1035.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1100.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association1" id="BPMNEdge_association1">
+        <omgdi:waypoint x="-45.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="-23.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association2" id="BPMNEdge_association2">
+        <omgdi:waypoint x="194.0" y="181.0"></omgdi:waypoint>
+        <omgdi:waypoint x="262.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association3" id="BPMNEdge_association3">
+        <omgdi:waypoint x="392.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="295.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association4" id="BPMNEdge_association4">
+        <omgdi:waypoint x="587.0" y="181.0"></omgdi:waypoint>
+        <omgdi:waypoint x="675.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association5" id="BPMNEdge_association5">
+        <omgdi:waypoint x="745.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="827.0" y="285.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association6" id="BPMNEdge_association6">
+        <omgdi:waypoint x="909.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="982.0" y="232.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association7" id="BPMNEdge_association7">
+        <omgdi:waypoint x="1051.0" y="391.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1117.0" y="285.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="135.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="210.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association8" id="BPMNEdge_association8">
+        <omgdi:waypoint x="43.0" y="365.0"></omgdi:waypoint>
+        <omgdi:waypoint x="117.0" y="285.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
