@@ -7,6 +7,7 @@ package ac.at.fhkufstein.bean.process;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.entity.BmwEvent;
+import ac.at.fhkufstein.mailing.EventTemplate;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwEventFacade;
@@ -59,7 +60,8 @@ public class ProcessBmwEventController implements Serializable {
                 Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
                 transaction.rollback();
             }
-
+            EventTemplate a = PersistenceService.getManagedBeanInstance(EventTemplate.class);
+            a.createTemplate(eventController.getSelected());
             startEventProcess(eventController.getSelected());
 
         } catch (NamingException ex) {
