@@ -17,21 +17,21 @@
 
                   
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_subject}" for="subject" />
-                        <p:inputText id="subject" value="#{emailTemplateBean.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" required="true" requiredMessage="Bitte Betreff ausfüllen!"/>
+                        <p:inputText id="subject" value="#{adminTemplateBean.subject}" title="#{bundle.CreateEmailTemplatesTitle_subject}" required="true" requiredMessage="Bitte Betreff ausfüllen!"/>
 
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_type}" for="type" />
                         
-                        <p:selectOneMenu id="type" value="#{emailTemplateBean.type}" title="#{bundle.CreateEmailTemplatesTitle_type}">
+                        <p:selectOneMenu id="type" value="#{adminTemplateBean.type}" title="#{bundle.CreateEmailTemplatesTitle_type}">
                             <f:selectItems value="#{mailBean.types}"/>
                             
                         </p:selectOneMenu>
                         
                         <p:outputLabel value="#{bundle.CreateEmailTemplatesLabel_emailContent}" for="emailContent" />
-                        <p:editor id="emailContent" value="#{emailTemplateBean.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
+                        <p:editor id="emailContent" value="#{adminTemplateBean.emailContent}" title="#{bundle.CreateEmailTemplatesTitle_emailContent}" />
 
                     
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{emailTemplateBean.saveNew}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
+                    <p:commandButton actionListener="#{adminTemplateBean.saveNew}" value="#{bundle.Save}" update="display,:EmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,EmailTemplatesCreateDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EmailTemplatesCreateDialog.hide()"/>
                 </h:panelGroup>
 

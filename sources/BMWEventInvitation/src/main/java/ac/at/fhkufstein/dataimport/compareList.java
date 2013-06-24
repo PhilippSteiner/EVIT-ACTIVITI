@@ -88,7 +88,6 @@ public class compareList {
 
     public String getRandomPassword() {
         StringBuilder password = new StringBuilder(8);
-        //int next = RandomUtils.nextInt(13) + 8;
         password.append(RandomStringUtils.randomAlphanumeric(8));
         return password.toString();
     }

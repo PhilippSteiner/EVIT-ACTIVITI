@@ -15,9 +15,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{emailTemplatesController.selected != null}">
 
-                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_id}"/>
-                        <h:outputText value="#{emailTemplatesController.selected.id}" title="#{bundle.ViewEmailTemplatesTitle_id}"/>
-
+                 
                         <h:outputText value="#{bundle.ViewEmailTemplatesLabel_subject}"/>
                         <h:outputText value="#{emailTemplatesController.selected.subject}" title="#{bundle.ViewEmailTemplatesTitle_subject}"/>
 
@@ -27,8 +25,7 @@
                         <h:outputText value="#{bundle.ViewEmailTemplatesLabel_emailContent}"/>
                         <h:outputText value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.ViewEmailTemplatesTitle_emailContent}"/>
 
-                        <h:outputText value="#{bundle.ViewEmailTemplatesLabel_eid}"/>
-                        <h:outputText value="#{emailTemplatesController.selected.eid.name}"/>
+                     
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="EmailTemplatesViewDialog.hide()"/>
                 </h:panelGroup>

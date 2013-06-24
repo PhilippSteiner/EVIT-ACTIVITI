@@ -64,7 +64,7 @@ public class MailService {
      * @param message
      * @return if success it returns true otherwise false
      */
-    public static boolean sendMail(String to, String subject, String message, MailType mailType) {
+    public static boolean sendMail(String to, String subject, String message, String mailType) {
         try {
 
             Email mail = initMail();
@@ -72,7 +72,8 @@ public class MailService {
             mail.addTo(to);
 
             mail.setSubject(subject);
-            mail.setMsg(message);
+            //mail.setMsg(message);
+            mail.setContent(message, "text/html; charset=utf-8");//Für HTML und Textemails
 
             mail.send();
 
@@ -91,7 +92,7 @@ public class MailService {
 
     }
 
-    public static void saveMailInHistory(Email mail, String content, MailType mailType) {
+    public static void saveMailInHistory(Email mail, String content, String mailType) {
 
         try {
 
@@ -127,7 +128,7 @@ public class MailService {
             emailHistory.setEmailSubject(mail.getSubject());
             emailHistory.setEmailContent(content);
 
-            emailHistory.setEmailType(mailType.toString());
+            emailHistory.setEmailType(mailType);
 
             emailHistoryController.saveNew(null);
 

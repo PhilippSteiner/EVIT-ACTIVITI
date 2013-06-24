@@ -10,17 +10,17 @@
 
         <p:panel header="#{bundle.ListEmailTemplatesTitle}">
 
-            <p:dataTable id="datalist" value="#{emailTemplatesController.items}" var="item"
+            <p:dataTable id="datalist" value="#{adminTemplateBean.list}" var="item"
                          selectionMode="single" selection="#{emailTemplatesController.selected}"
                          rowKey="#{item.id}"
                          paginator="true"
                          rows="10"
                          rowsPerPageTemplate="10,20,30"
                          >
-<!--
+
                 <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                 <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
--->
+
                 <p:column sortBy="#{item.id}" filterBy="#{item.id}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle.ListEmailTemplatesTitle_id}"/>
@@ -45,24 +45,26 @@
                     </f:facet>
                     <h:outputText value="#{item.emailContent}"/>
                 </p:column>
-                <p:column sortBy="#{item.eid.name}" filterBy="#{item.eid.name}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_eid}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.eid.id}"/>
-                </p:column>
-                <!--
+               
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{emailTemplatesController.prepareCreate}" update=":EmailTemplatesCreateForm" oncomplete="EmailTemplatesCreateDialog.show()"/>
                     <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EmailTemplatesViewForm" oncomplete="EmailTemplatesViewDialog.show()" disabled="#{empty emailTemplatesController.selected}"/>
                     <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":EmailTemplatesEditForm" oncomplete="EmailTemplatesEditDialog.show()" disabled="#{empty emailTemplatesController.selected}"/>
                     <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{emailTemplatesController.delete}" update=":growl,datalist" disabled="#{empty emailTemplatesController.selected}"/>
                 </f:facet>
--->
+
             </p:dataTable>
 
         </p:panel>
-
+  
+    </h:form>
+    
+    <h:form id="editTemplateForm">
+        
+        <p:panel header="Template Bearbeiten">
+            
+            
+        </p:panel>
     </h:form>
 
 </ui:composition>
