@@ -71,18 +71,23 @@
 	 <h:panelGrid id="display" columns="2" cellpadding="4" rendered="#{Participants.selectedPart.PState == 'vertretung' ? 'true' :'false'}">  
 
             <h:outputLabel value="Vertretung:" for="vertretung" />  
-            <p:autoComplete id="vertretung" value="#{autoCompleteBean.txt1}"   
-                    completeMethod="#{autoCompleteBean.complete}"/>  
+            <p:autoComplete id="vertretung" value="#{Participants.rep}"   
+							completeMethod="#{Participants.autoComplete}"/>  
   
         </h:panelGrid>  
 	  <h:outputLabel value="Status Ändern" for="state" />  
-	 <p:selectOneMenu id="state" value="#{pprBean.city}">  
-                <f:selectItem itemLabel="Status Wählen" itemValue="" />  
-                <f:selectItems value="#{pprBean.cities}" />  
+	  <p:selectOneMenu id="state" value="#{Participants.pcState}">  
+                <f:selectItem itemLabel="Status Wählen" itemValue="0" />  
+                <f:selectItem itemLabel="Eingeladen" itemValue="eingeladen" />  
+				<f:selectItem itemLabel="Zugesagt" itemValue="zugesagt" />  
+				<f:selectItem itemLabel="Vertretung" itemValue="vertretung" />
+				<f:selectItem itemLabel="Auto" itemValue="auto"/>
+				<f:selectItem itemLabel="Flug" itemValue="flug"/>
+				<f:selectItem itemLabel="Ticket" itemValue="ticket"/>
                 
             </p:selectOneMenu>  
   
-	 
+	  <p:commandButton value="Speichern" actionListener="#{Participants.saveRepresentant}" oncomplete="carDialog.hide()" update=":form growl" />  
     </p:dialog>  
  
 		</h:form>
