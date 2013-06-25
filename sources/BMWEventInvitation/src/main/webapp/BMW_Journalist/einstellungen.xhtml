@@ -15,35 +15,28 @@
         <h:body>
             <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
             <h:form>
-                <p:tabMenu activeIndex="1">
+                <p:tabMenu activeIndex="3">
                     <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
                     <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
                     <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
                     <p:menuitem value="Einstellungen" url="/faces/BMW_Journalist/einstellungen.xhtml"></p:menuitem>
                 </p:tabMenu>
 
-                <p:panel header="Vergangene Events">
-
-                    <p:dataTable id="events" var="event" value="#{journalistPastEventBean.journalistPastEvents}" emptyMessage="Keine Events gefunden.">  
-
-                        <p:column headerText="Name">
-                            <h:outputText value="#{event.name}" />
-                        </p:column>
-
-                        <p:column headerText="bis">
-                            <h:outputText value="#{event.startEventdate.toString()}" />
-                        </p:column>
-
-                        <p:column headerText="von">
-                            <h:outputText value="#{event.endEventdate.toString()}" />
-                        </p:column>
-
-                        <p:column style="width:4%">  
-                            <p:commandButton id="selectButton" action="#{JournalistBean.didSelectEventRow()}"  icon="ui-icon-search">  
-                                <f:setPropertyActionListener value="#{event}" target="#{JournalistBean.selectedBmwEvent}" />  
-                            </p:commandButton>  
-                        </p:column> 
-                    </p:dataTable>
+                <p:panel header="Passwort ändern">
+                    <p:growl id="growl" showDetail="true"/>
+                    <p:panelGrid columns="2">
+                        <h:outputLabel value="Altes Passwort: " for="oldpw" />
+                        <p:inputText id="oldpw" value="" required="true"/>
+                        
+                        <h:outputLabel value="Neues Passwort: " for="newpw"/>
+                        <p:inputText id="newpw" value="" required="true"/>
+                        
+                        <h:outputLabel value="Neues Passwort bestätigen: " for="newpwb"/>
+                        <p:inputText id="newpwb" value="" required="true"/>
+                        
+                    </p:panelGrid>
+                    <p:commandButton id="submit" value="Bestätigen" actionListener="#{journalisteinstellungen.changePassword()}" update="growl"/>
+                    
 
                 </p:panel>
             </h:form>
