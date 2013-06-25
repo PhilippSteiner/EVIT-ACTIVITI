@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwEmailTemplatesViewDlg" widgetVar="BmwEmailTemplatesViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwEmailTemplatesTitle}">
+
+            <h:form id="BmwEmailTemplatesViewForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{bmwEmailTemplatesController.selected != null}">
+
+                        <h:outputText value="#{bundle.ViewBmwEmailTemplatesLabel_id}"/>
+                        <h:outputText value="#{bmwEmailTemplatesController.selected.id}" title="#{bundle.ViewBmwEmailTemplatesTitle_id}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailTemplatesLabel_subject}"/>
+                        <h:outputText value="#{bmwEmailTemplatesController.selected.subject}" title="#{bundle.ViewBmwEmailTemplatesTitle_subject}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailTemplatesLabel_type}"/>
+                        <h:outputText value="#{bmwEmailTemplatesController.selected.type}" title="#{bundle.ViewBmwEmailTemplatesTitle_type}"/>
+
+                        <h:outputText value="#{bundle.ViewBmwEmailTemplatesLabel_emailContent}"/>
+                        <h:outputText value="#{bmwEmailTemplatesController.selected.emailContent}" title="#{bundle.ViewBmwEmailTemplatesTitle_emailContent}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwEmailTemplatesViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

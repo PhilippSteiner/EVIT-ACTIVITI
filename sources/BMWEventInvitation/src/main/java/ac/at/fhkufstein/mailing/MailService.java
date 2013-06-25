@@ -21,9 +21,11 @@ import org.apache.commons.mail.Email;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 import java.util.List;
 import java.util.Date;
 import java.util.Iterator;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 /**
@@ -33,11 +35,11 @@ import javax.faces.context.FacesContext;
 public class MailService {
 
     public final static String MAIL_STATUS_SENT = "sent";
-
+    
     private static Email initMail() throws EmailException {
 
         MailConfig config = MailConfig.getInstance();
-        Email mail = new SimpleEmail();
+        Email mail = new HtmlEmail();
         mail.setHostName(config.getHostname()); //mail.wi.fh-kufstein.ac.at
         mail.setSmtpPort(config.getSmtpPort());
 
@@ -66,7 +68,7 @@ public class MailService {
      */
     public static boolean sendMail(String to, String subject, String message, String mailType) {
         try {
-
+            FacesContext facesContext = FacesContext.getCurrentInstance();
             Email mail = initMail();
 
             mail.addTo(to);
@@ -77,8 +79,8 @@ public class MailService {
 
             mail.send();
             
-            MessageService.showInfo("Die Mail wurde gesendet.");
 
+            facesContext.addMessage(null, new FacesMessage("E-Mail", "E-mail erfolgreich versendet!"));
             saveMailInHistory(mail, message, mailType);
 
             return true;
