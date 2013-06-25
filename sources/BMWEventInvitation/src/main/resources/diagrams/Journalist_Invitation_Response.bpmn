@@ -21,7 +21,16 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
 </text>
     </textAnnotation>
     <textAnnotation id="textannotation7">
-      <text>Enter your text here</text>
+      <text>Entscheidung ob das Event noch für Einladungen geöffnet ist oder nicht.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation8">
+      <text>Dem Journalist wird mitgeteilt, dass seine Einladung abgelaufen ist, da er nicht auf sie geantwortet hat.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation9">
+      <text>Das System evaluiert, ob das System noch für Einladungen geöffnet oder bereits geschlossen ist und teilt dem Prozess den Status mit.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation10">
+      <text>Der Prozess zur Einladung des Journalisten wird beendet.</text>
     </textAnnotation>
   </process>
   <process id="process_pool1" name="process_pool1" isExecutable="true">
@@ -92,17 +101,16 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
     <sequenceFlow id="flow10" name="Event geschlossen" sourceRef="eventIsOpen" targetRef="endevent2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${eventIsOpen == false}]]></conditionExpression>
     </sequenceFlow>
-    <serviceTask id="inviteNextParticipant" name="naechsten Teilnehmer nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteNextParticipant"></serviceTask>
+    <serviceTask id="inviteNextParticipant" name="nächsten Journalisten nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteNextParticipant"></serviceTask>
     <sequenceFlow id="flow9" sourceRef="inviteNextParticipant" targetRef="endevent1"></sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <exclusiveGateway id="typeOfJourney" name="Type of Journey"></exclusiveGateway>
-    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="whichFlight">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == true}]]></conditionExpression>
-    </sequenceFlow>
     <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == false}]]></conditionExpression>
     </sequenceFlow>
-    <endEvent id="endevent4" name="End"></endEvent>
+    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="whichFlight">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == true}]]></conditionExpression>
+    </sequenceFlow>
     <exclusiveGateway id="whichFlight" name="whichFlight"></exclusiveGateway>
     <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="whichFlight" targetRef="manualExecution">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == false}]]></conditionExpression>
@@ -110,6 +118,7 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
     <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="whichFlight" targetRef="sendBookingMail">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == true}]]></conditionExpression>
     </sequenceFlow>
+    <endEvent id="endevent4" name="End"></endEvent>
     <userTask id="manualExecution" name="manuelle Abwicklung"></userTask>
     <sequenceFlow id="flow24" sourceRef="manualExecution" targetRef="endevent6"></sequenceFlow>
     <endEvent id="endevent6" name="End"></endEvent>
@@ -141,20 +150,36 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
     </sequenceFlow>
     <serviceTask id="cancelInvitation" name="Einladung stornieren" activiti:class="ac.at.fhkufstein.activiti.delegates.CancelInvitation"></serviceTask>
-    <sequenceFlow id="flow31" sourceRef="cancelInvitation" targetRef="eventIsOpen"></sequenceFlow>
+    <sequenceFlow id="flow31" sourceRef="cancelInvitation" targetRef="evaluateEventStatus"></sequenceFlow>
     <association id="association3" sourceRef="textannotation3" targetRef="sendInvitationmail"></association>
     <textAnnotation id="textannotation4">
       <text>Benutzeraktivität für die Beantwortung der Einladung vom Journalist. Er kann Zusagen, Absagen oder eine Vertretung schicken.</text>
     </textAnnotation>
     <association id="association4" sourceRef="textannotation4" targetRef="answerInvitation"></association>
     <textAnnotation id="textannotation5">
-      <text>Zeitevent, das ausgelöst wird, wenn der Journalist nach einem bei Prozessbeginn definierten Zeitraum die Einladung nicht beantwortet.</text>
+      <text>Zeit Event, das ausgelöst wird, wenn der Journalist nach einem bei Prozessbeginn definierten Zeitraum die Einladung nicht beantwortet.</text>
     </textAnnotation>
     <association id="association5" sourceRef="textannotation5" targetRef="answerInvitationBoundarytimer"></association>
     <textAnnotation id="textannotation6">
       <text>Entscheidung ob bereits ein Urgenzmail gesendet wurde. Ist dies der Fall wird die Einladung darauffolgend storniert. Wurde keine Urgenzmail ausgesendet, wird es bei der darauffolgenden Aktivität verschickt.</text>
     </textAnnotation>
     <association id="association6" sourceRef="textannotation6" targetRef="reminderSent"></association>
+    <association id="association7" sourceRef="textannotation8" targetRef="cancelInvitation"></association>
+    <association id="association8" sourceRef="textannotation7" targetRef="eventIsOpen"></association>
+    <association id="association9" sourceRef="textannotation9" targetRef="evaluateEventStatus"></association>
+    <association id="association10" sourceRef="textannotation10" targetRef="endevent2"></association>
+    <association id="association11" sourceRef="textannotation10" targetRef="endevent1"></association>
+    <association id="association12" sourceRef="textannotation10" targetRef="endevent3"></association>
+    <association id="association13" sourceRef="textannotation10" targetRef="endevent6"></association>
+    <textAnnotation id="textannotation12">
+      <text>Der Einladungsprozess für den nächstgereihten Jorunalisten wird gestartet.</text>
+    </textAnnotation>
+    <association id="association15" sourceRef="textannotation12" targetRef="inviteNextParticipant"></association>
+    <textAnnotation id="textannotation13">
+      <text>Entscheidung ob die Einladung als Zusage oder als Absage beantwortet wurde. Bei Vertretung wird hier der Weg der Absage gewählt.
+</text>
+    </textAnnotation>
+    <association id="association16" sourceRef="textannotation13" targetRef="answer"></association>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
     <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
@@ -171,64 +196,58 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdc:Bounds height="40.0" width="40.0" x="551.0" y="490.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="eventIsOpen" id="BPMNShape_eventIsOpen">
-        <omgdc:Bounds height="40.0" width="40.0" x="650.0" y="360.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="910.0" y="327.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="inviteNextParticipant" id="BPMNShape_inviteNextParticipant">
-        <omgdc:Bounds height="67.0" width="105.0" x="770.0" y="347.0"></omgdc:Bounds>
+        <omgdc:Bounds height="67.0" width="105.0" x="1036.0" y="314.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="805.0" y="216.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1071.0" y="206.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
-        <omgdc:Bounds height="35.0" width="35.0" x="653.0" y="216.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="913.0" y="206.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="answer" id="BPMNShape_answer">
-        <omgdc:Bounds height="40.0" width="40.0" x="460.0" y="750.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="373.0" y="753.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="selectiveInvitation" id="BPMNShape_selectiveInvitation">
-        <omgdc:Bounds height="55.0" width="105.0" x="926.0" y="483.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="1200.0" y="476.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
-        <omgdc:Bounds height="35.0" width="35.0" x="961.0" y="216.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="kindOfRejection" id="BPMNShape_kindOfRejection">
-        <omgdc:Bounds height="40.0" width="40.0" x="701.0" y="638.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1235.0" y="220.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="typeOfJourney" id="BPMNShape_typeOfJourney">
-        <omgdc:Bounds height="40.0" width="40.0" x="910.0" y="750.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="1060.0" y="750.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent4" id="BPMNShape_endevent4">
-        <omgdc:Bounds height="35.0" width="35.0" x="1040.0" y="753.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="whichFlight" id="BPMNShape_whichFlight">
-        <omgdc:Bounds height="40.0" width="40.0" x="910.0" y="638.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1063.0" y="870.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="manualExecution" id="BPMNShape_manualExecution">
-        <omgdc:Bounds height="55.0" width="105.0" x="1131.0" y="483.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="1380.0" y="476.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="sendBookingMail" id="BPMNShape_sendBookingMail">
-        <omgdc:Bounds height="55.0" width="105.0" x="1091.0" y="631.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="1378.0" y="860.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="supplyFlightInfos" id="BPMNShape_supplyFlightInfos">
-        <omgdc:Bounds height="55.0" width="105.0" x="1091.0" y="914.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="1380.0" y="1029.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="sendTicketNotification" id="BPMNShape_sendTicketNotification">
-        <omgdc:Bounds height="55.0" width="126.0" x="1251.0" y="914.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="126.0" x="1590.0" y="1029.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent5" id="BPMNShape_endevent5">
-        <omgdc:Bounds height="35.0" width="35.0" x="1421.0" y="924.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1800.0" y="1039.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent6" id="BPMNShape_endevent6">
-        <omgdc:Bounds height="35.0" width="35.0" x="1166.0" y="216.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="1420.0" y="220.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="inviteSelectedParticipant" id="BPMNShape_inviteSelectedParticipant">
-        <omgdc:Bounds height="61.0" width="105.0" x="926.0" y="350.0"></omgdc:Bounds>
+        <omgdc:Bounds height="61.0" width="105.0" x="1200.0" y="317.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="evaluateEventStatus" id="BPMNShape_evaluateEventStatus">
-        <omgdc:Bounds height="55.0" width="105.0" x="701.0" y="483.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="720.0" y="320.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="supplyTravelInfos" id="BPMNShape_supplyTravelInfos">
-        <omgdc:Bounds height="58.0" width="117.0" x="701.0" y="742.0"></omgdc:Bounds>
+        <omgdc:Bounds height="58.0" width="117.0" x="712.0" y="742.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="textannotation1" id="BPMNShape_textannotation1">
         <omgdc:Bounds height="123.0" width="173.0" x="40.0" y="19.0"></omgdc:Bounds>
@@ -243,16 +262,16 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdc:Bounds height="97.0" width="134.0" x="242.0" y="70.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="JournalistInvitationResponsePool" id="BPMNShape_JournalistInvitationResponsePool">
-        <omgdc:Bounds height="838.0" width="1478.0" x="20.0" y="180.0"></omgdc:Bounds>
+        <omgdc:Bounds height="953.0" width="1912.0" x="20.0" y="180.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="bmwMitarbeiter" id="BPMNShape_bmwMitarbeiter">
-        <omgdc:Bounds height="391.0" width="1458.0" x="40.0" y="180.0"></omgdc:Bounds>
+        <omgdc:Bounds height="391.0" width="1892.0" x="40.0" y="180.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="journalist" id="BPMNShape_journalist">
-        <omgdc:Bounds height="275.0" width="1458.0" x="40.0" y="571.0"></omgdc:Bounds>
+        <omgdc:Bounds height="390.0" width="1892.0" x="40.0" y="571.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="travelagency" id="BPMNShape_travelagency">
-        <omgdc:Bounds height="169.0" width="1458.0" x="40.0" y="846.0"></omgdc:Bounds>
+        <omgdc:Bounds height="169.0" width="1892.0" x="40.0" y="961.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="textannotation3" id="BPMNShape_textannotation3">
         <omgdc:Bounds height="70.0" width="121.0" x="449.0" y="81.0"></omgdc:Bounds>
@@ -264,13 +283,34 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdc:Bounds height="86.0" width="141.0" x="510.0" y="590.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="textannotation7" id="BPMNShape_textannotation7">
-        <omgdc:Bounds height="50.0" width="100.0" x="719.0" y="101.0"></omgdc:Bounds>
+        <omgdc:Bounds height="75.0" width="121.0" x="788.0" y="20.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="cancelInvitation" id="BPMNShape_cancelInvitation">
-        <omgdc:Bounds height="55.0" width="105.0" x="487.0" y="320.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="519.0" y="320.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="textannotation6" id="BPMNShape_textannotation6">
         <omgdc:Bounds height="131.0" width="151.0" x="170.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation8" id="BPMNShape_textannotation8">
+        <omgdc:Bounds height="71.0" width="113.0" x="569.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation9" id="BPMNShape_textannotation9">
+        <omgdc:Bounds height="82.0" width="141.0" x="650.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation10" id="BPMNShape_textannotation10">
+        <omgdc:Bounds height="75.0" width="131.0" x="964.0" y="43.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation12" id="BPMNShape_textannotation12">
+        <omgdc:Bounds height="74.0" width="131.0" x="870.0" y="410.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation13" id="BPMNShape_textannotation13">
+        <omgdc:Bounds height="101.0" width="161.0" x="120.0" y="790.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="whichFlight" id="BPMNShape_whichFlight">
+        <omgdc:Bounds height="40.0" width="40.0" x="1410.0" y="753.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="kindOfRejection" id="BPMNShape_kindOfRejection">
+        <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="638.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
@@ -289,120 +329,92 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="571.0" y="490.0"></omgdi:waypoint>
-        <omgdi:waypoint x="539.0" y="375.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="375.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="36.0" width="100.0" x="-69.0" y="-45.0"></omgdc:Bounds>
+          <omgdc:Bounds height="36.0" width="100.0" x="9.0" y="-6.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
-        <omgdi:waypoint x="690.0" y="380.0"></omgdi:waypoint>
-        <omgdi:waypoint x="770.0" y="380.0"></omgdi:waypoint>
+        <omgdi:waypoint x="950.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1036.0" y="347.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="12.0" width="55.0" x="-20.0" y="-20.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
-        <omgdi:waypoint x="822.0" y="347.0"></omgdi:waypoint>
-        <omgdi:waypoint x="822.0" y="251.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="314.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="241.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
-        <omgdi:waypoint x="670.0" y="360.0"></omgdi:waypoint>
-        <omgdi:waypoint x="670.0" y="251.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="327.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="241.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="93.0" x="-100.0" y="-11.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="93.0" x="10.0" y="-22.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
         <omgdi:waypoint x="393.0" y="686.0"></omgdi:waypoint>
-        <omgdi:waypoint x="480.0" y="750.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="753.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
-        <omgdi:waypoint x="500.0" y="770.0"></omgdi:waypoint>
-        <omgdi:waypoint x="701.0" y="771.0"></omgdi:waypoint>
+        <omgdi:waypoint x="413.0" y="773.0"></omgdi:waypoint>
+        <omgdi:waypoint x="712.0" y="771.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="37.0" x="-44.0" y="0.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="37.0" x="-37.0" y="7.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
-        <omgdi:waypoint x="480.0" y="750.0"></omgdi:waypoint>
-        <omgdi:waypoint x="721.0" y="678.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="753.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="678.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="37.0" x="-10.0" y="4.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
-        <omgdi:waypoint x="721.0" y="638.0"></omgdi:waypoint>
-        <omgdi:waypoint x="753.0" y="538.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="33.0" x="10.0" y="-2.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="37.0" x="-31.0" y="14.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
-        <omgdi:waypoint x="978.0" y="483.0"></omgdi:waypoint>
-        <omgdi:waypoint x="978.0" y="411.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="476.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="378.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
-        <omgdi:waypoint x="978.0" y="350.0"></omgdi:waypoint>
-        <omgdi:waypoint x="978.0" y="251.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="255.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
-        <omgdi:waypoint x="721.0" y="638.0"></omgdi:waypoint>
-        <omgdi:waypoint x="978.0" y="538.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="638.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="531.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="12.0" width="51.0" x="-10.0" y="5.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flight" id="BPMNEdge_flight">
-        <omgdi:waypoint x="930.0" y="750.0"></omgdi:waypoint>
-        <omgdi:waypoint x="930.0" y="678.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="21.0" x="-30.0" y="-4.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="car" id="BPMNEdge_car">
-        <omgdi:waypoint x="950.0" y="770.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1040.0" y="770.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.0" y="790.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.0" y="870.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="22.0" x="-15.0" y="-17.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="specialFlight" id="BPMNEdge_specialFlight">
-        <omgdi:waypoint x="930.0" y="638.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1183.0" y="538.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="52.0" x="-70.0" y="-2.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="predefinedFlight" id="BPMNEdge_predefinedFlight">
-        <omgdi:waypoint x="950.0" y="658.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1091.0" y="658.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="12.0" width="61.0" x="-21.0" y="4.0"></omgdc:Bounds>
+          <omgdc:Bounds height="12.0" width="22.0" x="-30.0" y="-10.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
-        <omgdi:waypoint x="1143.0" y="686.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1143.0" y="914.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1430.0" y="915.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1432.0" y="1029.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
-        <omgdi:waypoint x="1196.0" y="941.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1251.0" y="941.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1485.0" y="1056.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1590.0" y="1056.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
-        <omgdi:waypoint x="1183.0" y="483.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1183.0" y="251.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1432.0" y="476.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1437.0" y="255.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
-        <omgdi:waypoint x="753.0" y="483.0"></omgdi:waypoint>
-        <omgdi:waypoint x="670.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="825.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="910.0" y="347.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
-        <omgdi:waypoint x="818.0" y="771.0"></omgdi:waypoint>
-        <omgdi:waypoint x="910.0" y="770.0"></omgdi:waypoint>
+        <omgdi:waypoint x="829.0" y="771.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1060.0" y="770.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
-        <omgdi:waypoint x="1377.0" y="941.0"></omgdi:waypoint>
-        <omgdi:waypoint x="1421.0" y="941.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1716.0" y="1056.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1800.0" y="1056.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
         <omgdi:waypoint x="136.0" y="267.0"></omgdi:waypoint>
@@ -433,13 +445,79 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdi:waypoint x="461.0" y="649.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
-        <omgdi:waypoint x="592.0" y="347.0"></omgdi:waypoint>
-        <omgdi:waypoint x="670.0" y="360.0"></omgdi:waypoint>
+        <omgdi:waypoint x="624.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="347.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="association6" id="BPMNEdge_association6">
         <omgdi:waypoint x="321.0" y="465.0"></omgdi:waypoint>
         <omgdi:waypoint x="571.0" y="485.0"></omgdi:waypoint>
         <omgdi:waypoint x="591.0" y="510.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association7" id="BPMNEdge_association7">
+        <omgdi:waypoint x="625.0" y="82.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="320.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association8" id="BPMNEdge_association8">
+        <omgdi:waypoint x="848.0" y="95.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="327.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association9" id="BPMNEdge_association9">
+        <omgdi:waypoint x="720.0" y="171.0"></omgdi:waypoint>
+        <omgdi:waypoint x="772.0" y="320.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association10" id="BPMNEdge_association10">
+        <omgdi:waypoint x="1029.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association11" id="BPMNEdge_association11">
+        <omgdi:waypoint x="1029.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association12" id="BPMNEdge_association12">
+        <omgdi:waypoint x="1029.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="220.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association13" id="BPMNEdge_association13">
+        <omgdi:waypoint x="1095.0" y="80.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1427.0" y="93.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1437.0" y="220.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association15" id="BPMNEdge_association15">
+        <omgdi:waypoint x="935.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="381.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association16" id="BPMNEdge_association16">
+        <omgdi:waypoint x="281.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="856.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="793.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flight" id="BPMNEdge_flight">
+        <omgdi:waypoint x="1100.0" y="770.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1410.0" y="773.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="21.0" x="-30.0" y="-4.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="specialFlight" id="BPMNEdge_specialFlight">
+        <omgdi:waypoint x="1430.0" y="753.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1432.0" y="531.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="52.0" x="9.0" y="68.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="predefinedFlight" id="BPMNEdge_predefinedFlight">
+        <omgdi:waypoint x="1430.0" y="793.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1430.0" y="860.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="61.0" x="10.0" y="-16.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="770.0" y="638.0"></omgdi:waypoint>
+        <omgdi:waypoint x="772.0" y="375.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="33.0" x="10.0" y="-2.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
