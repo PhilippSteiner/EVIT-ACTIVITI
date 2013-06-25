@@ -21,14 +21,17 @@ package ac.at.fhkufstein.BMWJournalist;
  */
 import ac.at.fhkufstein.bean.BmwFlightController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.BmwTravelController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.entity.BmwFlight;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.BmwTravel;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.login.doLogin;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwFlightFacade;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
+import ac.at.fhkufstein.session.BmwTravelFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,13 +69,14 @@ public class ResponseBean implements Serializable {
     private String rightside;
     private BmwParticipants currentParticipant;
     private String eventdetailview = "eventdetail";
-    
     private String outcomemessage;
-    
     private BmwFlightController bmwFlightController;
+    private BmwTravelController bmwTravelController;
+    private BmwParticipantsController bmwParticipantsController;
+    private String kommentar;
 
     public ResponseBean() {
-        
+
         this.einladungsoberflaeche = "einladung";
         this.rightside = "detailrightside";
 
@@ -83,53 +87,55 @@ public class ResponseBean implements Serializable {
 
         this.auswahl = "nix";
 
-            System.out.println("IS RELOADING STATUS");
+        System.out.println("IS RELOADING STATUS");
 
-            BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        this.bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        this.bmwTravelController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwTravelController}", BmwTravelController.class);
+        this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
 
-            JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
 
-            doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
 
-            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+        EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
 
-            System.out.println("Parameter Event: "+currentJournalistBean.getSelectedBmwEvent().getName());
-            System.out.println("Parameter UserID: "+PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()));
+        System.out.println("Parameter Event: " + currentJournalistBean.getSelectedBmwEvent().getName());
+        System.out.println("Parameter UserID: " + PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()));
 
-            BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
-                    .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
-                    .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
-                    .getSingleResult();
+        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
 
-            String prestatus = currentPartipantsStati.getPState();
+        String prestatus = currentPartipantsStati.getPState();
 
-            System.out.println("state is null, now: " + prestatus);
+        System.out.println("state is null, now: " + prestatus);
 
-            if (prestatus.equals("eingeladen")) {
+        if (prestatus.equals("eingeladen")) {
 
-                this.step = "wiz1";
-            }
+            this.step = "wiz1";
+        }
 
-            if (prestatus.equals("zugesagt")) {
+        if (prestatus.equals("zugesagt")) {
 
-                this.step = "wiz2";
-            }
-            
-            if (prestatus.equals("selbstanreise")) {
+            this.step = "wiz2";
+        }
 
-                this.step = "wiz3";
-            }
-            
-            if (prestatus.equals("flugausgewaehlt")) {
+        if (prestatus.equals("selbstanreise")) {
 
-                this.step = "wiz3";
-            }
+            this.step = "wiz3";
+        }
+
+        if (prestatus.equals("flugausgewaehlt")) {
+
+            this.step = "wiz3";
+        }
     }
 
     @PostConstruct
     private void initialize() {
-        
+
         auswahlmoeglichkeiten.add(new SelectItem("Zusagen"));
         auswahlmoeglichkeiten.add(new SelectItem("Absagen"));
         auswahlmoeglichkeiten.add(new SelectItem("Vertretung schicken"));
@@ -154,10 +160,9 @@ public class ResponseBean implements Serializable {
     }
 
     public List<SelectItem> getVerfuegbareFluege() {
-        
-        this.setVerfuegbareFluege(this.getAllFlightsForEvent());
-        
-        return verfuegbareFluege;
+
+        return this.getAllFlightsForEvent();
+
     }
 
     public void setVerfuegbareFluege(List<SelectItem> verfuegbareFluege) {
@@ -170,9 +175,8 @@ public class ResponseBean implements Serializable {
 
     public void setFlugauswahl(String flugauswahl) {
         this.flugauswahl = flugauswahl;
-        
 
-        System.out.println("Set Flugauswahl: " + this.flugauswahl);
+        System.out.println("Set Flugauswahl: " + this.getFlugauswahl());
 
     }
 
@@ -216,7 +220,6 @@ public class ResponseBean implements Serializable {
     public void setRightside(String rightside) {
         this.rightside = rightside;
     }
-    
 
     public String getEinladungsoberflaeche() {
         return einladungsoberflaeche;
@@ -241,52 +244,56 @@ public class ResponseBean implements Serializable {
     public void setEventdetailview(String eventdetailview) {
         this.eventdetailview = eventdetailview;
     }
-    
-    
-    
-    
+
+    public String getKommentar() {
+        return kommentar;
+    }
+
+    public void setKommentar(String kommentar) {
+        this.kommentar = kommentar;
+    }
 
     //////*********************************************
     public void stateChangeListener(ValueChangeEvent event) {
 
-        System.out.println("Listener Beantwortet mit: " + event.getNewValue());
+        System.out.println("LISTENER: Beantwortet mit: " + event.getNewValue());
 
         this.auswahl = event.getNewValue().toString();
     }
 
     public void stateFlugChangeListener(ValueChangeEvent event) {
 
-        System.out.println("Flugauswahl Beantwortet mit: " + event.getNewValue());
+        System.out.println("LISTENER: Flugauswahl Beantwortet mit: " + event.getNewValue());
 
         this.flugauswahl = event.getNewValue().toString();
     }
 
-    public void beantworten() {
+    public String beantworten() {
 
         System.out.println("Beantwortet mit: " + this.auswahl);
 
         if (this.auswahl.equals("Vertretung schicken")) {
 
             this.einladungsoberflaeche = "einladung_select";
-            
-            //return "do nothing";
+
+            return "do nothing";
 
         } else if (auswahl.equals("nix")) {
 
             System.out.print("is nix *****************************************************************");
-            
-            //return "do nothing";
+
+            return "do nothing";
 
         } else if (auswahl.equals("Zusagen")) {
 
-            BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
 
             JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
 
             doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
 
-            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+            EntityManager em = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
 
 
             BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
@@ -302,25 +309,25 @@ public class ResponseBean implements Serializable {
 
             this.step = "wiz2";
 
-            bmwParticipantsController.setSelected(currentPartipantsStati);
+            this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
             currentPartipantsStati.setPState("zugesagt");
-            bmwParticipantsController.save(null);
+            this.bmwParticipantsController.save(null);
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
-            
-            //return "do nothing";
+
+            return "do nothing";
 
         } else if (auswahl.equals("Absagen")) {
 
-            BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+            //BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
 
             JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
 
             doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
 
-            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+            EntityManager em = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
 
 
             BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
@@ -334,114 +341,32 @@ public class ResponseBean implements Serializable {
             System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
             System.out.print("Status:" + currentPartipantsStati.getPState());
 
-            bmwParticipantsController.setSelected(currentPartipantsStati);
+            this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
             currentPartipantsStati.setPState("abgesagt");
-            bmwParticipantsController.save(null);
+            this.bmwParticipantsController.save(null);
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
-            
+
             this.outcomemessage = "Viele Dank für Ihre Antwort";
-            
-            //return "/BMW_Journalist/eventoutcome.xhtml";
-            
-            this.setEventdetailview("eventoutcome");
+
+            this.eventdetailview = "eventoutcome";
+
+            return "eventoutcome";
 
         } else {
             
-            //return "do nothing";
+            return "do nothing";
         }
     }
 
     public void flugauswaehlen() {
 
-        System.out.println("Flug ausgewaehlt: " + this.flugauswahl);
-        
+        System.out.println("Flug ausgewaehlt: " + this.getFlugauswahl());
+
         //STATUS ÄNDERN
-            
-        BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
 
-            JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
-
-
-            doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
-
-            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-
-
-            BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
-                    .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
-                    .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
-                    .getSingleResult();
-
-            //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
-
-            System.out.print("Abgesagt *****************************************************************");
-            System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
-            System.out.print("Status:" + currentPartipantsStati.getPState());
-
-            bmwParticipantsController.setSelected(currentPartipantsStati);
-
-            currentPartipantsStati.setPState("flugausgewaehlt");
-            bmwParticipantsController.save(null);
-
-            System.out.print("State saved to: " + currentPartipantsStati.getPState());
-
-        /* if (this.flugauswahl == null) {
-         //nachricht noch ausgeben
-         } else {*/
-
-        this.step = "wiz3";
-
-        //}
-
-    }
-
-    public void selbstanreisewaehlen() {
-        
-                    BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-
-            JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
-
-
-            doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
-
-            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-
-
-            BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
-                    .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
-                    .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
-                    .getSingleResult();
-
-            //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
-
-            System.out.print("Abgesagt *****************************************************************");
-            System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
-            System.out.print("Status:" + currentPartipantsStati.getPState());
-
-            bmwParticipantsController.setSelected(currentPartipantsStati);
-
-            currentPartipantsStati.setPState("selbstanreise");
-            bmwParticipantsController.save(null);
-
-            System.out.print("State saved to: " + currentPartipantsStati.getPState());
-
-        System.out.println("Selbstanreise");
-
-        this.step = "wiz3";
-
-    }
-
-    public void vertretungAngeben() {
-
-        //String vertretungsString = " Daten für Vertetung: Vorname: " + this.getVorname() + " Nachname: " + this.getNachname() + " Email: " + this.getEmail();
-
-        String vertretungsString = "Wolfgang Tevez fish@mail.com";
-        
-        System.out.println(vertretungsString);
-
-        BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        //BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
 
         JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
@@ -449,6 +374,176 @@ public class ResponseBean implements Serializable {
         doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
 
         EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+
+
+        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
+
+        //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
+
+        System.out.print("Abgesagt *****************************************************************");
+        System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
+        System.out.print("Status:" + currentPartipantsStati.getPState());
+
+        this.bmwParticipantsController.setSelected(currentPartipantsStati);
+
+        currentPartipantsStati.setPState("flugausgewaehlt");
+        this.bmwParticipantsController.save(null);
+
+        System.out.print("##############State saved to: " + currentPartipantsStati.getPState());
+
+        //FLUG-TRAVEL DATA STUFF
+
+        //get flug by name
+
+        if (this.getFlugauswahl() == null) {
+
+            System.out.print("Flug noch null");
+
+        } else {
+
+            System.out.print("Flug nicht mehr null");
+
+            String[] splitResult = this.getFlugauswahl().split(
+                    ",");
+
+            System.out.print("Lenght SplitString: " + splitResult.length);
+
+            String flightnumber = splitResult[2];
+
+            System.out.print("Flightnumber: " + flightnumber);
+
+            this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
+
+            EntityManager flugem = ((BmwFlightFacade) this.bmwFlightController.getFacade()).getEntityManager();
+
+            BmwFlight myflight = (BmwFlight) flugem.createNamedQuery("BmwFlight.findByFlightNumber")
+                    .setParameter("flightNumber", flightnumber)
+                    .getSingleResult();
+
+            System.out.print("Got Flight" + myflight.getDepartureLocation() + "from Flightnumber: " + flightnumber);
+
+            //create tavel *************************************************************
+
+            System.out.print("Kommentar: " + this.getKommentar());
+
+            BmwTravel mytravel = new BmwTravel();
+            mytravel.setFlightId(myflight);
+            mytravel.setPdfTicketUrl("no url");
+            mytravel.setComment(this.getKommentar());
+            mytravel.setType("typeFlug");
+            mytravel.setArrivalDatetime(myflight.getArrivalTime());
+
+            this.bmwTravelController.setSelected(mytravel);
+
+            this.bmwTravelController.save(null);
+
+            //Get Travel back from DB***************************************************
+
+            EntityManager travelEM = ((BmwTravelFacade) bmwTravelController.getFacade()).getEntityManager();
+
+            List<BmwTravel> myTravelDBList = travelEM.createNamedQuery("BmwTravel.findByFlight")
+                    .setParameter("flightId", myflight)
+                    .getResultList();
+
+            System.out.print("Size of Travellist again:" + myTravelDBList.size());
+
+            int pointer = (myTravelDBList.size() - 1);
+
+            System.out.print("Pointer :" + pointer);
+
+            BmwTravel myTravelfromDB = new BmwTravel();
+
+            myTravelfromDB = myTravelDBList.get(pointer);
+
+            System.out.print("myTravelfromDB Flight :" + myTravelfromDB.getFlightId().getDepartureLocation());
+
+            //Get partitipant change travel id at participant******************************
+
+            //BmwParticipantsController bmwParticipantsFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsFlightController}", BmwParticipantsController.class);
+
+            JournalistBean currentFlightJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+            doLogin currentFlightlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+            EntityManager particiEM = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
+
+            BmwParticipants toChangeParticipant = (BmwParticipants) particiEM.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                    .setParameter("id", currentFlightJournalistBean.getSelectedBmwEvent())
+                    .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentFlightlogin.getUid()))
+                    .getSingleResult();
+
+            //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
+
+            System.out.print("Abgesagt *****************************************************************");
+            System.out.print("Name: " + toChangeParticipant.getUserId().getUsername());
+            System.out.print("Status:" + toChangeParticipant.getPState());
+
+            this.bmwParticipantsController.setSelected(toChangeParticipant);
+
+            toChangeParticipant.setTravelId(myTravelfromDB);
+            this.bmwParticipantsController.save(null);
+
+            this.step = "wiz3";
+
+        }
+
+    }
+
+    public void selbstanreisewaehlen() {
+
+        //BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+        EntityManager em = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
+
+
+        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
+
+        //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
+
+        System.out.print("Abgesagt *****************************************************************");
+        System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
+        System.out.print("Status:" + currentPartipantsStati.getPState());
+
+        this.bmwParticipantsController.setSelected(currentPartipantsStati);
+
+        currentPartipantsStati.setPState("selbstanreise");
+        this.bmwParticipantsController.save(null);
+
+        System.out.print("State saved to: " + currentPartipantsStati.getPState());
+
+        System.out.println("Selbstanreise");
+
+        this.step = "wiz3";
+
+    }
+
+    public String vertretungAngeben() {
+
+        //String vertretungsString = " Daten für Vertetung: Vorname: " + this.getVorname() + " Nachname: " + this.getNachname() + " Email: " + this.getEmail();
+
+        String vertretungsString = "Wolfgang Tevez fish@mail.com";
+
+        System.out.println(vertretungsString);
+
+        //BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+        EntityManager em = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
 
 
         BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
@@ -464,30 +559,30 @@ public class ResponseBean implements Serializable {
         System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
         System.out.print("Status:" + currentPartipantsStati.getPState());
 
-        bmwParticipantsController.setSelected(currentPartipantsStati);
+        this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
         currentPartipantsStati.setPState("vertretung");
         currentPartipantsStati.setRepComment(vertretungsString);
-        bmwParticipantsController.save(null);
+        this.bmwParticipantsController.save(null);
 
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
         System.out.print("Comment saved to: " + currentPartipantsStati.getRepComment());
 
-        this.outcomemessage = "Sie haben als Vertretungswunsch Max Mustermann angegeben.";
-        
+        this.outcomemessage = "Sie haben als Vertretungswunsch" + this.getVorname() + " " + this.getNachname() + ", " + this.getEmail() + "angegeben.";
+
         this.eventdetailview = "eventoutcome";
-        
-        //return "eventoutcome.xhtml";
+
+        return "eventoutcome";
 
     }
-    
-    public List getAllFlightsForEvent() {
-        
-        List <SelectItem> returnFluege = new ArrayList<SelectItem>();
+
+    public List<SelectItem> getAllFlightsForEvent() {
+
+        List<SelectItem> returnFluege = new ArrayList<SelectItem>();
 
         this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
 
-        EntityManager em = ((BmwFlightFacade) bmwFlightController.getFacade()).getEntityManager();
+        EntityManager em = ((BmwFlightFacade) this.bmwFlightController.getFacade()).getEntityManager();
 
         JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
@@ -496,24 +591,19 @@ public class ResponseBean implements Serializable {
                 .getResultList();
 
         System.out.println("Flights " + currentFlightList.size());
-
+        System.out.println("Flight1 " + currentFlightList.get(0).getDepartureLocation());
 
         for (int i = 0; i < currentFlightList.size(); i++) {
+
             String dateString = "" + currentFlightList.get(i).getDepartureTime().getDay() + "." + currentFlightList.get(i).getDepartureTime().getMonth() + "." + currentFlightList.get(i).getDepartureTime().getYear();
-            String addstring = "" + currentFlightList.get(i).getDepartureLocation() + "-" + currentFlightList.get(i).getArrivalLocation() + ", " + dateString;
+            String addstring = "" + currentFlightList.get(i).getDepartureLocation() + "-" + currentFlightList.get(i).getArrivalLocation() + ", " + dateString + "," + currentFlightList.get(i).getFlightNumber();
 
             returnFluege.add(new SelectItem(addstring));
 
+            System.out.println("Last Object" + returnFluege.get(i).getLabel());
+
         }
-        
+
         return returnFluege;
     }
-    
-    /*public String goBackToEvents(){
-    
-        return "/BMW_Journalist/journalistmenue.xhtml";
-    
-    }*/
-
-
 }

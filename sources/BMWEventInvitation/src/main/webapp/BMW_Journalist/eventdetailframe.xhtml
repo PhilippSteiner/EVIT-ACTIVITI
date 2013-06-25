@@ -5,50 +5,28 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-        <h:head>
-            <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>PrimeFaces</title>
-            </f:facet>
-        </h:head>
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>PrimeFaces</title>
+        </f:facet>
+    </h:head>
 
-        <h:body>
+    <h:body>
+        <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
+        
+        <h:form id="formEDF">
 
-            <h:form id="megaform">
+            <p:tabMenu activeIndex="0">
+                <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
+                <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
+                <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
+            </p:tabMenu>
 
-                <p:layout fullPage="true">
+            <ui:include src="/BMW_Journalist/#{ResponseBean.eventdetailview}.xhtml" />
 
-                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                        <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
-                    </p:layoutUnit>
+        </h:form>
 
-                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                        BMW Events [Legal Stuff, AGB's, Imprint]
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
-                        <p:menu style='width:95%'>
-
-                            <p:menuitem value="Bevorstehende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
-                            <p:menuitem value="Vergangene Events" outcome="/BMW_Journalist/pastevents.xhtml" />
-                            <p:menuitem value="E-Mail History" outcome="/BMW_Journalist/history.xhtml" />
-
-                        </p:menu>
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="center">
-
-                        <h:form id="bigform">
-
-                            <ui:include src="/BMW_Journalist/#{ResponseBean.eventdetailview}.xhtml" />
-
-                        </h:form>
-
-                    </p:layoutUnit>
-
-                </p:layout>
-                
-            </h:form>
-        </h:body>
+    </h:body>
 
 </html>

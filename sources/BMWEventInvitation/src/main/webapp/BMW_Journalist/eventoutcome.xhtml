@@ -13,35 +13,8 @@
 
         <h:body>
             
-                <p:layout fullPage="true">
-
-                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                        <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                        BMW Events [Legal Stuff, AGB's, Imprint]
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
-                        <p:menu style='width:95%'>
-
-                            <p:menuitem value="Bevorstehende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
-                            <p:menuitem value="Vergangene Events" outcome="/BMW_Journalist/pastevents.xhtml" />
-                            <p:menuitem value="E-Mail History" outcome="/BMW_Journalist/history.xhtml" />
-
-                        </p:menu>
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="center">
-                                  
-                        <h4>#{ResponseBean.outcomemessage}</h4>
-                        
-                    </p:layoutUnit>
-
-                </p:layout>
-                
-         
+                        <h3>#{ResponseBean.outcomemessage}</h3>
+                         
         </h:body>
 </html>
 

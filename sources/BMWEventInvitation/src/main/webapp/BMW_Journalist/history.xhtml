@@ -5,81 +5,84 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-        <h:head>
-            <f:facet name="first">
-                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <title>PrimeFaces</title>
-            </f:facet>
-        </h:head>
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>PrimeFaces</title>
+        </f:facet>
+    </h:head>
 
-        <h:body>
-            <h:form>
-                <p:layout fullPage="true">
-
-                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                        <!--<img src="img/bmw-logo.jpg" height="100%"/>BMW Events [Logo n Stuff]-->
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
-
-                        <p:menuitem value="Kommende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
-                        <p:menuitem value="Vergangene Events" outcome="/BMW_Journalist/pastevents.xhtml" />
-                        <p:menuitem value="E-Mail History" outcome="/BMW_Journalist/history.xhtml" />
-
-                    </p:layoutUnit>
-
-                    <p:layoutUnit position="center">
-
-                        <p:panel header="Email Historie">  
-
-                            <h:form id="form">
-
-                                <p:dataTable id="events" var="email" value="#{journalistEmailBean.userEmails}" emptyMessage="Keine Events gefunden">  
-
-                                    <p:column headerText="Absender">
-                                        <h:outputText value="#{email.emailFrom}" />
-                                    </p:column>
-
-                                    <p:column headerText="Betreff">
-                                        <h:outputText value="#{email.emailSubject}" />
-                                    </p:column>
-
-                                    <p:column headerText="Vom">
-                                        <h:outputText value="#{email.datetimeRecieved}" />
-                                    </p:column>
-
-                                    <p:column style="width:4%">  
-                                        <p:commandButton id="selectButton" action="carDialig.show()"  icon="ui-icon-search">  
-                                            <f:setPropertyActionListener value="#{email}" target="#{journalistEmailBean.selectedEmails}" />  
-                                        </p:commandButton>  
-                                    </p:column> 
-                                </p:dataTable>
-
-                                <p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
-                                          showEffect="fade" hideEffect="explode">  
-
-                                    <h:panelGrid id="display" columns="2" cellpadding="4">  
-
-                                        <h:outputText value="Von:" />  
-                                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailFrom}" />
-                                        <h:outputText value="An:" />  
-                                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailTo}" />  
-                                        <h:outputText value="Betreff:" />  
-                                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailSubject}" />
-                                        <h:outputText value="Inhalt:" />  
-                                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailContent}" />
+    <h:body>
+        <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
+        <h:form id="form">
+            <p:tabMenu activeIndex="2">
+                <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
+                <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
+                <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
+            </p:tabMenu>
 
 
-                                    </h:panelGrid>  
-                                </p:dialog>  
+            <p:panel header="Emails">
 
-                            </h:form>
-                        </p:panel>
-                    </p:layoutUnit>
 
-                </p:layout>
-            </h:form>
-        </h:body>
+                <p:dataTable id="emails" value="#{journalistEmailBean.userEmails}" var="item"
+                             selectionMode="single" selection="#{journalistEmailBean.selectedEmails}"
+                             rowKey="#{item.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30"
+                             emptyMessage="Keine Emails gefunden."
+                             >
+
+                    <p:ajax event="rowSelect" 
+                            update=":form:display" oncomplete="carDialog.show()" />  
+                    <p:ajax event="rowUnselect" />  
+                    <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.emailFrom}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.emailTo}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.emailSubject}"/>
+                    </p:column>
+
+                </p:dataTable>
+
+
+                <p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
+                          showEffect="fade" hideEffect="explode">  
+
+                    <h:panelGrid id="display" columns="2" cellpadding="4">  
+
+                        <h:outputText value="Von:" />  
+                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailFrom}" />
+                        <h:outputText value="An:" />  
+                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailTo}" />  
+                        <h:outputText value="Betreff:" />  
+                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailSubject}" />
+                        <h:outputText value="Inhalt:" />  
+                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailContent}" />
+
+
+                    </h:panelGrid>  
+                </p:dialog>  
+
+            </p:panel>
+        </h:form>
+
+    </h:body>
 </html>
 
 

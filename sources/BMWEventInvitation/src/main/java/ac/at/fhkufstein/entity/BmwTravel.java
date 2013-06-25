@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BmwTravel.findAll", query = "SELECT b FROM BmwTravel b"),
     @NamedQuery(name = "BmwTravel.findById", query = "SELECT b FROM BmwTravel b WHERE b.id = :id"),
     @NamedQuery(name = "BmwTravel.findByType", query = "SELECT b FROM BmwTravel b WHERE b.type = :type"),
+    @NamedQuery(name = "BmwTravel.findByFlight", query = "SELECT b FROM BmwTravel b WHERE b.flightId = :flightId"),
     @NamedQuery(name = "BmwTravel.findByArrivalDatetime", query = "SELECT b FROM BmwTravel b WHERE b.arrivalDatetime = :arrivalDatetime"),
     @NamedQuery(name = "BmwTravel.findByPdfTicketUrl", query = "SELECT b FROM BmwTravel b WHERE b.pdfTicketUrl = :pdfTicketUrl")})
 public class BmwTravel implements Serializable {

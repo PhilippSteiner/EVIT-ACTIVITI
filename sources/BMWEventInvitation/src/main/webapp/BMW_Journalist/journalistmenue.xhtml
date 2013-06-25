@@ -14,57 +14,41 @@
         </h:head>
 
         <h:body>
-                <p:layout fullPage="true">
+            
+            <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
 
-                    <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
-                        <!--<img src="img/bmw-logo.jpg" height="100%"/> BMW Events [Logo n Stuff]-->
-                    </p:layoutUnit>
+            <h:form>
+                <p:tabMenu activeIndex="0">
+                    <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
+                    <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
+                    <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
+                </p:tabMenu>
 
-                    <p:layoutUnit position="south" size="100" closable="true" collapsible="true">
-                        BMW Events [Legal Stuff, AGB's, Imprint]
-                    </p:layoutUnit>
+                <p:panel header="Bevorstehende Events">
 
-                    <p:layoutUnit position="west" size="275" header="Navigation" collapsible="false">
-                        <p:menu style='width:95%'>
+                    <p:dataTable id="events" var="event" value="#{JournalistBean.journalistEvents}" emptyMessage="Keine Events gefunden.">  
 
-                            <p:menuitem value="Bevorstehende Events" outcome="/BMW_Journalist/journalistmenue.xhtml" />
-                            <p:menuitem value="Vergangene Events" outcome="/BMW_Journalist/pastevents.xhtml" />
-                            <p:menuitem value="E-Mail History" outcome="/BMW_Journalist/history.xhtml" />
+                        <p:column headerText="Name">
+                            <h:outputText value="#{event.name}" />
+                        </p:column>
 
-                        </p:menu>
-                    </p:layoutUnit>
+                        <p:column headerText="bis">
+                            <h:outputText value="#{event.startEventdate.toString()}" />
+                        </p:column>
 
-                    <p:layoutUnit position="center">
-                        
-                        <p:panel header="Bevorstehende Events">
-                        <h:form>
-                            <p:dataTable id="events" var="event" value="#{JournalistBean.journalistEvents}" emptyMessage="Keine Events gefunden">  
+                        <p:column headerText="von">
+                            <h:outputText value="#{event.endEventdate.toString()}" />
+                        </p:column>
 
-                                <p:column headerText="Name">
-                                    <h:outputText value="#{event.name}" />
-                                </p:column>
+                        <p:column style="width:4%">  
+                            <p:commandButton id="selectButton" action="#{JournalistBean.didSelectEventRow()}"  icon="ui-icon-search">  
+                                <f:setPropertyActionListener value="#{event}" target="#{JournalistBean.selectedBmwEvent}" />  
+                            </p:commandButton>  
+                        </p:column> 
+                    </p:dataTable>
 
-                                <p:column headerText="bis">
-                                    <h:outputText value="#{event.startEventdate.toString()}" />
-                                </p:column>
-
-                                <p:column headerText="von">
-                                    <h:outputText value="#{event.endEventdate.toString()}" />
-                                </p:column>
-
-                                <p:column style="width:4%">  
-                                    <p:commandButton id="selectButton" action="#{JournalistBean.didSelectEventRow()}"  icon="ui-icon-search">  
-                                        <f:setPropertyActionListener value="#{event}" target="#{JournalistBean.selectedBmwEvent}" />  
-                                    </p:commandButton>  
-                                </p:column> 
-                            </p:dataTable>
-                        </h:form>
-                        </p:panel>
-
-                    </p:layoutUnit>
-
-                </p:layout>
-         
+                </p:panel>
+            </h:form>
         </h:body>
 
     </f:view>
