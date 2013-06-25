@@ -19,12 +19,12 @@ public class BmwEmailTemplatesFacade extends AbstractFacade<BmwEmailTemplates> {
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 
     public BmwEmailTemplatesFacade() {
         super(BmwEmailTemplates.class);
     }
-    
+
 }

@@ -24,8 +24,6 @@ import org.activiti.engine.delegate.JavaDelegate;
  *
  * @author mike
  */
-@ManagedBean
-@RequestScoped
 public class InviteSelectedParticipant implements JavaDelegate {
 
     @Override

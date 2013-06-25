@@ -17,10 +17,10 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
-<error-page>
-<exception-type>javax.faces.application.ViewExpiredException</exception-type>
-<location>/faces/login.xhtml</location>
-</error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/faces/login.xhtml</location>
+    </error-page>
     <session-config>
         <session-timeout>
             3000
@@ -37,7 +37,7 @@
     <!-- ############################################# -->
     <!-- # File upload                               # -->
     <!-- ############################################# -->
-    
+
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>
@@ -47,12 +47,12 @@
             <param-name>thresholdSize</param-name>
             <param-value>51200</param-value>
         </init-param>
-         <!-- Optional
-        <init-param>
-            <param-name>uploadDirectory</param-name>
-            <param-value>/var/bcom/temp</param-value>
-        </init-param>
-         -->
+        <!-- Optional
+       <init-param>
+           <param-name>uploadDirectory</param-name>
+           <param-value>/var/bcom/temp</param-value>
+       </init-param>
+        -->
     </filter>
 
     <filter-mapping>
@@ -63,5 +63,5 @@
     <!-- ############################################# -->
     <!-- # end File upload                           # -->
     <!-- ############################################# -->
-    
+
 </web-app>

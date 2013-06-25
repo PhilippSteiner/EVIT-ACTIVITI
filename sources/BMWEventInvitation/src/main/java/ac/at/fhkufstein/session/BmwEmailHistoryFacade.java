@@ -26,5 +26,5 @@ public class BmwEmailHistoryFacade extends AbstractFacade<BmwEmailHistory> {
     public BmwEmailHistoryFacade() {
         super(BmwEmailHistory.class);
     }
-    
+
 }

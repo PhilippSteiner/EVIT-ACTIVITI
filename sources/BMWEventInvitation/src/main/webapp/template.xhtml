@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?> 
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -10,6 +10,9 @@
         <h:outputStylesheet library="css" name="pfcrud.css"/>
         <h:outputStylesheet library="css" name="style.css"/>
         <h:outputScript library="scripts" name="pfcrud.js"/>
+
+        <ui:insert name="head"></ui:insert>
+
     </h:head>
 
     <h:body>
@@ -17,18 +20,19 @@
         <p:growl id="growl" life="3000"/>
 
         <p:layout fullPage="true">
+
             <p:layoutUnit position="north" size="200px" header="BMW Event Management" style="border: none">
                 <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
+
 
                 <!-- Menu here. Also a layout and a way to log a user out -->
                 <ui:include src="/appmenu.xhtml"/>
             </p:layoutUnit>
 
 
-
             <p:layoutUnit position="center" style="border: none">
                 <ui:insert name="body"/>
-                 
+
             </p:layoutUnit>
 
         </p:layout>

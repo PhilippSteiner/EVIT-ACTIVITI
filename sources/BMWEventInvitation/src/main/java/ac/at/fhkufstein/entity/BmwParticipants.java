@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "BmwParticipants.findAll", query = "SELECT b FROM BmwParticipants b"),
     @NamedQuery(name = "BmwParticipants.findById", query = "SELECT b FROM BmwParticipants b WHERE b.id = :id"),
-	@NamedQuery(name = "BmwParticipants.findByEventId", query = "SELECT b FROM BmwParticipants b WHERE b.eventId = :id"),
-
-        @NamedQuery(name = "BmwParticipants.findByEventIdAndUserId", query = "SELECT b FROM BmwParticipants b WHERE b.eventId = :id AND b.userId = :userId"),
-        @NamedQuery(name = "BmwParticipants.findByUserId", query = "SELECT b FROM BmwParticipants b WHERE b.userId = :userId"),
+    @NamedQuery(name = "BmwParticipants.findByEventId", query = "SELECT b FROM BmwParticipants b WHERE b.eventId = :id"),
+    @NamedQuery(name = "BmwParticipants.findByEventIdAndUserId", query = "SELECT b FROM BmwParticipants b WHERE b.eventId = :id AND b.userId = :userId"),
     @NamedQuery(name = "BmwParticipants.findByUserId", query = "SELECT b FROM BmwParticipants b WHERE b.userId = :userId"),
     @NamedQuery(name = "BmwParticipants.findByUserIdAndEventId", query = "SELECT b FROM BmwParticipants b WHERE b.userId = :userId and b.eventId= :eventId"),
-
+    @NamedQuery(name = "BmwParticipants.findByTravelId", query = "SELECT b FROM BmwParticipants b WHERE b.travelId = :travelId"),
+    @NamedQuery(name = "BmwParticipants.findOpenFlightsByEventId", query = "SELECT b FROM BmwParticipants b WHERE b.eventId = :eventId AND b.travelId.flightId IS NOT NULL AND b.travelId.pdfTicketUrl IS NULL"),
     @NamedQuery(name = "BmwParticipants.findByPState", query = "SELECT b FROM BmwParticipants b WHERE b.pState = :pState"),
     @NamedQuery(name = "BmwParticipants.findByRepId", query = "SELECT b FROM BmwParticipants b WHERE b.repId = :repId"),
     @NamedQuery(name = "BmwParticipants.findByBmwAuth", query = "SELECT b FROM BmwParticipants b WHERE b.bmwAuth = :bmwAuth")})
 public class BmwParticipants implements Serializable, ActivitiProcessHolder {
+
     @Column(name = "invitation_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date invitationDate;
@@ -51,7 +51,7 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
     private Integer processId;
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@Basic(optional = false)
     //@NotNull
     @Column(name = "id")
@@ -114,13 +114,13 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
         this.bmwAuth = bmwAuth;
     }
 
-	public String getRepComment() {
-		return repComment;
-	}
+    public String getRepComment() {
+        return repComment;
+    }
 
-	public void setRepComment(String repComment) {
-		this.repComment = repComment;
-	}
+    public void setRepComment(String repComment) {
+        this.repComment = repComment;
+    }
 
     public BmwUser getUserId() {
         return userId;
@@ -192,5 +192,4 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
     public void setInvitationDate(Date invitationDate) {
         this.invitationDate = invitationDate;
     }
-
 }

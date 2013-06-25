@@ -18,12 +18,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.activiti.engine.runtime.Execution;
 
 public class InvitationProcess {
 
     final static public String DATABASE_EVENTID = "eventID";
     final static public String DATABASE_PARTICIPANTID = "participantId";
     final static public String ACTIVITI_CANCEL_INVITATION_TIME = "cancelInvitationTime";
+    final static public String ACTIVITI_FOLLOW_UP_TIME = "followUpTime";
     final static public String ACTIVITI_INVITATION_SENT = "invitationSent";
     final static public String ACTIVITI_REMINDER_SENT = "reminderSent";
     final static public String ACTIVITI_EVENT_IS_OPEN = "eventIsOpen";
@@ -31,6 +33,7 @@ public class InvitationProcess {
     final static public String ACTIVITI_WILL_BE_SUBSTITUTED = "willBeSubstituted";
     final static public String ACTIVITI_TAKES_FLIGHT = "takesFlight";
     final static public String ACTIVITI_TAKES_PREDEFINED_FLIGHT = "takesPredefinedFlight";
+    final static public String ACTIVITI_SIGNAL_VARIABLES_DEFINED = "variablesDefined";
     final static public String DATABASE_NEXT_PARTICIPANTID = "nextParticipantId";
     final static public String[] PROCESSES = {"InvitationProcess", "Journalist_Invitation_Response"};
     final static public String PROCESS_FILE_LOCATION = "diagrams/";
@@ -49,10 +52,12 @@ public class InvitationProcess {
                     Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
+        } else {
+            startProcess();
         }
     }
 
-    public void startProcess() throws Exception {
+    public void startProcess() {
 
         setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
 
@@ -63,7 +68,9 @@ public class InvitationProcess {
         }
 
         if (processHolder instanceof BmwEvent) {
+            BmwEvent event = (BmwEvent) processHolder;
             setVariable(DATABASE_EVENTID, processHolder.getId());
+            setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate(event.getEndEventdate().getTime() + getDaysInMilliSeconds(event.getSendFollowup())));
         } else if (processHolder instanceof BmwParticipants) {
             setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
         }
@@ -92,16 +99,8 @@ public class InvitationProcess {
 
     public String getNextFormKey() {
 
-        if (processHolder.getProcessId() == null) {
-            try {
-                startProcess();
-            } catch (Exception ex) {
-                Logger.getLogger(InvitationProcess.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
-        } else {
-            resumeProcess();
-        }
+        resumeProcess();
 
         String formKey;
 
@@ -147,6 +146,7 @@ public class InvitationProcess {
             return Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(String.valueOf(processHolder.getProcessId())).singleResult().getActivityId();
 
         } catch (NullPointerException ex) {
+            ex.printStackTrace();
             return null;
         }
     }
@@ -176,15 +176,23 @@ public class InvitationProcess {
         participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));
         PersistenceService.save(BmwParticipantsController.class, participant);
 
-        process.resumeProcess();
+        signalEvent(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED);
 
         return process;
+    }
+
+    public static void signalEvent(ProcessInstance processInstance, String reference) {
+        for (Execution exec : Services.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getProcessInstanceId()).signalEventSubscriptionName(reference).list()) {
+            Services.getRuntimeService().signalEventReceived(reference, exec.getId());
+            System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
+        }
+
     }
 
     public static long getDueTime(BmwEvent event, BmwParticipants participant, int days) throws Exception {
         Long dueTime;
 
-        if ((dueTime = participant.getInvitationDate().getTime() + days * 24 * 3600 * 1000) > event.getCloseInvitation().getTime()) {
+        if ((dueTime = participant.getInvitationDate().getTime() + getDaysInMilliSeconds(days)) > event.getCloseInvitation().getTime()) {
             dueTime = event.getCloseInvitation().getTime();
         }
 
@@ -193,6 +201,10 @@ public class InvitationProcess {
         }
 
         return dueTime;
+    }
+
+    public static int getDaysInMilliSeconds(int days) {
+        return days * 24 * 3600 * 1000;
     }
 
     public static String formatActivitiDate(Long time) {
