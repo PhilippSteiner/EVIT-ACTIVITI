@@ -20,6 +20,9 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <text>Der Journalist erhält eine Einladungsmail, die er im System beantworten sollte.
 </text>
     </textAnnotation>
+    <textAnnotation id="textannotation7">
+      <text>Enter your text here</text>
+    </textAnnotation>
   </process>
   <process id="process_pool1" name="process_pool1" isExecutable="true">
     <laneSet id="laneSet_process_pool1">
@@ -38,6 +41,7 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <flowNodeRef>selectiveInvitation</flowNodeRef>
         <flowNodeRef>inviteSelectedParticipant</flowNodeRef>
         <flowNodeRef>endevent3</flowNodeRef>
+        <flowNodeRef>cancelInvitation</flowNodeRef>
       </lane>
       <lane id="journalist" name="Journalist">
         <flowNodeRef>answerInvitation</flowNodeRef>
@@ -74,7 +78,7 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
     <sequenceFlow id="flow6" name="noch kein Urgenzmail versendet" sourceRef="reminderSent" targetRef="sendInvitationmail">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reminderSent == false}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow7" name="Urgenzmail bereits versendet" sourceRef="reminderSent" targetRef="eventIsOpen">
+    <sequenceFlow id="flow7" name="Urgenzmail bereits versendet" sourceRef="reminderSent" targetRef="cancelInvitation">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reminderSent == true}]]></conditionExpression>
     </sequenceFlow>
     <userTask id="supplyTravelInfos" name="Reiseinformationen eingeben"></userTask>
@@ -136,6 +140,8 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
     <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="selectiveInvitation">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
     </sequenceFlow>
+    <serviceTask id="cancelInvitation" name="Einladung stornieren" activiti:class="ac.at.fhkufstein.activiti.delegates.CancelInvitation"></serviceTask>
+    <sequenceFlow id="flow31" sourceRef="cancelInvitation" targetRef="eventIsOpen"></sequenceFlow>
     <association id="association3" sourceRef="textannotation3" targetRef="sendInvitationmail"></association>
     <textAnnotation id="textannotation4">
       <text>Benutzeraktivität für die Beantwortung der Einladung vom Journalist. Er kann Zusagen, Absagen oder eine Vertretung schicken.</text>
@@ -145,6 +151,10 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <text>Zeitevent, das ausgelöst wird, wenn der Journalist nach einem bei Prozessbeginn definierten Zeitraum die Einladung nicht beantwortet.</text>
     </textAnnotation>
     <association id="association5" sourceRef="textannotation5" targetRef="answerInvitationBoundarytimer"></association>
+    <textAnnotation id="textannotation6">
+      <text>Entscheidung ob bereits ein Urgenzmail gesendet wurde. Ist dies der Fall wird die Einladung darauffolgend storniert. Wurde keine Urgenzmail ausgesendet, wird es bei der darauffolgenden Aktivität verschickt.</text>
+    </textAnnotation>
+    <association id="association6" sourceRef="textannotation6" targetRef="reminderSent"></association>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
     <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
@@ -253,6 +263,15 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <bpmndi:BPMNShape bpmnElement="textannotation5" id="BPMNShape_textannotation5">
         <omgdc:Bounds height="86.0" width="141.0" x="510.0" y="590.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation7" id="BPMNShape_textannotation7">
+        <omgdc:Bounds height="50.0" width="100.0" x="719.0" y="101.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cancelInvitation" id="BPMNShape_cancelInvitation">
+        <omgdc:Bounds height="55.0" width="105.0" x="487.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation6" id="BPMNShape_textannotation6">
+        <omgdc:Bounds height="131.0" width="151.0" x="170.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
         <omgdi:waypoint x="393.0" y="631.0"></omgdi:waypoint>
@@ -270,7 +289,7 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
         <omgdi:waypoint x="571.0" y="490.0"></omgdi:waypoint>
-        <omgdi:waypoint x="670.0" y="400.0"></omgdi:waypoint>
+        <omgdi:waypoint x="539.0" y="375.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="36.0" width="100.0" x="-69.0" y="-45.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
@@ -412,6 +431,15 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <bpmndi:BPMNEdge bpmnElement="association5" id="BPMNEdge_association5">
         <omgdi:waypoint x="510.0" y="633.0"></omgdi:waypoint>
         <omgdi:waypoint x="461.0" y="649.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="592.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="670.0" y="360.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association6" id="BPMNEdge_association6">
+        <omgdi:waypoint x="321.0" y="465.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="485.0"></omgdi:waypoint>
+        <omgdi:waypoint x="591.0" y="510.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
