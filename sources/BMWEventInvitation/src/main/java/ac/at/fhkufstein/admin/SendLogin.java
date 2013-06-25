@@ -4,7 +4,9 @@
  */
 package ac.at.fhkufstein.admin;
 
+import ac.at.fhkufstein.bean.BmwEmailTemplatesController;
 import ac.at.fhkufstein.bean.BmwUserController;
+import ac.at.fhkufstein.entity.BmwEmailTemplates;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.NotificationService;
@@ -22,8 +24,9 @@ import javax.faces.context.FacesContext;
 public class SendLogin {
 
     private BmwUser[] selected = null;
-    private EmailTemplates loginTemplate = new EmailTemplates();
+    private BmwEmailTemplates loginTemplate;
     private BmwUserController bmwUserController;
+    private BmwEmailTemplatesController templateController;
 
     /**
      * Creates a new instance of SendLogin
@@ -31,10 +34,10 @@ public class SendLogin {
     public SendLogin() {
 
         bmwUserController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
-        loginTemplate.setSubject("BMWEvent Registrierung");
-        loginTemplate.setType("Login");
-        loginTemplate.setEmailContent("Sehr geehrte Damen und Herren,<div><br/></div><div>Anbei befindet sich Ihre Benutzerdaten für das BMW Eventmanagementsystem.</div><div><br/></div><div>Benutzer: $email$</div><div>Passwort: $password$</div><div><br/></div><div>Mit freundlichen Grüßen,</div><div>BMW Group Austria</div>");
-
+        templateController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEmailTemplatesController}", BmwEmailTemplatesController.class);
+       
+        loginTemplate = templateController.getItems().get(0);
+                
     }
 
     public void sendLogin() {

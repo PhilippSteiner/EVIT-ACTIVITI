@@ -4,12 +4,15 @@
  */
 package ac.at.fhkufstein.admin;
 
+import ac.at.fhkufstein.bean.BmwEmailTemplatesController;
 import ac.at.fhkufstein.bean.BmwUserController;
+import ac.at.fhkufstein.entity.BmwEmailTemplates;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.NotificationService;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -26,8 +29,10 @@ public class ResetPassword implements Serializable{
 
     private BmwUserController bmwUserController;
     private BmwUser[] selected;
-    private EmailTemplates resetPasswordTemplate = new EmailTemplates();
+    
     private boolean sendemail;
+    private BmwEmailTemplates resetTemplate;
+    private BmwEmailTemplatesController templateController;
     
     /**
      * Creates a new instance of ResetPassword
@@ -35,34 +40,39 @@ public class ResetPassword implements Serializable{
     public ResetPassword() {
         
         bmwUserController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
-    
-        resetPasswordTemplate.setSubject("Password Reset");
-        resetPasswordTemplate.setType("Password Reset");
-        resetPasswordTemplate.setEmailContent("<html><body>Sehr geehrte Damen und Herren,<div><br/></div><div>Anbei befindet sich Ihr neues Passwort und ihr Benutzername.</div><div><br/></div><div>Benutzer: $email$</div><div>Passwort: $password$</div><div><br/></div><div>Mit freundlichen Grüßen,</div><div>BMW Group Austria</div></body></html>");
-    
+        templateController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEmailTemplatesController}", BmwEmailTemplatesController.class);
+        
+        resetTemplate = templateController.getItems().get(1);
     }
     
     
     public void resetSendPassword(){
-            for(BmwUser a: selected){
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (selected.length == 0) {
+            context.addMessage(null, new FacesMessage("Passwort zurücksetzen", "Keinen Benutzer ausgewählt!"));
+        } else {   
+        
+        for(BmwUser a: selected){
                 System.out.println(a.getPersonenID());
                 a.setPwd(getRandomPassword());
                 bmwUserController.setSelected(a);
                 bmwUserController.save(null);
                 System.out.println("Passwort zurückgesetzt");
-                
+                context.addMessage(null, new FacesMessage("Passwort zurücksetzen", "Passwort zurückgesetzt!"));
                 
             }
             
             if(sendemail){
-                    NotificationService.parseTemplate(selected, resetPasswordTemplate);
+                    NotificationService.parseTemplate(selected, resetTemplate);
+                    context.addMessage(null, new FacesMessage("Passwort zurücksetzen", "Passwort versendet!"));
                 }
         
         }
 
        
     
-    
+    }
     
     public String getRandomPassword() {
         StringBuilder password = new StringBuilder(8);
