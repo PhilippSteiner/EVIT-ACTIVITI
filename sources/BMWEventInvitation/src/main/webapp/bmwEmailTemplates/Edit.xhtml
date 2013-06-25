@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <p:resizable for="BmwEmailTemplatesEditDlg"/>
+        <p:dialog id="BmwEmailTemplatesEditDlg" widgetVar="BmwEmailTemplatesEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditBmwEmailTemplatesTitle}">
+
+            <h:form id="BmwEmailTemplatesEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" rendered="#{bmwEmailTemplatesController.selected != null}">
+
+                        <h:outputLabel value="#{bundle.EditBmwEmailTemplatesLabel_id}" for="id" />
+                        <h:outputText id="id" value="#{bmwEmailTemplatesController.selected.id}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailTemplatesLabel_subject}" for="subject" />
+                        <p:inputText id="subject" value="#{bmwEmailTemplatesController.selected.subject}" title="#{bundle.EditBmwEmailTemplatesTitle_subject}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailTemplatesLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{bmwEmailTemplatesController.selected.type}" title="#{bundle.EditBmwEmailTemplatesTitle_type}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwEmailTemplatesLabel_emailContent}" for="emailContent" />
+                        <p:editor rows="20" cols="100" id="emailContent" value="#{bmwEmailTemplatesController.selected.emailContent}" title="#{bundle.EditBmwEmailTemplatesTitle_emailContent}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{bmwEmailTemplatesController.save}" value="#{bundle.Save}" update="display,:BmwEmailTemplatesListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwEmailTemplatesEditDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwEmailTemplatesEditDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

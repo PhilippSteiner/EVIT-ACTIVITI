@@ -8,8 +8,10 @@ import ac.at.fhkufstein.EventFunc.Participants;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -22,8 +24,11 @@ public class ProcessParticipants {
     private static final String ACTIVITI_ADD_ACTIVITY = "addJournalists";
 
     public void saveSelected() {
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         Participants participants = PersistenceService.getManagedBeanInstance(Participants.class);
         participants.saveSelected();
+        facesContext.addMessage(null, new FacesMessage("Journalisten", "Journalisten eingeladen!"));
 
         // @todo Invite Participants which have been invited after Start
 
