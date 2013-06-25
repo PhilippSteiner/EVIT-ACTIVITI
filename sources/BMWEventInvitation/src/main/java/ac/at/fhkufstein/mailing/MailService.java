@@ -76,7 +76,7 @@ public class MailService {
             mail.setContent(message, "text/html; charset=utf-8");//Für HTML und Textemails
 
             mail.send();
-
+            
             MessageService.showInfo("Die Mail wurde gesendet.");
 
             saveMailInHistory(mail, message, mailType);
@@ -180,7 +180,7 @@ public class MailService {
                         .getSingleResult();
 
                 user = ((BmwUserFacade) userController.getFacade()).getEntityManager().createNamedQuery("BmwUser.findByPersonenID", BmwUser.class)
-                        .setParameter("personenID", person.getPersonalID())
+                        .setParameter("personenID", person)
                         .getSingleResult();
 
                 return user;

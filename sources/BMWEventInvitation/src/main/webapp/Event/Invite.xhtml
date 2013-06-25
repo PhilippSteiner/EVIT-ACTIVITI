@@ -79,14 +79,14 @@
 		</h:form>
 =======
     <ui:define name="body">
-
-        	<h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
-        <p:tabMenu activeIndex="2">  
-       <ui:include src="menu.xhtml"></ui:include>
-        </p:tabMenu>
-
+        <h:form>
+            <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+            <p:tabMenu activeIndex="2">  
+                <ui:include src="menu.xhtml"></ui:include>
+            </p:tabMenu>
+        </h:form>
         <h:form id="BmwUserListForm">
-            <p:growl id="growl" showDetail="true" sticky="true" />
+            
             <p:panel header="Journalisten Einladen">
 
                 <p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
@@ -134,7 +134,8 @@
                     <f:facet name="footer">
                         <!-- <p:commandButton id="multiViewButton" value="View" icon="ui-icon-search"
                                          update=":BmwUserListForm:displayMulti" oncomplete="multiCarDialog.show()"/>-->
-                        <p:commandButton id="Submit" value="Speichern" action="#{processParticipants.saveSelected()}" oncomplete="cityDialog.show()" style="margin-top:5px"/>
+                        <p:growl id="growl" showDetail="true" />
+                        <p:commandButton id="Submit" value="Speichern" action="#{processParticipants.saveSelected()}" update="growl" oncomplete="cityDialog.show()" style="margin-top:5px"/>
                     </f:facet>
 
                 </p:dataTable>
