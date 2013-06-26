@@ -168,5 +168,5 @@ public class BmwFlight implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwFlight[ id=" + id + " ]";
     }
-    
+
 }

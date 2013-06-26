@@ -21,9 +21,11 @@ import org.apache.commons.mail.Email;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 import java.util.List;
 import java.util.Date;
 import java.util.Iterator;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 /**
@@ -37,7 +39,7 @@ public class MailService {
     private static Email initMail() throws EmailException {
 
         MailConfig config = MailConfig.getInstance();
-        Email mail = new SimpleEmail();
+        Email mail = new HtmlEmail();
         mail.setHostName(config.getHostname()); //mail.wi.fh-kufstein.ac.at
         mail.setSmtpPort(config.getSmtpPort());
 
@@ -66,7 +68,6 @@ public class MailService {
      */
     public static boolean sendMail(String to, String subject, String message, String mailType) {
         try {
-
             Email mail = initMail();
 
             mail.addTo(to);
@@ -77,7 +78,7 @@ public class MailService {
 
             mail.send();
 
-            MessageService.showInfo("Die Mail wurde gesendet.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "E-Mail", "E-mail erfolgreich versendet.");
 
             saveMailInHistory(mail, message, mailType);
 
@@ -85,7 +86,7 @@ public class MailService {
         } catch (EmailException ex) {
             Logger.getLogger(MailService.class.getName()).log(Level.SEVERE, null, ex);
 
-            MessageService.showError("Die Mail konnte nicht gesendet werden.");
+            MessageService.showError(FacesContext.getCurrentInstance(), "Die Mail konnte nicht gesendet werden.");
         }
 
         return false;
@@ -132,12 +133,12 @@ public class MailService {
 
             emailHistoryController.saveNew(null);
 
-            MessageService.showInfo("Die Mail wurde erfolgreich gespeichert.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Die Mail wurde erfolgreich gespeichert.");
 
         } catch (Exception ex) {
             ex.printStackTrace();
 
-            MessageService.showError("Die Mail konnte nicht gespeichert werden.");
+            MessageService.showError(FacesContext.getCurrentInstance(), "Die Mail konnte nicht gespeichert werden.");
         }
 
     }
@@ -180,7 +181,7 @@ public class MailService {
                         .getSingleResult();
 
                 user = ((BmwUserFacade) userController.getFacade()).getEntityManager().createNamedQuery("BmwUser.findByPersonenID", BmwUser.class)
-                        .setParameter("personenID", person.getPersonalID())
+                        .setParameter("personenID", person)
                         .getSingleResult();
 
                 return user;

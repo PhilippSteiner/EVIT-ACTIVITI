@@ -13,15 +13,22 @@ import javax.faces.context.FacesContext;
  */
 public class MessageService {
 
-    public static void showInfo(String message) {
+    public static void showInfo(FacesContext context, String message) {
+        showInfo(context, null, message);
+    }
+    public static void showInfo(FacesContext context, String summary, String message) {
         System.out.println(message);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, null, message));
+        context.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, summary, message));
     }
 
-    public static void showError(String message) {
+    public static void showError(FacesContext context, String message) {
+        showError(context, null, message);
+    }
+
+    public static void showError(FacesContext context, String summary, String message) {
         System.out.println(message);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, null, message));
+        context.addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, message));
     }
 }

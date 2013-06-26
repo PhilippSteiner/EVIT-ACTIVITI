@@ -23,8 +23,6 @@ import org.activiti.engine.delegate.JavaDelegate;
  *
  * @author mike
  */
-@ManagedBean
-@RequestScoped
 public class StartSingleProcesses implements JavaDelegate {
 
     @Override

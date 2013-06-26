@@ -26,5 +26,5 @@ public class BmwTravelFacade extends AbstractFacade<BmwTravel> {
     public BmwTravelFacade() {
         super(BmwTravel.class);
     }
-    
+
 }

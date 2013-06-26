@@ -26,5 +26,5 @@ public class EmailTemplatesFacade extends AbstractFacade<EmailTemplates> {
     public EmailTemplatesFacade() {
         super(EmailTemplates.class);
     }
-    
+
 }

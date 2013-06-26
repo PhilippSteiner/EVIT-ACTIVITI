@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ht="http://java.sun.com/jsf/html"
+                template="/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{bundle.BmwEventTitle}"/>
+    </ui:define>
+
+    <ui:define name="body">
+
+        <p:dataTable id="events" var="event" value="#{travelagencyController.events}">
+
+            <p:column style="width:4%">
+                <p:button outcome="/Travelagency/flights" value="Flüge" icon="ui-icon-search">
+                    <f:param name="eventId" value="#{event.id}" />
+                </p:button>
+            </p:column>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{event.name}" />
+            </p:column>
+
+            <p:column headerText="von">
+                <h:outputText value="#{event.startEventdate.toString()}" />
+            </p:column>
+
+            <p:column headerText="bis">
+                <h:outputText value="#{event.endEventdate.toString()}" />
+            </p:column>
+
+        </p:dataTable>
+
+
+
+    </ui:define>
+
+</ui:composition>

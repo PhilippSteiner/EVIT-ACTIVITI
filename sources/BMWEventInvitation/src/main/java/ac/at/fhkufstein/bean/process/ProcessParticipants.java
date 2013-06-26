@@ -8,8 +8,10 @@ import ac.at.fhkufstein.EventFunc.Participants;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -22,8 +24,11 @@ public class ProcessParticipants {
     private static final String ACTIVITI_ADD_ACTIVITY = "addJournalists";
 
     public void saveSelected() {
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         Participants participants = PersistenceService.getManagedBeanInstance(Participants.class);
         participants.saveSelected();
+        facesContext.addMessage(null, new FacesMessage("Journalisten", "Journalisten eingeladen!"));
 
         // @todo Invite Participants which have been invited after Start
 
@@ -32,9 +37,9 @@ public class ProcessParticipants {
 
             process.resumeProcess();
 
-            MessageService.showInfo("Der Prozess wird fortgefahren.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess wird fortgefahren.");
         } else {
-            MessageService.showError("Der Prozess kann nicht fortgesetzt werden." + (process.getCurrentActivity() != null ? " current Activity: "+process.getCurrentActivity()  : ""));
+            MessageService.showError(FacesContext.getCurrentInstance(), "Der Prozess kann nicht fortgesetzt werden." + (process.getCurrentActivity() != null ? " current Activity: "+process.getCurrentActivity()  : ""));
         }
     }
 }

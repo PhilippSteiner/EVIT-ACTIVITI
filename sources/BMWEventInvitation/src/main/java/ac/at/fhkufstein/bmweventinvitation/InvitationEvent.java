@@ -29,7 +29,7 @@ public class InvitationEvent {
 
     public void startProcess() {
         try {
-            getProcess().startProcess();
+            getProcess();
         } catch (Exception ex) {
             Logger.getLogger(InvitationEvent.class.getName()).log(Level.SEVERE, null, ex);
         }
