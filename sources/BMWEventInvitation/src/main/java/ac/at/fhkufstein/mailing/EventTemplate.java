@@ -28,6 +28,7 @@ public class EventTemplate {
     private EmailTemplates booking = new EmailTemplates();
     private EmailTemplates ticket = new EmailTemplates();
     private EmailTemplates followup = new EmailTemplates();
+    private EmailTemplates storno = new EmailTemplates();
     
     private EmailTemplatesController templateController;
     
@@ -111,12 +112,22 @@ public class EventTemplate {
         
         //Erstellung der Follow-up mail an den BMW Mitarbeiter
         followup.setEid(e);
-        followup.setSubject("Follow-up");
+        followup.setSubject("Follow-up E-mail");
         followup.setType("followup");
         followup.setEmailContent("Anbei finden Sie Eventinformationen");
         
         templateController.prepareCreate(null);
         templateController.setSelected(followup);
+        templateController.saveNew(null);
+        
+        //Erstellung der Storno mail an den Journalisten
+        storno.setEid(e);
+        storno.setSubject("Stornierung der Einladung");
+        storno.setType("storno");
+        storno.setEmailContent("Ihre Einladung wurde somit storniert!");
+        
+        templateController.prepareCreate(null);
+        templateController.setSelected(storno);
         templateController.saveNew(null);
     }
     
