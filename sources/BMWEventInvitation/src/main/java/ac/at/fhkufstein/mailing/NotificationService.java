@@ -28,7 +28,6 @@ public class NotificationService {
             template.setAttribute("vorname", u.getPersonenID().getVorname());
             template.setAttribute("nachname", u.getPersonenID().getNachname());
             template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
-            //System.out.println(template.toString());
             String mailcontent = template.toString();
             
             MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
@@ -69,6 +68,41 @@ public class NotificationService {
             
             MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
         }
+    }
+    
+    
+    public static void parseTemplate(List<BmwUser> b, BmwEmailTemplates e) {
+
+        for (BmwUser u : b) {
+            
+            StringTemplate template = new StringTemplate(e.getEmailContent());
+            template.setAttribute("email", u.getPersonenID().getEMail1());
+            template.setAttribute("password", u.getPwd());
+            template.setAttribute("username", u.getUsername());
+            template.setAttribute("vorname", u.getPersonenID().getVorname());
+            template.setAttribute("nachname", u.getPersonenID().getNachname());
+            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
+            //System.out.println(template.toString());
+            String mailcontent = template.toString();
+            
+            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+        }
+    }
+    
+    public static void parseTemplate(BmwUser u, BmwEmailTemplates e) {
+
+            
+            StringTemplate template = new StringTemplate(e.getEmailContent());
+            template.setAttribute("email", u.getPersonenID().getEMail1());
+            template.setAttribute("password", u.getPwd());
+            template.setAttribute("username", u.getUsername());
+            template.setAttribute("vorname", u.getPersonenID().getVorname());
+            template.setAttribute("nachname", u.getPersonenID().getNachname());
+            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
+            String mailcontent = template.toString();
+            
+            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+        
     }
     
     
