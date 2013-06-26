@@ -43,10 +43,12 @@
 .ui-resizable{
 	width:100%;
 }
+*/
 .ui-editor{
 	width: 100% !important;
-<<<<<<< HEAD
-}*/
+
+}
+
 #emailContent{
 	width:100%;
 }
