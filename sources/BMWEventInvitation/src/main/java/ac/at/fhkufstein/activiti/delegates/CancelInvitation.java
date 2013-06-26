@@ -9,6 +9,7 @@ import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
@@ -36,10 +37,13 @@ public class CancelInvitation implements JavaDelegate {
 
         try {
 
+            participant.setPState(ParticipantStatus.CANCELED);
+            PersistenceService.save(BmwParticipantsController.class, participant);
+
                 // @todo implementMailFunction
 //            MailService.sendMail(null, null, null);
 
-                String mailSentMessage = "Es wurde eine Stornierungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+                String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
 
                 System.out.println(mailSentMessage);
                 FacesContext.getCurrentInstance().addMessage(null,

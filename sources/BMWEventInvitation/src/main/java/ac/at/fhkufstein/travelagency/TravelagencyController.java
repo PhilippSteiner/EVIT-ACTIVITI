@@ -47,7 +47,8 @@ public class TravelagencyController implements Serializable {
     private HtmlInputHidden travelInputHidden;
 
     static {
-    System.setProperty("ticket_upl_path", "/Volumes/Home/Uploads");
+        // must be set in runtime environment
+//    System.setProperty("ticket_upl_path", "/Volumes/Home/Uploads");
     }
     String dir = System.getProperty("ticket_upl_path") + "/";//Path where the files are saved
 
