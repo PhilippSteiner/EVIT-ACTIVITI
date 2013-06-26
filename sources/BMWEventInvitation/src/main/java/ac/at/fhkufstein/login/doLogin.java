@@ -31,6 +31,7 @@ public class doLogin {
 	Integer role;
 	String user;
 	String pw;
+	String name;
 	BmwUserController bmwUserController;
 	BmwUser bmwUser;
 	PersonenController personenController;
@@ -83,7 +84,9 @@ public class doLogin {
 				System.out.println("System Error Login");
 			}
 		}
+		
 		if (bmwUser != null) {
+			name=bmwUser.getUsername();
 			//check if one user is found
 			if (pw.equals(bmwUser.getPwd())) {//check if password is correct
 				//Set uid and role
@@ -243,5 +246,13 @@ public class doLogin {
 
 	public void setPw(String pw) {
 		this.pw = pw;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
