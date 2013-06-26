@@ -48,7 +48,7 @@
                     <h:outputText value="#{item.rating}"/>
                 </p:column>
 				 <p:column style="width:4%">
-                     <p:commandButton id="welcome" value="Login as Journalist" action="#{login.loginAsJournalist(item.uid)}" update=":growl" style="margin-top: 20px"></p:commandButton>
+                     <p:commandButton id="welcome" value="Login" action="#{login.loginAsJournalist(item.uid)}" update=":growl"></p:commandButton>
                 </p:column>
                
                 <f:facet name="footer">

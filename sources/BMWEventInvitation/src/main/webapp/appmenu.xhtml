@@ -8,12 +8,12 @@
 
     <ui:composition>
         <h:form id="menuForm">
-            <p:menubar>
+            <p:menubar style="width: 100%">
                 <p:menuitem value="Dashboard" outcome="/index" icon="ui-icon-home"/>
                 <p:menuitem value="Events" outcome="//Events/index" icon="ui-icon-calculator"/>
                 <p:menuitem value="Journalisten" outcome="//Journalisten/index" icon="ui-icon-pencil"/>
                 <p:menuitem value="Administration" outcome="//admin/index" icon="ui-icon-pencil"/>
-                
+				 
                 <p:submenu label="#{bundle.Maintenance}">
                     <p:menuitem value="BmwEvent" outcome="//bmwEvent/index" />
                     <p:menuitem value="BmwFlight" outcome="//bmwFlight/index" />
@@ -26,6 +26,8 @@
                     <p:menuitem value="Email" outcome="//emailTemplates/index" />
                     <p:menuitem value="Sysdiagrams" outcome="//sysdiagrams/index" />
                 </p:submenu>
+				<p:menuitem value="Logout" action="#{login.logout()}"  icon="ui-icon-pencil" style="position: absolute; right: 20px;"/>
+                
             </p:menubar>
         </h:form>
     </ui:composition>
