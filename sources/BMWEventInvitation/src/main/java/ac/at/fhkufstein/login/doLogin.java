@@ -13,6 +13,7 @@ import ac.at.fhkufstein.session.PersonenFacade;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
@@ -22,6 +23,7 @@ import javax.persistence.EntityManager;
  * wolfgangteves
  */
 @ManagedBean(name = "login")
+@SessionScoped
 public class doLogin {
 
 	Integer uid;
