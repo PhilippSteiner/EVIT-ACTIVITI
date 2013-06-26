@@ -11,11 +11,15 @@
             
             <h:outputText value="#{bundle.AppName}"></h:outputText>
         </ui:define>
+		
         <ui:define name="body">
-
-            <ui:include src="/bmwuser_home_elms/upcoming.xhtml"/>
-            <ui:include src="/bmwuser_home_elms/past.xhtml"/>
-            <ui:include src="/bmwuser_home_elms/emails_notifications.xhtml"/>
+		
+           
+				<ui:include src="/bmwuser_home_elms/upcoming.xhtml"/>
+				<ui:include src="/bmwuser_home_elms/past.xhtml"/>
+				
+					<ui:include src="/bmwuser_home_elms/emails_notifications.xhtml"/>
+					
             <p:panel header="#{bundle.Welcome}">
 
 
@@ -32,11 +36,16 @@
                     -) Prozessschema fertiggestellt <br/>
                     -) benötigte Felder in Datenbank bei Event: Frist Einladungsmail, Frist Urgenzmail</p>
             </p:panel>
-
+				
+			<h:form>
            <p:panelGrid columns="2">	
                 <h:outputText value="Eingeloggt als: #{login.uid}"/>
                 <p:commandButton id="welcome" value="Abmelden" action="#{login.logout()}"></p:commandButton>
             </p:panelGrid>
+				</h:form>
+			
+			
+           
         </ui:define>
 
     </ui:composition>

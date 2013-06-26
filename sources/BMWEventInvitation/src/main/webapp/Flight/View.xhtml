@@ -15,9 +15,7 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{bmwFlightController.selected != null}">
 
-                        <h:outputText value="#{bundle.ViewBmwFlightLabel_id}"/>
-                        <h:outputText value="#{bmwFlightController.selected.id}" title="#{bundle.ViewBmwFlightTitle_id}"/>
-
+          
                         <h:outputText value="#{bundle.ViewBmwFlightLabel_flightNumber}"/>
                         <h:outputText value="#{bmwFlightController.selected.flightNumber}" title="#{bundle.ViewBmwFlightTitle_flightNumber}"/>
 
@@ -37,10 +35,6 @@
                             <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                         </h:outputText>
 
-                        <h:outputText value="#{bundle.ViewBmwFlightLabel_eventId}"/>
-                        <h:outputText value="#{bmwFlightController.selected.eventId.name}"/>
-
-                        <h:outputText value="#{bundle.ViewBmwFlightLabel_bmwTravelCollection}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="BmwFlightViewDialog.hide()"/>
                 </h:panelGroup>

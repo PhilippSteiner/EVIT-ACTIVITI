@@ -38,9 +38,12 @@
                     
 
                 </p:panel>
-                <p:panelGrid columns="2" style="margin-top: 10px">	
+			</h:form>
+				 <h:form>
+					  <p:growl id="growl" showDetail="true"/>
+            <p:panelGrid columns="2">	
                 <h:outputText value="Eingeloggt als: #{login.uid}"/>
-                <p:commandButton id="welcome" value="Abmelden" action="#{login.logout()}"></p:commandButton>
+                <p:commandButton id="welcome" value="Abmelden" action="#{login.logout()}" update="growl"></p:commandButton>
             </p:panelGrid>
       </h:form>
         </ui:define>

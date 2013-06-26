@@ -8,7 +8,7 @@
 
     <ui:composition>
         
-        <p:dialog id="EmailTemplatesEditDlg" widgetVar="EmailTemplatesEditDialog" modal="true" resizable="true" appendToBody="true" header="#{bundle.EditEmailTemplatesTitle}">
+        <p:dialog id="EmailTemplatesEditDlg" widgetVar="EmailTemplatesEditDialog" style="width: 100%" modal="true" resizable="true" appendToBody="true" header="#{bundle.EditEmailTemplatesTitle}">
 
             <h:form id="EmailTemplatesEditForm" >
                
@@ -29,7 +29,7 @@
                         </p:selectOneMenu>
                         
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_emailContent}" for="emailContent" />
-                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}" />
+                        <p:editor id="emailContent" value="#{emailTemplatesController.selected.emailContent}" title="#{bundle.EditEmailTemplatesTitle_emailContent}"/>
                         <p:resizable for="emailContent"/>
                     
                     </p:panelGrid>

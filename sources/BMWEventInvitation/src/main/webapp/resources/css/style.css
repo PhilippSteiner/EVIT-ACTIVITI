@@ -29,4 +29,24 @@
     
 }
 
+#logo_container{
+	height: 100px;
+	width: 100%;
+	padding: 0px;
+	background-color: #0c5fa8;
+}
+/*
+.ui-panelgrid{
+	width:100%;
+}
 
+.ui-resizable{
+	width:100%;
+}
+.ui-editor{
+	width: 100% !important;
+<<<<<<< HEAD
+}*/
+#emailContent{
+	width:100%;
+}

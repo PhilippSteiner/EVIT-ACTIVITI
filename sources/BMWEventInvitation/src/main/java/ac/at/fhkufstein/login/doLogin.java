@@ -16,6 +16,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -102,8 +103,8 @@ public class doLogin {
 				} else if (bmwUser.getRole() == 3) {
 					//is Travel Agency
 					//Todo: Redirect to Travel Agency Interface
-					context.addMessage(null, new FacesMessage("Fehler", "Es gibt noch keine Oberfläche für Reisebüros"));
-					return "#";
+					return "/faces/Travelagency/index.xhtml";
+					
 				} else {
 					//Unbekannte Rolle
 					context.addMessage(null, new FacesMessage("Fehler", "Diese Rolle (" + bmwUser.getRole().toString() + ") ist dem System nicht bekannt"));
@@ -126,13 +127,90 @@ public class doLogin {
 	}
 
 	public String logout() {
+		
+		System.out.println("logout called: trying to get session...");
+		
+		if(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("old_admin")!=null){
+			
+			//Its a admin going back
+			
+		Integer ol =Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("old_admin").toString());
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("uid", ol);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", 1);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("old_admin", null);
+			
+			System.out.println("Its a admin going back");
+			return "/faces/index.xhtml";
+		}else{
+			//Its a regular user logging out
 		//Delete Session
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		//redirect to login page
 		return "/faces/login.xhtml";
+		}
 
 	}
+	
+	public String loginAsJournalist(Integer jid){
+		System.out.println("login as journalist called");
+		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
+		if(role==1){//Some Security
+		Integer ol_admin=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid").toString());
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("old_admin", ol_admin);
+		System.out.println("Old Admin Saved in old_admin:"+ol_admin);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("uid", jid);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", 2);
+		System.out.println("Logging in as Journalist... JID:"+jid);
+		
+		return "/faces/BMW_Journalist/journalistmenue.xhtml";
+		}else{
+			return "/faces/login.xhtml";
+		}
+	}
+	
+	public void checkBmwSession(){
+		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
+		if(role!=1){
+			System.out.println("invalid access to Bmw");
+			//Delete Session
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			try{//redirect to login page
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			}catch(Exception e){
+				System.out.println("Redirect to login page failed");
+			}
+		}
+	}
 
+	public void checkJournalistSession(){
+		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
+		if(role!=2){
+			System.out.println("invalid access to Journalist");
+			//Delete Session
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			try{//redirect to login page
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			}catch(Exception e){
+				System.out.println("Redirect to login page failed");
+			}
+		}
+	}
+	
+	public void checkTravelagencySession(){
+		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
+		if(role!=3){
+			System.out.println("invalid access to Travelagency");
+			//Delete Session
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			try{//redirect to login page
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			}catch(Exception e){
+				System.out.println("Redirect to login page failed");
+			}
+		}
+	}
+	
+	
 	public Integer getUid() {
 		//Get uid from session
 		return Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid").toString());
