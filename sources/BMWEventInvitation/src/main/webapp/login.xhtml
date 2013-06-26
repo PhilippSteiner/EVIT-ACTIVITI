@@ -40,7 +40,7 @@
 
                     <p:panelGrid columns="2" style="margin: 10px">
                         <h:outputLabel id="pwLabel" value="Geben Sie Ihre E-mail Addresse ein: " for="pwtext"></h:outputLabel>
-                        <p:inputText id="pwtext" value="#{forgotPassword.email}"></p:inputText>
+                        <p:inputText id="pwtext" value="#{forgotPassword.email}" size="25"></p:inputText>
 
                         <p:commandButton value="Absenden" actionListener="#{forgotPassword.send()}" update=":loginform:growl" style="margin-top: 20px"></p:commandButton>
                         <p:commandButton value="Abbrechen" onclick="pdlg.hide();" style="margin-top: 20px"></p:commandButton>
