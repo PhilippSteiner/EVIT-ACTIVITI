@@ -23,8 +23,9 @@
 
             <p:layoutUnit position="north" size="200px" header="BMW Event Management" style="border: none">
              		<div id="logo_container">
-				
+				<h2 id="logo_text">Willkommen #{login.name}</h2>
 					<img src="#{request.contextPath}/resources/img/header.jpg" style="height: 100px; position: fixed; right: 0;"/>
+					
 </div>
                 <!-- Menu here. Also a layout and a way to log a user out -->
                 <ui:include src="/appmenu.xhtml"/>
