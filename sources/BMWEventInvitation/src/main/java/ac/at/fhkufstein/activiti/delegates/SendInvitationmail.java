@@ -7,8 +7,12 @@ package ac.at.fhkufstein.activiti.delegates;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.EmailTemplatesController;
+import ac.at.fhkufstein.entity.BmwEmailTemplates;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.EmailTemplates;
+import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
@@ -37,8 +41,17 @@ public class SendInvitationmail implements JavaDelegate {
         try {
             if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
 
-                // @todo implementMailFunction
-//            MailService.sendMail(null, null, null);
+                //erstmalige Einladung
+
+                // send invitation mail
+                String emailType = "invite";
+
+                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                        .setParameter("eventId", event)
+                        .setParameter("type", emailType)
+                        .getSingleResult();
+
+                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
 
                 execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
 
@@ -53,8 +66,19 @@ public class SendInvitationmail implements JavaDelegate {
                         new FacesMessage(mailSentMessage));
             } else {
 
-                // @todo implementMailFunction
-//            MailService.sendMail(null, null, null);
+                // Urgenzmail
+
+                // send urgenz mail
+                String emailType = "urgenz";
+
+                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                        .setParameter("eventId", event)
+                        .setParameter("type", emailType)
+                        .getSingleResult();
+
+                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+
+
 
                 execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
 

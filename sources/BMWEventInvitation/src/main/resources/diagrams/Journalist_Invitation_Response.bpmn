@@ -5,7 +5,6 @@
     <participant id="JournalistInvitationResponsePool" name="Journalist Einladungsantwort" processRef="process_pool1"></participant>
   </collaboration>
   <process id="Journalist_Invitation_Response" name="Journalist_Invitation_Response" isExecutable="true">
-    <sequenceFlow id="flow5" sourceRef="answerInvitationBoundarytimer" targetRef="reminderSent"></sequenceFlow>
     <textAnnotation id="textannotation1">
       <text>Startevent des Journalistenprozesses.
 Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem gestartet, oder nach Freigabe und erneuter Einladung von einer Instanz dieses Journalistenprozesses.
@@ -238,6 +237,7 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <text>Es wird eine Benachrichtigung an den für das Event verantwortlichen BMW Mitarbeiter ausgesendet, dass eine Vertretung eines Journalisten manuell nachzuladen ist.</text>
     </textAnnotation>
     <association id="association32" sourceRef="textannotation30" targetRef="notifyForManualInvitation"></association>
+	<sequenceFlow id="flow34" sourceRef="answerInvitationBoundarytimer" targetRef="reminderSent"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
     <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
@@ -418,10 +418,6 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
         <omgdi:waypoint x="393.0" y="631.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
-        <omgdi:waypoint x="446.0" y="634.0"></omgdi:waypoint>
-        <omgdi:waypoint x="571.0" y="530.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
         <omgdi:waypoint x="571.0" y="490.0"></omgdi:waypoint>
@@ -678,6 +674,10 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdi:waypoint x="1195.0" y="620.0"></omgdi:waypoint>
         <omgdi:waypoint x="1088.0" y="587.0"></omgdi:waypoint>
         <omgdi:waypoint x="1043.0" y="551.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow34" id="BPMNEdge_flow34">
+        <omgdi:waypoint x="446.0" y="634.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="530.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

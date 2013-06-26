@@ -32,18 +32,37 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_location}" for="location" />
                         <p:inputText id="location" value="#{bmwEventController.selected.location}" title="#{bundle.CreateBmwEventTitle_location}" />
 
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
-                        <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.CreateBmwEventTitle_urgencyDayLimit}" />
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_sendReminder}" for="sendReminder" />
+                        <p:inputText id="sendReminder" value="#{bmwEventController.selected.sendReminder}"  required="true" title="#{bundle.CreateBmwEventTitle_sendReminder}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_cancelInvitation}" for="cancelInvitation" />
+                        <p:inputText id="cancelInvitation" value="#{bmwEventController.selected.cancelInvitation}"  required="true" title="#{bundle.CreateBmwEventTitle_cancelInvitation}" />
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_sendFollowup}" for="sendFollowup" />
-                        <p:inputText id="sendFollowup" value="#{bmwEventController.selected.sendFollowup}" title="#{bundle.CreateBmwEventTitle_sendFollowup}" />
+                        <p:inputText id="sendFollowup" value="#{bmwEventController.selected.sendFollowup}"  required="true" title="#{bundle.CreateBmwEventTitle_sendFollowup}" />
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_bmwParticipants}" for="bmwParticipants" />
                         <p:inputText id="bmwParticipants" value="#{bmwEventController.selected.bmwParticipants}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
-                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
 
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" />
+                        <p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.EditBmwEventTitle_embargoDate}" required="false" requiredMessage="#{bundle.EditBmwEventRequiredMessage_embargoDate}" showOn="button"/>
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargo}" for="embargo" />
+                         <p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_travelAgency}" for="travelAgency" />
+                        <p:selectOneMenu id="travelAgency" value="#{bmwEventController.selected.travelAgency}" required="true" requiredMessage="#{bundle.EditBmwTravelRequiredMessage_travelAgency}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{bmwTravelagencyController.items}"
+                                           var="userItem"
+                                           itemValue="#{userItem}"
+                                           itemLabel="#{userItem.companyName}"
+                                           />
+                            <f:converter binding="#{bmwUserConverter}"/>
+                        </p:selectOneMenu>
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{processBmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>

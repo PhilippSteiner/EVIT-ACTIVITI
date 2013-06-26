@@ -4,6 +4,7 @@
  */
 package ac.at.fhkufstein.entity;
 
+import ac.at.fhkufstein.mailing.EmailTemplateable;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -31,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "BmwEmailTemplates.findById", query = "SELECT b FROM BmwEmailTemplates b WHERE b.id = :id"),
     @NamedQuery(name = "BmwEmailTemplates.findBySubject", query = "SELECT b FROM BmwEmailTemplates b WHERE b.subject = :subject"),
     @NamedQuery(name = "BmwEmailTemplates.findByType", query = "SELECT b FROM BmwEmailTemplates b WHERE b.type = :type")})
-public class BmwEmailTemplates implements Serializable {
+public class BmwEmailTemplates implements Serializable, EmailTemplateable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -113,5 +114,5 @@ public class BmwEmailTemplates implements Serializable {
     public String toString() {
         return "ac.at.fhkufstein.entity.BmwEmailTemplates[ id=" + id + " ]";
     }
-    
+
 }

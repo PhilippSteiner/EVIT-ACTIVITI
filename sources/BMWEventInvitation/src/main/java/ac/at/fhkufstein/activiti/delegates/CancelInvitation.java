@@ -7,9 +7,12 @@ package ac.at.fhkufstein.activiti.delegates;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.EmailTemplatesController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.entity.ParticipantStatus;
+import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
@@ -40,8 +43,20 @@ public class CancelInvitation implements JavaDelegate {
             participant.setPState(ParticipantStatus.CANCELED);
             PersistenceService.save(BmwParticipantsController.class, participant);
 
-                // @todo implementMailFunction
-//            MailService.sendMail(null, null, null);
+
+                // send cancel mail
+
+                String emailType = "storno";
+
+                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                        .setParameter("eventId", event)
+                        .setParameter("type", emailType)
+                        .getSingleResult();
+
+                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+
+
+
 
                 String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
 

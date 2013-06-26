@@ -48,7 +48,7 @@ public class ProcessBmwEventController implements Serializable {
     public void saveNew(ActionEvent event) {
         try {
 
-            BmwEventController eventController = PersistenceService.getManagedBeanInstance(BmwEventController.class);
+            final BmwEventController eventController = PersistenceService.getManagedBeanInstance(BmwEventController.class);
 
             // to get the id of the inserted event immediately a transacion has to be executed
             UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
@@ -64,7 +64,18 @@ public class ProcessBmwEventController implements Serializable {
             }
             EventTemplate a = PersistenceService.getManagedBeanInstance(EventTemplate.class);
             a.createTemplate(eventController.getSelected());
-            startEventProcess(eventController.getSelected());
+
+            // starting process in Thread
+            new Thread() {
+
+                @Override
+                public void run() {
+                    startEventProcess(eventController.getSelected());
+                }
+            }.start();
+
+
+
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage(null, new FacesMessage("Event erstellen", "Event erfolgreich erstellt!"));
 

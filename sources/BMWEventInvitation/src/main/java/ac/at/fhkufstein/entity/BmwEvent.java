@@ -73,9 +73,9 @@ public class BmwEvent implements Serializable, ActivitiProcessHolder {
     @Column(name = "responsibleUser")
     private String responsibleUser;
     @Column(name = "sendReminder")
-    private Integer sendReminder;
+    private Integer sendReminder = 14;
     @Column(name = "cancelInvitation")
-    private Integer cancelInvitation;
+    private Integer cancelInvitation = 14;
     @Column(name = "closeInvitation")
     @Temporal(TemporalType.TIMESTAMP)
     private Date closeInvitation;
