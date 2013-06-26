@@ -4,44 +4,6 @@
   <collaboration id="Collaboration">
     <participant id="JournalistInvitationResponsePool" name="Journalist Einladungsantwort" processRef="process_pool1"></participant>
   </collaboration>
-  <process id="Journalist_Invitation_Response" name="Journalist_Invitation_Response" isExecutable="true">
-    <sequenceFlow id="flow5" sourceRef="answerInvitationBoundarytimer" targetRef="reminderSent"></sequenceFlow>
-    <textAnnotation id="textannotation1">
-      <text>Startevent des Journalistenprozesses.
-Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem gestartet, oder nach Freigabe und erneuter Einladung von einer Instanz dieses Journalistenprozesses.
-</text>
-    </textAnnotation>
-    <association id="association1" sourceRef="textannotation1" targetRef="startevent1"></association>
-    <textAnnotation id="textannotation2">
-      <text>Signal Event, das darauf wartet bis das Hauptsystem die Werte der benötigten Variablen an den Prozess weitergegeben hat.</text>
-    </textAnnotation>
-    <association id="association2" sourceRef="textannotation2" targetRef="variablesDefinedSignal"></association>
-    <textAnnotation id="textannotation3">
-      <text>Der Journalist erhält eine Einladungsmail, die er im System beantworten sollte.
-</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation7">
-      <text>Entscheidung ob das Event noch für Einladungen geöffnet ist oder nicht.</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation8">
-      <text>Dem Journalist wird mitgeteilt, dass seine Einladung abgelaufen ist, da er nicht auf sie geantwortet hat.</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation9">
-      <text>Das System evaluiert, ob das System noch für Einladungen geöffnet oder bereits geschlossen ist und teilt dem Prozess den Status mit.</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation10">
-      <text>Der Prozess zur Einladung des Journalisten wird beendet.</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation24">
-      <text>Benutzeraktivität für die Eingabe der Flugdaten(Ticket) in das System, ausgeführt vom Reisebüro.</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation25">
-      <text>Es wird eine Benachrichtigung an den Journalisten gesendet, dass seine Flugdaten bzw. das Ticket auf dem System verfügbar ist.</text>
-    </textAnnotation>
-    <textAnnotation id="textannotation26">
-      <text>Der Prozess zur Einladung des Journalisten wird beendet.</text>
-    </textAnnotation>
-  </process>
   <process id="process_pool1" name="process_pool1" isExecutable="true">
     <laneSet id="laneSet_process_pool1">
       <lane id="bmwMitarbeiter" name="BMW Mitarbeiter">
@@ -158,11 +120,12 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
     </sequenceFlow>
     <serviceTask id="cancelInvitation" name="Einladung stornieren" activiti:class="ac.at.fhkufstein.activiti.delegates.CancelInvitation"></serviceTask>
     <sequenceFlow id="flow31" sourceRef="cancelInvitation" targetRef="evaluateEventStatus"></sequenceFlow>
-    <serviceTask id="notifyForManualInvitation" name="Für manuelle Nachladung benachrichtigen"></serviceTask>
+    <serviceTask id="notifyForManualInvitation" name="Für manuelle Nachladung benachrichtigen" activiti:class="ac.at.fhkufstein.activiti.delegates.NotifyForManualInvitation"></serviceTask>
     <sequenceFlow id="flow32" sourceRef="notifyForManualInvitation" targetRef="selectiveInvitation"></sequenceFlow>
     <serviceTask id="notifyForSpecialFlight" name="Für Spezialflug benachrichtigen" activiti:class="ac.at.fhkufstein.activiti.delegates.NotifyForSpecialFlight"></serviceTask>
     <sequenceFlow id="flow33" sourceRef="notifyForSpecialFlight" targetRef="endevent6"></sequenceFlow>
     <endEvent id="endevent6" name="End"></endEvent>
+    <sequenceFlow id="flow34" sourceRef="answerInvitationBoundarytimer" targetRef="reminderSent"></sequenceFlow>
     <association id="association3" sourceRef="textannotation3" targetRef="sendInvitationmail"></association>
     <textAnnotation id="textannotation4">
       <text>Benutzeraktivität für die Beantwortung der Einladung vom Journalist. Er kann Zusagen, Absagen oder eine Vertretung schicken.</text>
@@ -419,10 +382,6 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
         <omgdi:waypoint x="393.0" y="631.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
-        <omgdi:waypoint x="446.0" y="634.0"></omgdi:waypoint>
-        <omgdi:waypoint x="571.0" y="530.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
         <omgdi:waypoint x="571.0" y="490.0"></omgdi:waypoint>
         <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
@@ -678,6 +637,10 @@ Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem ge
         <omgdi:waypoint x="1195.0" y="620.0"></omgdi:waypoint>
         <omgdi:waypoint x="1088.0" y="587.0"></omgdi:waypoint>
         <omgdi:waypoint x="1043.0" y="551.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow34" id="BPMNEdge_flow34">
+        <omgdi:waypoint x="446.0" y="634.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="530.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
