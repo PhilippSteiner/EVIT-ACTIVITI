@@ -9,13 +9,13 @@
     <ui:composition>
     
     				
-					<p:panel header="Kommende Events">
+					<p:panel header="Kommende Events" style="width: 49%; float: left;">
 
             <p:dataTable id="datalist_upcoming" value="#{Events.upcoming()}" var="item"
                          selectionMode="single" selection="#{bmwEventController.selected}"
                          rowKey="#{item.id}"
                          paginator="true"
-                         rows="10"
+                         rows="5"
                          rowsPerPageTemplate="10,20,30"
                          
                          >
@@ -48,18 +48,6 @@
                     <h:outputText value="#{item.endEventdate}">
                         <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
                     </h:outputText>
-                </p:column>
-                <p:column sortBy="#{item.maxParticipants}" filterBy="#{item.maxParticipants}">
-                    <f:facet name="header">
-                        <h:outputText value="Maximale Anzahl Teilnehmer"/>
-                    </f:facet>
-                    <h:outputText value="#{item.maxParticipants}"/>
-                </p:column>
-                <p:column sortBy="#{item.location}" filterBy="#{item.location}">
-                    <f:facet name="header">
-                        <h:outputText value="Ort"/>
-                    </f:facet>
-                    <h:outputText value="#{item.location}"/>
                 </p:column>
                 <f:facet name="footer">
                     
