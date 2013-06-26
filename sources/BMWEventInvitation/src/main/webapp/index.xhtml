@@ -32,11 +32,12 @@
                     -) Prozessschema fertiggestellt <br/>
                     -) benötigte Felder in Datenbank bei Event: Frist Einladungsmail, Frist Urgenzmail</p>
             </p:panel>
-
+			<h:form>
            <p:panelGrid columns="2">	
                 <h:outputText value="Eingeloggt als: #{login.uid}"/>
                 <p:commandButton id="welcome" value="Abmelden" action="#{login.logout()}"></p:commandButton>
             </p:panelGrid>
+				</h:form>
         </ui:define>
 
     </ui:composition>
