@@ -53,11 +53,11 @@
                         </f:facet>
                         <h:outputText value="#{item.rating}"/>
                     </p:column>
-                    <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                    <p:column sortBy="#{personenID.email1}" filterBy="#{personenID.email1}">
                         <f:facet name="header">
-                            <h:outputText value="Rating"/>
+                            <h:outputText value="E-mail"/>
                         </f:facet>
-                        <h:outputText value="#{item.rating}"/>
+                        <h:outputText value="#{item.personenID.EMail1}"/>
                     </p:column>
 
                     <f:facet name="footer">
