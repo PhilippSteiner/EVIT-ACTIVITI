@@ -95,7 +95,6 @@ public class ResponseBean implements Serializable {
 
         JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
-
         doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
 
         EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
@@ -286,8 +285,6 @@ public class ResponseBean implements Serializable {
 
         } else if (auswahl.equals("Zusagen")) {
 
-
-
             JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
 
@@ -355,7 +352,7 @@ public class ResponseBean implements Serializable {
             return "eventoutcome";
 
         } else {
-            
+
             return "do nothing";
         }
     }
@@ -364,129 +361,133 @@ public class ResponseBean implements Serializable {
 
         System.out.println("Flug ausgewaehlt: " + this.getFlugauswahl());
 
-        //STATUS ÄNDERN
+        if (this.getFlugauswahl().equals("Noch keine Flüge verfügbar")) {
 
-        //BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
-
-        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
-
-
-        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
-
-        EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-
-
-        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
-                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
-                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
-                .getSingleResult();
-
-        //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
-
-        System.out.print("Abgesagt *****************************************************************");
-        System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
-        System.out.print("Status:" + currentPartipantsStati.getPState());
-
-        this.bmwParticipantsController.setSelected(currentPartipantsStati);
-
-        currentPartipantsStati.setPState("flugausgewaehlt");
-        this.bmwParticipantsController.save(null);
-
-        System.out.print("##############State saved to: " + currentPartipantsStati.getPState());
-
-        //FLUG-TRAVEL DATA STUFF
-
-        //get flug by name
-
-        if (this.getFlugauswahl() == null) {
-
-            System.out.print("Flug noch null");
-
+        System.out.println("Keine Fluege, nix ausgewählt");    
+        
         } else {
 
-            System.out.print("Flug nicht mehr null");
+            JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
-            String[] splitResult = this.getFlugauswahl().split(
-                    ",");
 
-            System.out.print("Lenght SplitString: " + splitResult.length);
+            doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
 
-            String flightnumber = splitResult[2];
+            EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
 
-            System.out.print("Flightnumber: " + flightnumber);
 
-            this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
-
-            EntityManager flugem = ((BmwFlightFacade) this.bmwFlightController.getFacade()).getEntityManager();
-
-            BmwFlight myflight = (BmwFlight) flugem.createNamedQuery("BmwFlight.findByFlightNumber")
-                    .setParameter("flightNumber", flightnumber)
-                    .getSingleResult();
-
-            System.out.print("Got Flight" + myflight.getDepartureLocation() + "from Flightnumber: " + flightnumber);
-
-            //create tavel *************************************************************
-
-            System.out.print("Kommentar: " + this.getKommentar());
-
-            BmwTravel mytravel = new BmwTravel();
-            mytravel.setFlightId(myflight);
-            mytravel.setPdfTicketUrl("no url");
-            mytravel.setComment(this.getKommentar());
-            mytravel.setType("typeFlug");
-            mytravel.setArrivalDatetime(myflight.getArrivalTime());
-
-            this.bmwTravelController.setSelected(mytravel);
-
-            this.bmwTravelController.save(null);
-
-            //Get Travel back from DB***************************************************
-
-            EntityManager travelEM = ((BmwTravelFacade) bmwTravelController.getFacade()).getEntityManager();
-
-            List<BmwTravel> myTravelDBList = travelEM.createNamedQuery("BmwTravel.findByFlight")
-                    .setParameter("flightId", myflight)
-                    .getResultList();
-
-            System.out.print("Size of Travellist again:" + myTravelDBList.size());
-
-            int pointer = (myTravelDBList.size() - 1);
-
-            System.out.print("Pointer :" + pointer);
-
-            BmwTravel myTravelfromDB = new BmwTravel();
-
-            myTravelfromDB = myTravelDBList.get(pointer);
-
-            System.out.print("myTravelfromDB Flight :" + myTravelfromDB.getFlightId().getDepartureLocation());
-
-            //Get partitipant change travel id at participant******************************
-
-            //BmwParticipantsController bmwParticipantsFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsFlightController}", BmwParticipantsController.class);
-
-            JournalistBean currentFlightJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
-
-            doLogin currentFlightlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
-
-            EntityManager particiEM = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
-
-            BmwParticipants toChangeParticipant = (BmwParticipants) particiEM.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
-                    .setParameter("id", currentFlightJournalistBean.getSelectedBmwEvent())
-                    .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentFlightlogin.getUid()))
+            BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                    .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                    .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
                     .getSingleResult();
 
             //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
 
             System.out.print("Abgesagt *****************************************************************");
-            System.out.print("Name: " + toChangeParticipant.getUserId().getUsername());
-            System.out.print("Status:" + toChangeParticipant.getPState());
+            System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
+            System.out.print("Status:" + currentPartipantsStati.getPState());
 
-            this.bmwParticipantsController.setSelected(toChangeParticipant);
+            this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-            toChangeParticipant.setTravelId(myTravelfromDB);
+            currentPartipantsStati.setPState("flugausgewaehlt");
             this.bmwParticipantsController.save(null);
 
-            this.step = "wiz3";
+            System.out.print("##############State saved to: " + currentPartipantsStati.getPState());
+
+            //FLUG-TRAVEL DATA STUFF
+
+            //get flug by name
+
+            if (this.getFlugauswahl() == null) {
+
+                System.out.print("Flug noch null");
+
+            } else {
+
+                System.out.print("Flug nicht mehr null");
+
+                String[] splitResult = this.getFlugauswahl().split(
+                        ",");
+
+                System.out.print("Lenght SplitString: " + splitResult.length);
+
+                String flightnumber = splitResult[2];
+
+                System.out.print("Flightnumber: " + flightnumber);
+
+                this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
+
+                EntityManager flugem = ((BmwFlightFacade) this.bmwFlightController.getFacade()).getEntityManager();
+
+                BmwFlight myflight = (BmwFlight) flugem.createNamedQuery("BmwFlight.findByFlightNumber")
+                        .setParameter("flightNumber", flightnumber)
+                        .getSingleResult();
+
+                System.out.print("Got Flight" + myflight.getDepartureLocation() + "from Flightnumber: " + flightnumber);
+
+                //create tavel *************************************************************
+
+                System.out.print("Kommentar: " + this.getKommentar());
+
+                BmwTravel mytravel = new BmwTravel();
+                mytravel.setFlightId(myflight);
+                mytravel.setPdfTicketUrl("no url");
+                mytravel.setComment(this.getKommentar());
+                mytravel.setType("typeFlug");
+                mytravel.setArrivalDatetime(myflight.getArrivalTime());
+
+                this.bmwTravelController.setSelected(mytravel);
+
+                this.bmwTravelController.save(null);
+
+                //Get Travel back from DB***************************************************
+
+                EntityManager travelEM = ((BmwTravelFacade) bmwTravelController.getFacade()).getEntityManager();
+
+                List<BmwTravel> myTravelDBList = travelEM.createNamedQuery("BmwTravel.findByFlight")
+                        .setParameter("flightId", myflight)
+                        .getResultList();
+
+                System.out.print("Size of Travellist again:" + myTravelDBList.size());
+
+                int pointer = (myTravelDBList.size() - 1);
+
+                System.out.print("Pointer :" + pointer);
+
+                BmwTravel myTravelfromDB = new BmwTravel();
+
+                myTravelfromDB = myTravelDBList.get(pointer);
+
+                System.out.print("myTravelfromDB Flight :" + myTravelfromDB.getFlightId().getDepartureLocation());
+
+                //Get partitipant change travel id at participant******************************
+
+                //BmwParticipantsController bmwParticipantsFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsFlightController}", BmwParticipantsController.class);
+
+                JournalistBean currentFlightJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+                doLogin currentFlightlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+                EntityManager particiEM = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
+
+                BmwParticipants toChangeParticipant = (BmwParticipants) particiEM.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                        .setParameter("id", currentFlightJournalistBean.getSelectedBmwEvent())
+                        .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentFlightlogin.getUid()))
+                        .getSingleResult();
+
+                //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
+
+                System.out.print("Abgesagt *****************************************************************");
+                System.out.print("Name: " + toChangeParticipant.getUserId().getUsername());
+                System.out.print("Status:" + toChangeParticipant.getPState());
+
+                this.bmwParticipantsController.setSelected(toChangeParticipant);
+
+                toChangeParticipant.setTravelId(myTravelfromDB);
+                this.bmwParticipantsController.save(null);
+
+                this.step = "wiz3";
+
+            }
 
         }
 
@@ -591,17 +592,23 @@ public class ResponseBean implements Serializable {
                 .getResultList();
 
         System.out.println("Flights " + currentFlightList.size());
-        System.out.println("Flight1 " + currentFlightList.get(0).getDepartureLocation());
 
-        for (int i = 0; i < currentFlightList.size(); i++) {
+        if (currentFlightList.isEmpty()) {
 
-            String dateString = "" + currentFlightList.get(i).getDepartureTime().getDay() + "." + currentFlightList.get(i).getDepartureTime().getMonth() + "." + currentFlightList.get(i).getDepartureTime().getYear();
-            String addstring = "" + currentFlightList.get(i).getDepartureLocation() + "-" + currentFlightList.get(i).getArrivalLocation() + ", " + dateString + "," + currentFlightList.get(i).getFlightNumber();
+            returnFluege.add(new SelectItem("Noch keine Flüge verfügbar"));
 
-            returnFluege.add(new SelectItem(addstring));
+        } else {
 
-            System.out.println("Last Object" + returnFluege.get(i).getLabel());
+            for (int i = 0; i < currentFlightList.size(); i++) {
 
+                String dateString = "" + currentFlightList.get(i).getDepartureTime().getDay() + "." + currentFlightList.get(i).getDepartureTime().getMonth() + "." + currentFlightList.get(i).getDepartureTime().getYear();
+                String addstring = "" + currentFlightList.get(i).getDepartureLocation() + "-" + currentFlightList.get(i).getArrivalLocation() + ", " + dateString + "," + currentFlightList.get(i).getFlightNumber();
+
+                returnFluege.add(new SelectItem(addstring));
+
+                System.out.println("Last Object" + returnFluege.get(i).getLabel());
+
+            }
         }
 
         return returnFluege;

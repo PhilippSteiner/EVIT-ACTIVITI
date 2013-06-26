@@ -166,6 +166,17 @@ public class JournalistBean {
         return "eventdetailframe";
 
     }
+    
+        public String didSelectPastEventRow() {
+
+        System.out.println("Selected Event from did select: " + this.selectedBmwEvent.getName());
+
+        this.von = "" + this.selectedBmwEvent.getStartEventdate().getDay() + "." + this.selectedBmwEvent.getStartEventdate().getMonth();
+        this.bis = "" + this.selectedBmwEvent.getEndEventdate().getDay() + "." + this.selectedBmwEvent.getEndEventdate().getMonth() + "." + this.selectedBmwEvent.getEndEventdate().getYear();
+        
+        return "eventsolo";
+
+    }
 
     public void einladungBeantworten() {
 
