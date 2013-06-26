@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.AppName}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form>
+            <p:tabMenu activeIndex="3">
+                <p:menuitem value="Allgemeine Einstellungen" url="/faces/admin/index.xhtml"></p:menuitem>
+                <p:menuitem value="Passwort zurücksetzen" url="/faces/admin/PWReset.xhtml"></p:menuitem>
+                <p:menuitem value="Registration versenden" url="/faces/admin/SendLogin.xhtml"></p:menuitem>
+                <p:menuitem value="CSV-Import" url="/faces/admin/CsvImport.xhtml"></p:menuitem>
+            </p:tabMenu>
+            </h:form>
+            
+            <p:panel header="CSV Import">
+                <h:outputText value="Wilkommen beim CSV Import. Bitte wählen Sie eine Datei von ihrem Lokalen System."></h:outputText>
+
+
+                <h:form enctype="multipart/form-data">
+
+                    <p:messages showDetail="true"/>
+
+                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+
+
+                        <h:outputText value="CSV Datei: " />
+                        <p:fileUpload value="#{csvImportController.csvFile}" mode="simple" label="Datei..." allowTypes="/(\.|\/)(csv)$/" update=":journalistenform:datalistpersonen"/>
+
+                    </h:panelGrid>
+
+                    <p:commandButton value="Hochladen" ajax="false"
+                                     actionListener="#{csvImportController.upload}" />
+
+                </h:form>
+
+
+            </p:panel>
+            <!--
+                        <h:form id="userform">
+                            <p:panel header="User">
+                                <p:dataTable id="datalist" value="#{compareList.users}" var="item"
+            
+                                             rowKey="#{item.uid}"
+                                             paginator="true"
+                                             rows="10"
+                                             rowsPerPageTemplate="10,20,30"
+                                             >
+                                    <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_uid}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.uid}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.pwd}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.rating}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.seatingPriority}" filterBy="#{item.seatingPriority}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_seatingPriority}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.seatingPriority}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.personenID.vorname}"/>
+                                    </p:column>
+                                    <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item.personenID.nachname}"/>
+                                    </p:column>
+            
+                                </p:dataTable>
+            
+                            </p:panel>
+                        </h:form>
+            -->
+            <h:form id="journalistenform">
+                <p:panel header="Neue Journalisten die noch nicht vorhanden sind">
+                    <p:dataTable id="datalistpersonen" value="#{compareList.subPersonen}" var="pers"
+                                 emptyMessage="Keine Änderungen vorhanden!"
+                                 rowKey="#{pers.personalID}"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30"
+                                 >
+                        <p:column sortBy="#{pers.firma}" filterBy="#{pers.firma}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_firma}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.firma}"/>
+                        </p:column>
+                        <p:column sortBy="#{pers.anrede}" filterBy="#{pers.anrede}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_anrede}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.anrede}"/>
+                        </p:column>
+
+
+                        <p:column sortBy="#{pers.vorname}" filterBy="#{pers.vorname}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_vorname}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.vorname}"/>
+                        </p:column>
+                        <p:column sortBy="#{pers.nachname}" filterBy="#{pers.nachname}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_nachname}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.nachname}"/>
+                        </p:column>
+
+                        <p:column sortBy="#{pers.EMail1}" filterBy="#{pers.EMail1}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPersonenTitle_EMail1}"/>
+                            </f:facet>
+                            <h:outputText value="#{pers.EMail1}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:commandButton actionListener="#{compareList.saveUsers}" value="Importieren" update="datalistpersonen,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
+                </p:panel>
+
+            </h:form>
+
+            
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>
