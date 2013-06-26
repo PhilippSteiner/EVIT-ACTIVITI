@@ -26,19 +26,23 @@
                     <p:growl id="growl" showDetail="true"/>
                     <p:panelGrid columns="2">
                         <h:outputLabel value="Altes Passwort: " for="oldpw" />
-                        <p:inputText id="oldpw" value="" required="true"/>
+                        <p:inputText id="oldpw" value="#{journalisteinstellungen.oldpw}" required="true"/>
                         
                         <h:outputLabel value="Neues Passwort: " for="newpw"/>
-                        <p:inputText id="newpw" value="" required="true"/>
+                        <p:inputText id="newpw" value="#{journalisteinstellungen.newpw}" required="true"/>
                         
                         <h:outputLabel value="Neues Passwort bestätigen: " for="newpwb"/>
-                        <p:inputText id="newpwb" value="" required="true"/>
+                        <p:inputText id="newpwb" value="#{journalisteinstellungen.newpwb}" required="true"/>
                         
                     </p:panelGrid>
-                    <p:commandButton id="submit" value="Bestätigen" actionListener="#{journalisteinstellungen.changePassword()}" update="growl"/>
+                    <p:commandButton style="margin-top: 10px" id="submit" value="Bestätigen" actionListener="#{journalisteinstellungen.changePassword()}" update="growl"/>
                     
 
                 </p:panel>
+                <p:panelGrid columns="2" style="margin-top: 10px">	
+                <h:outputText value="Eingeloggt als: #{login.uid}"/>
+                <p:commandButton id="welcome" value="Abmelden" action="#{login.logout()}"></p:commandButton>
+            </p:panelGrid>
             </h:form>
 
         </h:body>
