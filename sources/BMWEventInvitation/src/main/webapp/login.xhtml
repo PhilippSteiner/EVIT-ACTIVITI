@@ -24,25 +24,33 @@
                         <h:outputText value="Passwort: " />
                         <p:password value="#{login.pw}" />
 
-                        <p:row>
-                            <p:commandLink id="forgotlink" value="Passwort vergessen?" onclick="pdlg.show();" ></p:commandLink>
-                            
-                        </p:row>
-                        <p:row>
-                        <p:commandButton id="welcome" value="Login" action="#{login.login()}" update="loginform,growl" style="margin-top: 20px"></p:commandButton>
-                        </p:row>
-                    
                     </p:panelGrid>
-                    
+                    <br/>
+                    <p:commandLink id="forgotlink" value="Passwort vergessen? " onclick="pdlg.show();" style="text-align: center"></p:commandLink>
+                    <br/>
+                    <p:commandButton id="welcome" value="Anmelden" action="#{login.login()}" update="loginform,growl" style="margin-top: 20px"></p:commandButton>
+
                 </p:panel>
-                
+
             </h:form>
-            <p:dialog id="pwdialog" header="Passwort anfordern" widgetVar="pdlg" height="100">
-                    <h:outputLabel id="pwLabel" value="Geben Sie Ihre E-mail Addresse ein: " for="pwtext"></h:outputLabel>
-                    <p:inputText id="pwtext" ></p:inputText>
-                   
-                </p:dialog>
+
+            <p:dialog appendToBody="true" id="pwdialog" header="Passwort anfordern" widgetVar="pdlg" height="100" modal="true" style="text-align: center">
+                <h:form>
+
+
+                    <p:panelGrid columns="2" style="margin: 10px">
+                        <h:outputLabel id="pwLabel" value="Geben Sie Ihre E-mail Addresse ein: " for="pwtext"></h:outputLabel>
+                        <p:inputText id="pwtext" value="#{forgotPassword.email}"></p:inputText>
+
+                        <p:commandButton value="Absenden" actionListener="#{forgotPassword.send()}" update=":loginform:growl" style="margin-top: 20px"></p:commandButton>
+                        <p:commandButton value="Abbrechen" onclick="pdlg.hide();" style="margin-top: 20px"></p:commandButton>
+
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
         </ui:define>
+
+
 
     </ui:composition>
 
