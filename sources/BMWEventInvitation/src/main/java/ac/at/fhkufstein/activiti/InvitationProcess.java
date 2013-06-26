@@ -34,6 +34,7 @@ public class InvitationProcess {
     final static public String ACTIVITI_TAKES_FLIGHT = "takesFlight";
     final static public String ACTIVITI_TAKES_PREDEFINED_FLIGHT = "takesPredefinedFlight";
     final static public String ACTIVITI_SIGNAL_VARIABLES_DEFINED = "variablesDefined";
+    final static public String ACTIVITI_INVITATION_STARTED = "invitationStarted";
     final static public String DATABASE_NEXT_PARTICIPANTID = "nextParticipantId";
     final static public String[] PROCESSES = {"InvitationProcess", "Journalist_Invitation_Response"};
     final static public String PROCESS_FILE_LOCATION = "diagrams/";
@@ -63,6 +64,7 @@ public class InvitationProcess {
 
         // nur bei Hauptprozess
         if (processDefinition.equals(PROCESSES[0])) {
+            setVariable(ACTIVITI_INVITATION_STARTED, false);
             processHolder.setProcessId(Integer.valueOf(getProcessInstance().getId()));
             PersistenceService.save(BmwEventController.class, processHolder);
         }
@@ -84,7 +86,8 @@ public class InvitationProcess {
         Services.getRuntimeService().setVariable(getProcessInstance().getId(), name, value);
     }
 
-    public void getVariable(String name) {
+    public Object getVariable(String name) {
+        return Services.getRuntimeService().getVariable(getProcessInstance().getId(), name);
     }
 
     public String getStartFormKey() {

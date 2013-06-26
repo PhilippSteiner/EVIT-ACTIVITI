@@ -32,7 +32,8 @@ public class StartSingleProcesses implements JavaDelegate {
         System.out.println("################# starting journalist processes #################");
 
 
-        execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
+        execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_STARTED, true);
+        
         BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
         BmwEvent event = eventController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_EVENTID) )) );
 

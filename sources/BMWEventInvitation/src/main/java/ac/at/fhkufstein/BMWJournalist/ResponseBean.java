@@ -23,6 +23,7 @@ import ac.at.fhkufstein.bean.BmwFlightController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwTravelController;
 import ac.at.fhkufstein.bean.BmwUserController;
+import ac.at.fhkufstein.bean.process.ProcessJournalist;
 import ac.at.fhkufstein.entity.BmwFlight;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwTravel;
@@ -316,6 +317,9 @@ public class ResponseBean implements Serializable {
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
+        // Prozess weiterführen
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentParticipant, true, false);
+
             return "do nothing";
 
         } else if (auswahl.equals("Absagen")) {
@@ -348,6 +352,9 @@ public class ResponseBean implements Serializable {
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
+            // Prozess weiterführen
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentParticipant, false, false);
+
             this.outcomemessage = "Viele Dank für Ihre Antwort";
 
             this.eventdetailview = "eventoutcome";
@@ -355,7 +362,7 @@ public class ResponseBean implements Serializable {
             return "eventoutcome";
 
         } else {
-            
+
             return "do nothing";
         }
     }
@@ -486,6 +493,10 @@ public class ResponseBean implements Serializable {
             toChangeParticipant.setTravelId(myTravelfromDB);
             this.bmwParticipantsController.save(null);
 
+            
+            // Prozess weiterführen
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentParticipant, true, true);
+
             this.step = "wiz3";
 
         }
@@ -523,6 +534,9 @@ public class ResponseBean implements Serializable {
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
         System.out.println("Selbstanreise");
+
+        // Prozess weiterführen
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentParticipant, false, false);
 
         this.step = "wiz3";
 
@@ -565,8 +579,12 @@ public class ResponseBean implements Serializable {
         currentPartipantsStati.setRepComment(vertretungsString);
         this.bmwParticipantsController.save(null);
 
+
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
         System.out.print("Comment saved to: " + currentPartipantsStati.getRepComment());
+
+        // Prozess weiterführen
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentParticipant, false, true);
 
         this.outcomemessage = "Sie haben als Vertretungswunsch" + this.getVorname() + " " + this.getNachname() + ", " + this.getEmail() + "angegeben.";
 
