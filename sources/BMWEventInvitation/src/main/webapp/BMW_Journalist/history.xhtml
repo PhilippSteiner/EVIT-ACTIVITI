@@ -1,89 +1,90 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <f:facet name="first">
-            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-            <title>PrimeFaces</title>
-        </f:facet>
-    </h:head>
+    <ui:composition template="/templatejournalist.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.AppName}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:form>
+                <p:tabMenu activeIndex="2">
+                    <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
+                    <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
+                    <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
+                    <p:menuitem value="Einstellungen" url="/faces/BMW_Journalist/einstellungen.xhtml"></p:menuitem>
+                </p:tabMenu>
+            </h:form>
 
-    <h:body>
-        <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
-        <h:form id="form">
-            <p:tabMenu activeIndex="2">
-                <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
-                <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
-                <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
-                <p:menuitem value="Einstellungen" url="/faces/BMW_Journalist/einstellungen.xhtml"></p:menuitem>
-            </p:tabMenu>
-
-
-            <p:panel header="Emails">
+            <h:form id="form">
+                <p:panel header="Emails">
 
 
-                <p:dataTable id="emails" value="#{journalistEmailBean.userEmails}" var="item"
-                             selectionMode="single" selection="#{journalistEmailBean.selectedEmails}"
-                             rowKey="#{item.id}"
-                             paginator="true"
-                             rows="10"
-                             rowsPerPageTemplate="10,20,30"
-                             emptyMessage="Keine Emails gefunden."
-                             >
+                    <p:dataTable id="emails" value="#{journalistEmailBean.userEmails}" var="item"
+                                 selectionMode="single" selection="#{journalistEmailBean.selectedEmails}"
+                                 rowKey="#{item.id}"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30"
+                                 emptyMessage="Keine Emails gefunden."
+                                 >
 
-                    <p:ajax event="rowSelect" 
-                            update=":form:display" oncomplete="carDialog.show()" />  
-                    <p:ajax event="rowUnselect" />  
-                    <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
-                        </f:facet>
-                        <h:outputText value="#{item.emailFrom}"/>
-                    </p:column>
+                        <p:ajax event="rowSelect" 
+                                update=":form:dialog" oncomplete="carDialog.show()" />  
+                        <p:ajax event="rowUnselect" />  
+                        <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.emailFrom}"/>
+                        </p:column>
 
-                    <p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
-                        </f:facet>
-                        <h:outputText value="#{item.emailTo}"/>
-                    </p:column>
+                        <p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.emailTo}"/>
+                        </p:column>
 
-                    <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
-                        </f:facet>
-                        <h:outputText value="#{item.emailSubject}"/>
-                    </p:column>
+                        <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.emailSubject}"/>
+                        </p:column>
 
-                </p:dataTable>
-
-
-                <p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
-                          showEffect="fade" hideEffect="explode">  
-
-                    <h:panelGrid id="display" columns="2" cellpadding="4">  
-
-                        <h:outputText value="Von:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailFrom}" />
-                        <h:outputText value="An:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailTo}" />  
-                        <h:outputText value="Betreff:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailSubject}" />
-                        <h:outputText value="Inhalt:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailContent}" />
+                    </p:dataTable>
 
 
-                    </h:panelGrid>  
-                </p:dialog>  
+                    <p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
+                              showEffect="fade" hideEffect="explode">  
 
-            </p:panel>
-        </h:form>
+                        <h:panelGrid id="display" columns="2" cellpadding="4">  
 
-    </h:body>
+                            <h:outputText value="Von:" />  
+                            <h:outputText value="#{journalistEmailBean.selectedEmails.emailFrom}" />
+                            <h:outputText value="An:" />  
+                            <h:outputText value="#{journalistEmailBean.selectedEmails.emailTo}" />  
+                            <h:outputText value="Betreff:" />  
+                            <h:outputText value="#{journalistEmailBean.selectedEmails.emailSubject}" />
+                            <h:outputText value="Inhalt:" />  
+                            <h:outputText value="#{journalistEmailBean.selectedEmails.emailContent}" />
+
+
+                        </h:panelGrid>  
+                    </p:dialog>  
+
+                </p:panel>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
 </html>
+
 
 
