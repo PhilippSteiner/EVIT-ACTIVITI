@@ -21,12 +21,7 @@
                 <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                 <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
 
-                <p:column sortBy="#{item.id}" filterBy="#{item.id}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListEmailTemplatesTitle_id}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.id}"/>
-                </p:column>
+                
                 <p:column sortBy="#{item.subject}" filterBy="#{item.subject}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle.ListEmailTemplatesTitle_subject}"/>

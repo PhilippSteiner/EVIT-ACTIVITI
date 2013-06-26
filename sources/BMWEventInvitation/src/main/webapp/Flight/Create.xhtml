@@ -17,19 +17,19 @@
 
 
                         <p:outputLabel value="#{bundle.CreateBmwFlightLabel_flightNumber}" for="flightNumber" />
-                        <p:inputText id="flightNumber" value="#{Flight.flightNumber}" title="#{bundle.CreateBmwFlightTitle_flightNumber}" />
+                        <p:inputText id="flightNumber" value="#{Flight.flightNumber}" title="#{bundle.CreateBmwFlightTitle_flightNumber}" required="true"/>
 
                         <p:outputLabel value="#{bundle.CreateBmwFlightLabel_departureLocation}" for="departureLocation" />
-                        <p:inputText id="departureLocation" value="#{Flight.departureLocation}" title="#{bundle.CreateBmwFlightTitle_departureLocation}" />
+                        <p:inputText id="departureLocation" value="#{Flight.departureLocation}" title="#{bundle.CreateBmwFlightTitle_departureLocation}" required="true" />
 
                         <p:outputLabel value="#{bundle.CreateBmwFlightLabel_arrivalLocation}" for="arrivalLocation" />
-                        <p:inputText id="arrivalLocation" value="#{Flight.arrivalLocation}" title="#{bundle.CreateBmwFlightTitle_arrivalLocation}" />
+                        <p:inputText id="arrivalLocation" value="#{Flight.arrivalLocation}" title="#{bundle.CreateBmwFlightTitle_arrivalLocation}" required="true"/>
 
                         <p:outputLabel value="#{bundle.CreateBmwFlightLabel_departureTime}" for="departureTime" />
-                        <p:calendar id="departureTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{Flight.departureTime}" title="#{bundle.EditBmwFlightTitle_departureTime}"  showOn="button"/>
+                        <p:calendar id="departureTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{Flight.departureTime}" title="#{bundle.EditBmwFlightTitle_departureTime}"  showOn="button" required="true"/>
 
                         <p:outputLabel value="#{bundle.CreateBmwFlightLabel_arrivalTime}" for="arrivalTime" />
-                        <p:calendar id="arrivalTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{Flight.arrivalTime}" title="#{bundle.EditBmwFlightTitle_arrivalTime}"  showOn="button"/>
+                        <p:calendar id="arrivalTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{Flight.arrivalTime}" title="#{bundle.EditBmwFlightTitle_arrivalTime}"  showOn="button" required="true"/>
 
                     </p:panelGrid>
                     <p:commandButton actionListener="#{Flight.saveNew}" value="#{bundle.Save}" update="display,:BmwFlightListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwFlightCreateDialog);"/>
