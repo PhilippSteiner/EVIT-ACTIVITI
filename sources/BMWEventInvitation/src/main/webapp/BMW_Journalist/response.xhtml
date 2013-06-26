@@ -10,81 +10,85 @@
     </h:head>
     <h:body>
 
-        <h:outputStylesheet library="css" name="style.css"  />
+        <p:wizard id="mywizard" widgetVar="wiz"
+                  flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
 
-        <h:form id="form">
-            
+            <p:tab id="wiz1" title="Einladung" >
 
-            <p:wizard id="mywizard" widgetVar="wiz"
-                      flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
+                <p:panel header="Bitte Einladung beantworten">
+                    <h:panelGrid columns="4">
 
-                <p:tab id="wiz1" title="Einladung" >
+                        <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
+                                         valueChangeListener="#{ResponseBean.stateChangeListener}" style="width: 150px;">
+                            <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                            <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
+                            <p:ajax event="change"/>
+                        </p:selectOneMenu>
+                        <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
 
-                    <p:panel header="Bitte Einladung beantworten">
-                        <h:panelGrid columns="4">
+                    </h:panelGrid>
 
-                            <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
-                                             valueChangeListener="#{ResponseBean.stateChangeListener}" style="width: 150px;">
-                                <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
-                                <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
-                                <p:ajax event="change"/>
-                            </p:selectOneMenu>
-                      
-                            <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
-                            
-                        </h:panelGrid>
-                        
-                    </p:panel>
-                </p:tab>
+                </p:panel>
+            </p:tab>
 
-                <p:tab id="wiz2" title="Anreise" >
+            <p:tab id="wiz2" title="Anreise" >
 
-                        <p:panel header="Bitte Anreiseoptionen wählen">
+                <p:panel header="Bitte Anreiseoptionen wählen">
 
-                <p:tabView id="tabView">  
+                    <p:tabView id="tabView">  
 
-                    <p:tab id="tab1" title="Fliegen">  
+                        <p:tab id="tab1" title="Fliegen">  
 
-                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                            <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 
-                            <p:selectOneMenu id="eid" value="#{ResponseBean.flugauswahl}" valueChangeListener="#{ResponseBean.stateChangeListener}">
-                                <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
-                                <f:selectItems value="#{ResponseBean.verfuegbareFluege}"/>
-                                <p:ajax event="change"/>
-                            </p:selectOneMenu>
+                                <p:selectOneMenu id="states" value="#{ResponseBean.flugauswahl}"
+                                                 valueChangeListener="#{ResponseBean.stateFlugChangeListener}" style="width: 150px;">
+                                    <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                    <f:selectItems value="#{ResponseBean.allFlightsForEvent}"/>
+                                    <p:ajax event="change"/>
+                                </p:selectOneMenu>
 
-                            <p:commandButton value="Auswählen" onclick="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
-                            
-                        </h:panelGrid>
+                                <h:outputLabel value="Kommentar:"/>
 
-                    </p:tab>  
+                                <p:inputTextarea rows="6" cols="40" value="#{ResponseBean.kommentar}"/>
 
-                    <p:tab id="tab2" title="Selbstanreise"> 
+                                <p:commandButton value="Auswählen" actionListener="#{ResponseBean.flugauswaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
 
-                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                            </h:panelGrid>
 
-                            <h3>Sie wollen wirklich selbst anreisen?</h3>
+                        </p:tab>  
 
-                        </h:panelGrid>
+                        <p:tab id="tab2" title="Selbstanreise"> 
 
-                        <p:commandButton value="Auswählen" onclick="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
-                        
-                    </p:tab> 
+                            <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 
-                </p:tabView>
+                                <h3>Sie wollen wirklich selbst anreisen?</h3>
 
-            </p:panel>
+                            </h:panelGrid>
 
-                </p:tab>
+                            <p:commandButton value="Auswählen" actionListener="#{ResponseBean.selbstanreisewaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
 
-                <p:tab id="wiz3" title="Anreisedokumente" >
+                        </p:tab> 
 
-                    <h3>Noch keine Anreisedokumente verfügbar</h3>
-                    
-                </p:tab>
+                    </p:tabView>
 
-            </p:wizard>
+                </p:panel>
 
-        </h:form>
+            </p:tab>
+
+            <p:tab id="wiz3" title="Eventdokumente/ Flugticket" >
+
+                <p:panel header="Eventdokumente">
+                    <h6>Noch keine Eventdokumente verfügbar.</h6>
+                </p:panel>
+
+                <p:panel header="Flugticket">
+                    <h6>Noch kein Flugticket verfügbar.</h6>
+                </p:panel>
+
+            </p:tab>
+
+        </p:wizard>
+
     </h:body>
 </html>
