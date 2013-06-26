@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-
+#{login.checkJournalistSession()}
     <h:head>
         <title><ui:insert name="title">BMW Eventmanagement</ui:insert></title>
         <h:outputStylesheet library="css" name="pfcrud.css"/>
@@ -18,10 +18,10 @@
 
         <p:layout fullPage="true">
             <p:layoutUnit position="north" size="200px" header="BMW Event Management">
-                <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
-
-                <!-- Menu here. Also a layout and a way to log a user out -->
-                
+            		<div id="logo_container">
+				
+					<img src="#{request.contextPath}/resources/img/header.jpg" style="height: 100px; position: fixed; right: 0;"/>
+</div>
             </p:layoutUnit>
 
 

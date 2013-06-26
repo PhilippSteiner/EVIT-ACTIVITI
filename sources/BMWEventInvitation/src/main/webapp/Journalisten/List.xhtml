@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <h:form id="BmwUserListForm">
-
+<p:growl id="growl" showDetail="true"/>
         <p:panel header="Journalisten">
 
             <p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
@@ -46,6 +46,9 @@
                         <h:outputText value="Rating"/>
                     </f:facet>
                     <h:outputText value="#{item.rating}"/>
+                </p:column>
+				 <p:column style="width:4%">
+                     <p:commandButton id="welcome" value="Login as Journalist" action="#{login.loginAsJournalist(item.uid)}" update=":growl" style="margin-top: 20px"></p:commandButton>
                 </p:column>
                
                 <f:facet name="footer">
