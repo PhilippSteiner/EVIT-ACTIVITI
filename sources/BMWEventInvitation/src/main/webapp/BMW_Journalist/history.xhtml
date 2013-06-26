@@ -7,86 +7,6 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 
-
-    <h:head>
-        <f:facet name="first">
-            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-            <title>PrimeFaces</title>
-        </f:facet>
-    </h:head>
-
-    <h:body>
-        <img src="#{request.contextPath}/resources/img/header.jpg" style="width: 100%; height: 100px;"/>
-        <h:form id="form">
-            <p:tabMenu activeIndex="2">
-                <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
-                <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
-                <p:menuitem value="Email Verlauf" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
-            </p:tabMenu>
-
-
-            <p:panel header="E-Mail Verlauf">
-
-
-                <p:dataTable id="emails" value="#{journalistEmailBean.userEmails}" var="item"
-                             selectionMode="single" selection="#{journalistEmailBean.selectedEmails}"
-                             rowKey="#{item.id}"
-                             paginator="true"
-                             rows="10"
-                             rowsPerPageTemplate="10,20,30"
-                             emptyMessage="Keine Emails gefunden."
-                             >
-
-                    <p:ajax event="rowSelect" 
-                            update=":form:display" oncomplete="carDialog.show()" />  
-                    <p:ajax event="rowUnselect" />  
-                    <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
-                        <f:facet name="header">
-                            <h:outputText value="Absender"/>
-                        </f:facet>
-                        <h:outputText value="#{item.emailFrom}"/>
-                    </p:column>
-
-                    <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
-                        <f:facet name="header">
-                            <h:outputText value="Betreff"/>
-                        </f:facet>
-                        <h:outputText value="#{item.emailSubject}"/>
-                    </p:column>
-
-                    <p:column sortBy="#{item.datetimeRecieved}" filterBy="#{item.datetimeRecieved}">
-                        <f:facet name="header">
-                            <h:outputText value="Datum"/>
-                        </f:facet>
-                        <h:outputText value="#{item.datetimeRecieved}"/>
-                    </p:column>
-
-                </p:dataTable>
-
-
-                <p:dialog id="dialog" header="#{journalistEmailBean.selectedEmails.emailSubject}" widgetVar="carDialog" resizable="false"  
-                          showEffect="fade" hideEffect="explode">  
-
-                    <h:panelGrid id="display" columns="2" cellpadding="4">  
-
-                        <h:outputText value="Von:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailFrom}" />
-                        <h:outputText value="An:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailTo}" />  
-                        <h:outputText value="Betreff:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailSubject}" />
-                        <h:outputText value="Inhalt:" />  
-                        <h:outputText value="#{journalistEmailBean.selectedEmails.emailContent}" />
-
-
-                    </h:panelGrid>  
-                </p:dialog>  
-
-            </p:panel>
-        </h:form>
-
-    </h:body>
-
     <ui:composition template="/templatejournalist.xhtml">
         <ui:define name="title">
             <h:outputText value="#{bundle.AppName}"></h:outputText>
@@ -96,13 +16,14 @@
                 <p:tabMenu activeIndex="2">
                     <p:menuitem value="Kommende Events" url="/faces/BMW_Journalist/journalistmenue.xhtml"></p:menuitem>
                     <p:menuitem value="Vergangene Events" url="/faces/BMW_Journalist/pastevents.xhtml"></p:menuitem>
-                    <p:menuitem value="Email History" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
+                    <p:menuitem value="Email Verlauf" url="/faces/BMW_Journalist/history.xhtml"></p:menuitem>
                     <p:menuitem value="Einstellungen" url="/faces/BMW_Journalist/einstellungen.xhtml"></p:menuitem>
+
                 </p:tabMenu>
             </h:form>
 
             <h:form id="form">
-                <p:panel header="Emails">
+                <p:panel header="Email Verlauf">
 
 
                     <p:dataTable id="emails" value="#{journalistEmailBean.userEmails}" var="item"
@@ -119,23 +40,23 @@
                         <p:ajax event="rowUnselect" />  
                         <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
+                                <h:outputText value="Absender"/>
                             </f:facet>
                             <h:outputText value="#{item.emailFrom}"/>
                         </p:column>
 
                         <p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
+                                <h:outputText value="Betreff"/>
                             </f:facet>
-                            <h:outputText value="#{item.emailTo}"/>
+                            <h:outputText value="#{item.emailSubject}"/>
                         </p:column>
 
                         <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
                             <f:facet name="header">
-                                <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
+                                <h:outputText value="Datum"/>
                             </f:facet>
-                            <h:outputText value="#{item.emailSubject}"/>
+                            <h:outputText value="#{item.datetimeRecieved}"/>
                         </p:column>
 
                     </p:dataTable>

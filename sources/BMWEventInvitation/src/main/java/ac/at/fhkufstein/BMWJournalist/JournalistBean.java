@@ -19,6 +19,7 @@ import ac.at.fhkufstein.session.BmwEventFacade;
 import ac.at.fhkufstein.session.BmwFlightFacade;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -83,10 +84,8 @@ public class JournalistBean {
     }
 
     public List<BmwEvent> getJournalistEvents() {
-        
-        this.defineMyEvents();
-        
-        return journalistEvents;
+             
+        return this.PreEvents();
     }
 
     public void setJournalistEvents(List<BmwEvent> journalistEvents) {
@@ -178,7 +177,7 @@ public class JournalistBean {
 
     }
 
-    public void einladungBeantworten() {
+   /* public void einladungBeantworten() {
 
         System.out.println("Einladung beant mit: " + this.auswahl);
 
@@ -194,7 +193,7 @@ public class JournalistBean {
         System.out.println("++++++++++++++++++++++++++flugwählen mit flug: " + this.flugauswahl);
 
 
-    }
+    }*/
     
         
         public void stateChangeListener(ValueChangeEvent event) {
@@ -203,28 +202,32 @@ public class JournalistBean {
     
     }
 
-    public void defineMyEvents(){
+    public List<BmwEvent> PreEvents(){
+        
+        this.journalistEvents = new ArrayList<BmwEvent>();
+        
+        if(!(this.journalistEvents.isEmpty())) {
+        
+            this.journalistEvents.clear();
+            
+        }
     
         doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
         
-        this.UserID = currentlogin.getUid();
-        
-        System.out.println("User ID: "+this.UserID);
+        System.out.println("User ID: "+currentlogin.getUid());
         
         //1317
 
-        cev = bmwUserController.getFacade().find(UserID);
-
-        try {
+        BmwUser cev = bmwUserController.getFacade().find(currentlogin.getUid());
 
             EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
-            JournalistParticipants = em.createNamedQuery("BmwParticipants.findByUserId")
+            List <BmwParticipants> JournalistParticipants = em.createNamedQuery("BmwParticipants.findByUserId")
                     .setParameter("userId", cev)
                     .getResultList();
             
             System.out.println("Constructor: User Participants Anzahl: " + JournalistParticipants.size());
-
-            this.journalistEvents = new ArrayList<BmwEvent>();
+            
+            Date d = new Date(System.currentTimeMillis());
             
             for(int k = 0; k < JournalistParticipants.size() ; k++){
                 
@@ -232,35 +235,17 @@ public class JournalistBean {
                 
                 System.out.println("Constructor: State of Participant : " + JournalistParticipants.get(k).getPState());
                 
-                if(!((JournalistParticipants.get(k).getPState().toString().equals("abgesagt"))
-                     || (JournalistParticipants.get(k).getPState().toString().equals("vertretung")))){
+                if(currentBMWEvent.getEndEventdate().compareTo(d)>0){
                 
-                    System.out.println("Constructor: Add Event : " + currentBMWEvent.getName());
+                    System.out.println("Event in der Vergangenheit: Add Event : " + currentBMWEvent.getName());
                     
                     this.journalistEvents.add(currentBMWEvent);
+                    
                 }
                
-                
             }
-            
-            /*Iterator<BmwParticipants> it = JournalistParticipants.iterator();
-
-            this.journalistEvents = new ArrayList<BmwEvent>();
-
-            while (it.hasNext()) {
-
-                BmwEvent currentBMWEvent = it.next().getEventId();
-
-                System.out.println("Constructor: JournalistenEvent : " + currentBMWEvent.getName());
-
-                this.journalistEvents.add(currentBMWEvent);
-
-            }*/
-
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-    
+        
+        return this.journalistEvents;
+        
     }
-
 }

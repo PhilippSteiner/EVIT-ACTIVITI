@@ -50,7 +50,7 @@ import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
 
 @ManagedBean(name = "ResponseBean")
-@ViewScoped
+@SessionScoped
 public class ResponseBean implements Serializable {
 
     //private static final long serialVersionUID = -1776353555799643520L;
@@ -74,6 +74,10 @@ public class ResponseBean implements Serializable {
     private BmwTravelController bmwTravelController;
     private BmwParticipantsController bmwParticipantsController;
     private String kommentar;
+    
+    private String noresponsemessage;
+    
+    private String responseview;
 
     public ResponseBean() {
 
@@ -109,26 +113,46 @@ public class ResponseBean implements Serializable {
 
         String prestatus = currentPartipantsStati.getPState();
 
-        System.out.println("state is null, now: " + prestatus);
+        System.out.println("Check state in Constructor: " + prestatus);
 
         if (prestatus.equals("eingeladen")) {
 
             this.step = "wiz1";
+            
+            this.responseview = "response";
         }
 
         if (prestatus.equals("zugesagt")) {
 
             this.step = "wiz2";
+            
+            this.responseview = "response";
         }
 
         if (prestatus.equals("selbstanreise")) {
 
             this.step = "wiz3";
+            
+            this.responseview = "response";
         }
 
         if (prestatus.equals("flugausgewaehlt")) {
 
             this.step = "wiz3";
+            
+            this.responseview = "response";
+        }
+
+        if (prestatus.equals("vertreten")) {
+
+            this.noresponsemessage = "  Sie haben eine Vertretung für diesen Event angegeben";
+            this.responseview = "noresponse";
+        }
+
+        if (prestatus.equals("abgesagt")) {
+
+            this.noresponsemessage = "  Sie haben für diesen Event abgesagt";
+            this.responseview = "noresponse";
         }
     }
 
@@ -189,14 +213,23 @@ public class ResponseBean implements Serializable {
     }
 
     public void setVorname(String vorname) {
+
+        System.out.println("Vorname changed to: " + vorname);
+
         this.vorname = vorname;
     }
 
     public void setNachname(String nachname) {
+
+        System.out.println("Nachname changed to: " + nachname);
+
         this.nachname = nachname;
     }
 
     public void setEmail(String email) {
+
+        System.out.println("Email changed to: " + email);
+
         this.email = email;
     }
 
@@ -251,6 +284,24 @@ public class ResponseBean implements Serializable {
     public void setKommentar(String kommentar) {
         this.kommentar = kommentar;
     }
+
+    public String getNoresponsemessage() {
+        return noresponsemessage;
+    }
+
+    public void setNoresponsemessage(String noresponsemessage) {
+        this.noresponsemessage = noresponsemessage;
+    }
+
+    public String getResponseview() {
+        return responseview;
+    }
+
+    public void setResponseview(String responseview) {
+        this.responseview = responseview;
+    }
+    
+    
 
     //////*********************************************
     public void stateChangeListener(ValueChangeEvent event) {
@@ -361,10 +412,10 @@ public class ResponseBean implements Serializable {
 
         System.out.println("Flug ausgewaehlt: " + this.getFlugauswahl());
 
-        if (this.getFlugauswahl().equals("Noch keine Flüge verfügbar")) {
+        if (this.getFlugauswahl() == null || this.getFlugauswahl().equals("Noch keine Flüge verfügbar"))   {
 
-        System.out.println("Keine Fluege, nix ausgewählt");    
-        
+            System.out.println("Keine Fluege, nix ausgewählt");
+
         } else {
 
             JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
@@ -495,7 +546,7 @@ public class ResponseBean implements Serializable {
 
     public void selbstanreisewaehlen() {
 
-        //BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+        this.step = "wiz3";
 
         JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
@@ -510,9 +561,6 @@ public class ResponseBean implements Serializable {
                 .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
                 .getSingleResult();
 
-        //BmwParticipants zusagenParticipant = (BmwParticipants) currentPartipantsStati.get(0);
-
-        System.out.print("Abgesagt *****************************************************************");
         System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
         System.out.print("Status:" + currentPartipantsStati.getPState());
 
@@ -525,15 +573,17 @@ public class ResponseBean implements Serializable {
 
         System.out.println("Selbstanreise");
 
-        this.step = "wiz3";
-
     }
 
     public String vertretungAngeben() {
 
-        //String vertretungsString = " Daten für Vertetung: Vorname: " + this.getVorname() + " Nachname: " + this.getNachname() + " Email: " + this.getEmail();
+        this.eventdetailview = "eventoutcome";
+        this.outcomemessage = "Sie haben als Vertretungswunsch" + this.getKommentar() + "angegeben.";
 
-        String vertretungsString = "Wolfgang Tevez fish@mail.com";
+
+        String vertretungsString = this.getKommentar();
+
+        //String vertretungsString = "Wolfgang Tevez fish@mail.com";
 
         System.out.println(vertretungsString);
 
@@ -568,10 +618,6 @@ public class ResponseBean implements Serializable {
 
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
         System.out.print("Comment saved to: " + currentPartipantsStati.getRepComment());
-
-        this.outcomemessage = "Sie haben als Vertretungswunsch" + this.getVorname() + " " + this.getNachname() + ", " + this.getEmail() + "angegeben.";
-
-        this.eventdetailview = "eventoutcome";
 
         return "eventoutcome";
 
