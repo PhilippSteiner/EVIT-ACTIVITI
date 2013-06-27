@@ -17,7 +17,7 @@ import org.antlr.stringtemplate.StringTemplate;
  */
 public class NotificationService {
 
-    
+
     //Methoden zum Versenden von Eventspezifischen Templates
     public static void parseTemplate(List<BmwUser> b, EmailTemplates e) {
 
@@ -33,7 +33,7 @@ public class NotificationService {
         }
     }
 
-    public static void inside(BmwUser u, EmailTemplates e) {
+    public static void inside(BmwUser u, EmailTemplateable e) {
 
         StringTemplate template = new StringTemplate(e.getEmailContent());
         template.setAttribute("email", u.getPersonenID().getEMail1());
@@ -47,10 +47,10 @@ public class NotificationService {
 
         MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
     }
-    
+
 
     //Methoden zum Versenden von Login/Reset/ForgotPassword Templates
-    public static void parseTemplate(BmwUser[] b, BmwEmailTemplates e) {
+    public static void parseTemplate(BmwUser[] b, EmailTemplateable e) {
 
         for (BmwUser u : b) {
 
@@ -58,7 +58,7 @@ public class NotificationService {
         }
     }
 
-    public static void parseTemplate(List<BmwUser> b, BmwEmailTemplates e) {
+    public static void parseTemplate(List<BmwUser> b, EmailTemplateable e) {
 
         for (BmwUser u : b) {
 
@@ -66,12 +66,12 @@ public class NotificationService {
         }
     }
 
-    public static void parseTemplate(BmwUser u, BmwEmailTemplates e) {
+    public static void parseTemplate(BmwUser u, EmailTemplateable e) {
 
         insideT(u, e);
     }
 
-    public static void insideT(BmwUser u, BmwEmailTemplates e) {
+    public static void insideT(BmwUser u, EmailTemplateable e) {
         StringTemplate template = new StringTemplate(e.getEmailContent());
         template.setAttribute("email", u.getPersonenID().getEMail1());
         template.setAttribute("password", u.getPwd());
@@ -82,6 +82,30 @@ public class NotificationService {
         String mailcontent = template.toString();
 
         MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+
+    }
+
+public static void parseTemplateNonJournalist(BmwUser u, EmailTemplateable e) {
+
+        StringTemplate template = new StringTemplate(e.getEmailContent());
+            template.setAttribute("email", u.getEmail());
+            template.setAttribute("password", u.getPwd());
+            template.setAttribute("username", u.getUsername());
+            template.setAttribute("vorname", u.getFirstName());
+            template.setAttribute("nachname", u.getLastName());
+            String mailcontent = template.toString();
+
+            MailService.sendMail(u.getEmail(), e.getSubject(), mailcontent, e.getType());
+
+    }
+
+    public static void parseTemplateByMailAddress(String mailAddress, EmailTemplateable e) {
+
+        StringTemplate template = new StringTemplate(e.getEmailContent());
+            template.setAttribute("email", mailAddress);
+            String mailcontent = template.toString();
+
+            MailService.sendMail(mailAddress, e.getSubject(), mailcontent, e.getType());
 
     }
 }
