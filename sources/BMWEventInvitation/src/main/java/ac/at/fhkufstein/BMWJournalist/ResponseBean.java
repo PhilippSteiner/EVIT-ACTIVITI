@@ -23,6 +23,7 @@ import ac.at.fhkufstein.bean.BmwFlightController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwTravelController;
 import ac.at.fhkufstein.bean.BmwUserController;
+import ac.at.fhkufstein.bean.process.ProcessJournalist;
 import ac.at.fhkufstein.entity.BmwFlight;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwTravel;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -74,10 +76,9 @@ public class ResponseBean implements Serializable {
     private BmwTravelController bmwTravelController;
     private BmwParticipantsController bmwParticipantsController;
     private String kommentar;
-    
     private String noresponsemessage;
-    
     private String responseview;
+    private FacesContext context;
 
     public ResponseBean() {
 
@@ -88,6 +89,8 @@ public class ResponseBean implements Serializable {
 
         auswahlmoeglichkeiten = new ArrayList<SelectItem>();
         verfuegbareFluege = new ArrayList<SelectItem>();
+
+        this.context = FacesContext.getCurrentInstance();
 
         this.auswahl = "nix";
 
@@ -118,28 +121,28 @@ public class ResponseBean implements Serializable {
         if (prestatus.equals("eingeladen")) {
 
             this.step = "wiz1";
-            
+
             this.responseview = "response";
         }
 
         if (prestatus.equals("zugesagt")) {
 
             this.step = "wiz2";
-            
+
             this.responseview = "response";
         }
 
         if (prestatus.equals("selbstanreise")) {
 
             this.step = "wiz3";
-            
+
             this.responseview = "response";
         }
 
         if (prestatus.equals("flugausgewaehlt")) {
 
             this.step = "wiz3";
-            
+
             this.responseview = "response";
         }
 
@@ -300,8 +303,6 @@ public class ResponseBean implements Serializable {
     public void setResponseview(String responseview) {
         this.responseview = responseview;
     }
-    
-    
 
     //////*********************************************
     public void stateChangeListener(ValueChangeEvent event) {
@@ -364,6 +365,12 @@ public class ResponseBean implements Serializable {
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
+
+        // Prozess weiterführen
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, true, false);
+
+            context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Zugesagt"));
+
             return "do nothing";
 
         } else if (auswahl.equals("Absagen")) {
@@ -396,11 +403,17 @@ public class ResponseBean implements Serializable {
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
+            // Prozess weiterführen
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, false, false);
+
             this.outcomemessage = "Viele Dank für Ihre Antwort";
 
             this.eventdetailview = "eventoutcome";
 
+            context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Abgesagt"));
+
             return "eventoutcome";
+
 
         } else {
 
@@ -412,7 +425,7 @@ public class ResponseBean implements Serializable {
 
         System.out.println("Flug ausgewaehlt: " + this.getFlugauswahl());
 
-        if (this.getFlugauswahl() == null || this.getFlugauswahl().equals("Noch keine Flüge verfügbar"))   {
+        if (this.getFlugauswahl() == null || this.getFlugauswahl().equals("Noch keine Flüge verfügbar")) {
 
             System.out.println("Keine Fluege, nix ausgewählt");
 
@@ -481,7 +494,6 @@ public class ResponseBean implements Serializable {
 
                 BmwTravel mytravel = new BmwTravel();
                 mytravel.setFlightId(myflight);
-                mytravel.setPdfTicketUrl("no url");
                 mytravel.setComment(this.getKommentar());
                 mytravel.setType("typeFlug");
                 mytravel.setArrivalDatetime(myflight.getArrivalTime());
@@ -533,8 +545,14 @@ public class ResponseBean implements Serializable {
 
                 this.bmwParticipantsController.setSelected(toChangeParticipant);
 
+
                 toChangeParticipant.setTravelId(myTravelfromDB);
                 this.bmwParticipantsController.save(null);
+
+
+            // Prozess weiterführen
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(toChangeParticipant, true, true);
+
 
                 this.step = "wiz3";
 
@@ -572,6 +590,13 @@ public class ResponseBean implements Serializable {
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
         System.out.println("Selbstanreise");
+
+        // Prozess weiterführen
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentPartipantsStati, false, false);
+
+        this.step = "wiz3";
+
+        context.addMessage(null, new FacesMessage("Selbstanreise", "Selbstanreise ausgewählt."));
 
     }
 
@@ -616,8 +641,16 @@ public class ResponseBean implements Serializable {
         currentPartipantsStati.setRepComment(vertretungsString);
         this.bmwParticipantsController.save(null);
 
+
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
         System.out.print("Comment saved to: " + currentPartipantsStati.getRepComment());
+
+        // Prozess weiterführen
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, false, true);
+
+        this.outcomemessage = "Sie haben als Vertretungswunsch" + this.getVorname() + " " + this.getNachname() + ", " + this.getEmail() + "angegeben.";
+
+        this.eventdetailview = "eventoutcome";
 
         return "eventoutcome";
 
@@ -658,5 +691,31 @@ public class ResponseBean implements Serializable {
         }
 
         return returnFluege;
+    }
+
+    public String getTicketPath() {
+
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+        EntityManager em = ((BmwParticipantsFacade) this.bmwParticipantsController.getFacade()).getEntityManager();
+
+
+        BmwParticipants currentPartipant = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
+
+        if (currentPartipant.getTravelId().getPdfTicketUrl() == null) {
+
+            return "Noch kein Ticket verfügbar";
+
+        } else {
+
+            return currentPartipant.getTravelId().getPdfTicketUrl().toString();
+
+        }
     }
 }

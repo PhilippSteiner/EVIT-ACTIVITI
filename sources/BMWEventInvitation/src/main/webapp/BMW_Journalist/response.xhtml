@@ -10,6 +10,8 @@
     </h:head>
     <h:body>
 
+
+
         <p:wizard id="mywizard" widgetVar="wiz"
                   flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
 
@@ -76,19 +78,49 @@
 
             </p:tab>
 
-            <p:tab id="wiz3" title="Eventdokumente/ Flugticket" >
-
-                <p:panel header="Eventdokumente">
-                    <h6>Noch keine Eventdokumente verfügbar.</h6>
-                </p:panel>
+            <p:tab id="wiz3" title="Flugticket" >
 
                 <p:panel header="Flugticket">
-                    <h6>Noch kein Flugticket verfügbar.</h6>
+                    <h:form>  
+                        <p:dataTable var="File" value="#{JournalistFiles.ticketFolder}">  
+                            <p:column headerText="Files">  
+                                <h:outputText value="#{File.name}" />
+                            </p:column>  
+                            <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
+                                                                             icon="ui-icon-arrowthichk-s">  
+                                    <p:fileDownload value="#{JournalistFiles.currentTicketFile(File.name)}" /> 
+                                </p:commandButton>  
+
+                            </p:column>
+
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:outputScript library="js" name="common.js" target="body" />
                 </p:panel>
 
             </p:tab>
 
         </p:wizard>
+
+        <p:panel header="Eventdokumente">
+
+            <h:form>  
+                <p:dataTable var="File" value="#{JournalistFiles.getEventFolder()}">  
+                    <p:column headerText="Files">  
+                        <h:outputText value="#{File.name}" />
+                    </p:column>  
+                    <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
+                                                                     icon="ui-icon-arrowthichk-s">  
+                            <p:fileDownload value="#{JournalistFiles.getCurrentEventFile(File.name)}" />  
+                        </p:commandButton>  
+
+                    </p:column>
+
+                </p:dataTable>  
+            </h:form> 
+            <h:outputScript library="js" name="common.js" target="body" />
+
+        </p:panel>
 
     </h:body>
 </html>

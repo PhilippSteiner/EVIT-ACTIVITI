@@ -32,17 +32,45 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_location}" for="location" />
                         <p:inputText id="location" value="#{bmwEventController.selected.location}" title="#{bundle.CreateBmwEventTitle_location}" />
 
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_urgencyDayLimit}" for="urgencyDayLimit" />
-                        <p:inputText id="urgencyDayLimit" value="#{bmwEventController.selected.urgencyDayLimit}" title="#{bundle.CreateBmwEventTitle_urgencyDayLimit}" />
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_sendReminder}" for="sendReminder" />
+                        <p:inputText id="sendReminder" value="#{bmwEventController.selected.sendReminder}"  required="true" title="#{bundle.CreateBmwEventTitle_sendReminder}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_cancelInvitation}" for="cancelInvitation" />
+                        <p:inputText id="cancelInvitation" value="#{bmwEventController.selected.cancelInvitation}"  required="true" title="#{bundle.CreateBmwEventTitle_cancelInvitation}" />
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_sendFollowup}" for="sendFollowup" />
-                        <p:inputText id="sendFollowup" value="#{bmwEventController.selected.sendFollowup}" title="#{bundle.CreateBmwEventTitle_sendFollowup}" />
+                        <p:inputText id="sendFollowup" value="#{bmwEventController.selected.sendFollowup}"  required="true" title="#{bundle.CreateBmwEventTitle_sendFollowup}" />
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_bmwParticipants}" for="bmwParticipants" />
                         <p:inputText id="bmwParticipants" value="#{bmwEventController.selected.bmwParticipants}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
 
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
+
+                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_closeInvitation}" for="closeInvitation" />
+                        <p:calendar id="closeInvitation" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.closeInvitation}" title="#{bundle.EditBmwEventTitle_closeInvitation}" required="true" showOn="button"/>
+
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_travelAgency}" for="travelAgency" />
+                        <p:selectOneMenu id="travelAgency" value="#{bmwEventController.selected.travelAgency}" required="true" requiredMessage="#{bundle.EditBmwTravelRequiredMessage_travelAgency}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{bmwTravelagencyController.items}"
+                                           var="userItem"
+                                           itemValue="#{userItem}"
+                                           itemLabel="#{userItem.companyName}"
+                                           />
+                            <f:converter binding="#{bmwUserConverter}"/>
+                        </p:selectOneMenu>
+
                         <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+						<p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
+						<p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
+							<p:ajax event="change" update=":BmwEventCreateForm" />
+						</p:selectBooleanCheckbox>
+
+						 <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" rendered="#{bmwEventController.selected.embargo}"/>
+                      	<p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.CreateBmwEventTitle_embargoDate}" rendered="#{bmwEventController.selected.embargo}" showOn="button"/>
 
 
                     </p:panelGrid>

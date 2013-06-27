@@ -34,6 +34,7 @@ public class InvitationProcess {
     final static public String ACTIVITI_TAKES_FLIGHT = "takesFlight";
     final static public String ACTIVITI_TAKES_PREDEFINED_FLIGHT = "takesPredefinedFlight";
     final static public String ACTIVITI_SIGNAL_VARIABLES_DEFINED = "variablesDefined";
+    final static public String ACTIVITI_INVITATION_STARTED = "invitationStarted";
     final static public String DATABASE_NEXT_PARTICIPANTID = "nextParticipantId";
     final static public String[] PROCESSES = {"InvitationProcess", "Journalist_Invitation_Response"};
     final static public String PROCESS_FILE_LOCATION = "diagrams/";
@@ -50,6 +51,7 @@ public class InvitationProcess {
         if (processHolder.getProcessId() != null) {
             setProcessInstance(
                     Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
+            System.out.println(processHolder.getProcessId().toString());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
         } else {
@@ -61,9 +63,12 @@ public class InvitationProcess {
 
         setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
 
+
+        processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
+
         // nur bei Hauptprozess
         if (processDefinition.equals(PROCESSES[0])) {
-            processHolder.setProcessId(Integer.valueOf(getProcessInstance().getId()));
+            setVariable(ACTIVITI_INVITATION_STARTED, false);
             PersistenceService.save(BmwEventController.class, processHolder);
         }
 
@@ -84,7 +89,8 @@ public class InvitationProcess {
         Services.getRuntimeService().setVariable(getProcessInstance().getId(), name, value);
     }
 
-    public void getVariable(String name) {
+    public Object getVariable(String name) {
+        return Services.getRuntimeService().getVariable(getProcessInstance().getId(), name);
     }
 
     public String getStartFormKey() {
@@ -173,20 +179,35 @@ public class InvitationProcess {
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
 
+        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, new Date());
+        process.setVariable(ACTIVITI_INVITATION_SENT, false);
+
         participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));
         PersistenceService.save(BmwParticipantsController.class, participant);
 
-        signalEvent(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED);
+        if(!signalEvent(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED)) {
+
+            Services.getRuntimeService().signal(process.getProcessInstance().getId());
+
+        }
+
+        System.out.println("Start Single Process");
 
         return process;
     }
 
-    public static void signalEvent(ProcessInstance processInstance, String reference) {
-        for (Execution exec : Services.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getProcessInstanceId()).signalEventSubscriptionName(reference).list()) {
-            Services.getRuntimeService().signalEventReceived(reference, exec.getId());
-            System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
+    public static boolean signalEvent(ProcessInstance processInstance, String reference) {
+        System.out.println("searching signal event subscription " + reference);
+        boolean found = false;
+        for (Execution exec : Services.getRuntimeService().createExecutionQuery().signalEventSubscriptionName(reference).list()) {
+            if (exec.getProcessInstanceId().equals(processInstance.getProcessInstanceId())) {
+                Services.getRuntimeService().signalEventReceived(reference, exec.getId());
+                System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
+                found = true;
+            }
         }
 
+        return found;
     }
 
     public static long getDueTime(BmwEvent event, BmwParticipants participant, int days) throws Exception {
@@ -196,7 +217,7 @@ public class InvitationProcess {
             dueTime = event.getCloseInvitation().getTime();
         }
 
-        if (dueTime >= new Date().getTime()) {
+        if (dueTime <= new Date().getTime()) {
             throw new Exception("Zeitpunkt bereits vorüber.");
         }
 
