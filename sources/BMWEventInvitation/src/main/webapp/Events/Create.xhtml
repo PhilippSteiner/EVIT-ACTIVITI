@@ -44,10 +44,6 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_bmwParticipants}" for="bmwParticipants" />
                         <p:inputText id="bmwParticipants" value="#{bmwEventController.selected.bmwParticipants}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
 
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
-
-                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
-
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_closeInvitation}" for="closeInvitation" />
                         <p:calendar id="closeInvitation" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.closeInvitation}" title="#{bundle.EditBmwEventTitle_closeInvitation}" required="true" showOn="button"/>
 
@@ -62,7 +58,11 @@
                                            />
                             <f:converter binding="#{bmwUserConverter}"/>
                         </p:selectOneMenu>
-
+<!--
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
+                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+-->
+                        
                         <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
 						<p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
 						<p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
