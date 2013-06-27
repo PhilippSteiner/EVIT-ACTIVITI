@@ -81,7 +81,21 @@
             <p:tab id="wiz3" title="Flugticket" >
 
                 <p:panel header="Flugticket">
-                    <h3>#{ResponseBean.ticketPath}</h3>
+                    <h:form>  
+                        <p:dataTable var="File" value="#{JournalistFiles.ticketFolder}">  
+                            <p:column headerText="Files">  
+                                <h:outputText value="#{File.name}" />
+                            </p:column>  
+                            <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
+                                                                             icon="ui-icon-arrowthichk-s">  
+                                    <p:fileDownload value="#{JournalistFiles.currentTicketFile(File.name)}" /> 
+                                </p:commandButton>  
+
+                            </p:column>
+
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:outputScript library="js" name="common.js" target="body" />
                 </p:panel>
 
             </p:tab>

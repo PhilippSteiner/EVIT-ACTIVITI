@@ -105,15 +105,19 @@ public class JournalistFiles {
 
     public List<File> getEventFolder() {
 
-        //System.setProperty("event_upl_path", "C:\\BMW_Folder");
-        //System.out.println("Property set to: "+System.getProperty("event_upl_path"));
+        System.setProperty("ticket_upl_path", "C:\\BMW_Ticket");
+        System.out.println("Property set to: " + System.getProperty("ticket_upl_path"));
 
         final File folder = new File(dir);
+
         return listFilesForFolder(folder);
     }
 
     public List<File> listFilesForFolder(final File folder) {
         List<File> files = new ArrayList<File>();
+        
+        try {
+        
         if (folder.listFiles().length > 0) {
             for (final File fileEntry : folder.listFiles()) {
                 if (fileEntry.isDirectory()) {
@@ -127,6 +131,12 @@ public class JournalistFiles {
             System.out.println("Keine Dateien Vorhanden");
         }
         return files;
+        
+        } catch (Exception e) {
+            System.out.println("File nicht gefunden");
+            return null;
+        }
+
     }
 
     public StreamedContent getCurrentEventFile(String name) {
@@ -146,4 +156,98 @@ public class JournalistFiles {
         }
     }
 
+    public StreamedContent getCurrentTicketFile(String name) {
+
+        BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+        EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+
+        System.out.println("Parameter Event: " + currentJournalistBean.getSelectedBmwEvent().getName());
+        System.out.println("Parameter UserID: " + PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()));
+
+        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
+
+
+        System.out.println("TICKET PATH: " + currentPartipantsStati.getTravelId().getPdfTicketUrl());
+
+        String path = currentPartipantsStati.getTravelId().getPdfTicketUrl();
+
+        try {
+
+            System.out.println("Opening File..." + name);
+
+            File f = new File(path + "/" + name);
+            System.out.println("Got File" + f.getName());
+            InputStream stream = new FileInputStream(path + "/" + name);
+
+            return new DefaultStreamedContent(stream, "application", f.getName());
+        } catch (Exception e) {
+            System.out.println("File nicht gefunden");
+            return null;
+        }
+    }
+
+    //+++++++++++++++++++++++++++++++++++++++++++
+    public List<File> getTicketFolder() {
+
+        try{
+        
+        BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+        EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+
+        System.out.println("Parameter Event: " + currentJournalistBean.getSelectedBmwEvent().getName());
+        System.out.println("Parameter UserID: " + PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()));
+
+        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
+
+
+        final File folder = new File(currentPartipantsStati.getTravelId().getPdfTicketUrl());
+
+        return listFilesForTicketFolder(folder);
+        
+        } catch (Exception e) {
+            System.out.println("File nicht gefunden");
+            return null;
+        }
+    }
+
+    public List<File> listFilesForTicketFolder(final File folder) {
+        List<File> files = new ArrayList<File>();
+
+        if (folder.exists()) {
+
+            if (folder.listFiles().length > 0) {
+                for (final File fileEntry : folder.listFiles()) {
+                    if (fileEntry.isDirectory()) {
+                        listFilesForFolder(fileEntry);
+                    } else {
+                        files.add(fileEntry);
+                        System.out.println(fileEntry.getName());
+                    }
+                }
+            } else {
+                System.out.println("Keine Ticket Vorhanden");
+            }
+            return files;
+
+        } else {
+
+            return null;
+        }
+    }
 }
