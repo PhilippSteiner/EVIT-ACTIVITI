@@ -23,9 +23,14 @@
 
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_type}" for="type" />
                          <p:selectOneMenu id="type" value="#{emailTemplatesController.selected.type}" title="#{bundle.EditEmailTemplatesTitle_type}">
-                            <f:selectItem itemLabel="Einladung" itemValue="Einladung"/>
-                            <f:selectItem itemLabel="Urgenz" itemValue="Urgenz"/>
-                            <f:selectItem itemLabel="Follo-up" itemValue="Follow-up"/>
+                            <f:selectItem itemLabel="Einladung" itemValue="invite"/>
+                            <f:selectItem itemLabel="Urgenz" itemValue="urgenz"/>
+                            <f:selectItem itemLabel="Follow-up" itemValue="followup"/>
+                            <f:selectItem itemLabel="Manuel" itemValue="manuel"/>
+                            <f:selectItem itemLabel="Spezialemail" itemValue="spezial"/>
+                            <f:selectItem itemLabel="Buchungsemail" itemValue="booking"/>
+                            <f:selectItem itemLabel="Ticket E-mail" itemValue="ticket"/>
+                            <f:selectItem itemLabel="Storno E-mail" itemValue="storno"/>
                         </p:selectOneMenu>
                         
                         <p:outputLabel value="#{bundle.EditEmailTemplatesLabel_emailContent}" for="emailContent" />

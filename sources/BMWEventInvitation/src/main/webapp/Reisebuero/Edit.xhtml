@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwUserEditDlg" widgetVar="BmwUserEditDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.EditBmwUserTitle}">
+
+            <h:form id="BmwUserEditForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid  columns="2" rendered="#{reisebuero.selected != null}">
+
+                        <h:outputLabel value="#{bundle.EditBmwUserLabel_uid}" for="uid" />
+                        <h:outputText id="uid" value="#{reisebuero.selected.uid}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_username}" for="username" />
+                        <p:inputText id="username" value="#{reisebuero.selected.username}" title="#{bundle.EditBmwUserTitle_username}" />
+                        
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_pwd}" for="pwd" />
+                        <p:inputText id="pwd" value="#{reisebuero.selected.pwd}" title="#{bundle.EditBmwUserTitle_pwd}" />
+
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_rating}" for="rating" />
+                        <p:inputText id="rating" value="#{reisebuero.selected.rating}" title="#{bundle.EditBmwUserTitle_rating}" />
+
+                   
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_seatingPriority}" for="seatingPriority" />
+                        <p:inputText id="seatingPriority" value="#{reisebuero.selected.seatingPriority}" title="#{bundle.EditBmwUserTitle_seatingPriority}" />
+
+                        
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{reisebuero.save}" value="#{bundle.Save}" update="display,:BmwUserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserEditDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwUserEditDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

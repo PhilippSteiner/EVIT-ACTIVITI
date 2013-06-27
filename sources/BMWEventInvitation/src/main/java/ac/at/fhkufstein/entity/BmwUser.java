@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BmwUser.findByEmail", query = "SELECT b FROM BmwUser b WHERE b.email = :email"),
     @NamedQuery(name = "BmwUser.findByUsername", query = "SELECT b FROM BmwUser b WHERE b.username = :username"),
     @NamedQuery(name = "BmwUser.findByRating", query = "SELECT b FROM BmwUser b WHERE b.rating = :rating"),
+    @NamedQuery(name = "BmwUser.findByRole", query = "SELECT b FROM BmwUser b WHERE b.role = :role"),
     @NamedQuery(name = "BmwUser.findBySeatingPriority", query = "SELECT b FROM BmwUser b WHERE b.seatingPriority = :seatingPriority")})
 public class BmwUser implements Serializable {
     @Column(name = "loginSent")
