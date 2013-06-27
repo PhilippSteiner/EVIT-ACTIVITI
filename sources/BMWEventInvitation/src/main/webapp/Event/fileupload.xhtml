@@ -31,19 +31,19 @@
         <h:form>  
             <p:dataTable var="File" value="#{fileupload.getEventFolder()}">  
                 <p:column headerText="Files">  
-                    <h:outputText value="#{File.name}" />  
+                    <h:outputText value="#{File.name}" />
                 </p:column>  
                 <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
                                                                  icon="ui-icon-arrowthichk-s">  
                         <p:fileDownload value="#{fileupload.getCurrentEventFile(File.name)}" />  
-                    </p:commandButton>  </p:column>
+                    </p:commandButton>  
 
+                </p:column>
 
             </p:dataTable>  
         </h:form> 
-       <h:outputScript library="js" name="common.js" target="body" />
-        
-            
+        <h:outputScript library="js" name="common.js" target="body" />
+
     </ui:define>
 
 

@@ -26,16 +26,31 @@
             <h:form id="formED">
 
                 <p:layout style="height: 600px;">
-                    <p:layoutUnit position="center" size="80%">
+                    
+                    <p:layoutUnit position="west" size="70%">
                         <h2>#{JournalistBean.selectedBmwEvent.name}</h2>
                         <h4>#{JournalistBean.von} - #{JournalistBean.bis} in #{JournalistBean.selectedBmwEvent.location}</h4>
                         <h6>#{JournalistBean.selectedBmwEvent.description}</h6>
                     </p:layoutUnit>
 
-                    <p:layoutUnit position="east" size="20%">
+                    <p:layoutUnit position="center" size="30%">
 
                         <p:panel header="Eventdokumente">
-                            <h6>Noch keine Eventdokumente verfügbar.</h6>
+                            <h:form>  
+                                <p:dataTable var="File" value="#{journalistFiles.getEventFolder()}" emptyMessage="Noch keine Dokumente verfügbar">  
+                                    <p:column headerText="Files">  
+                                        <h:outputText value="#{File.name}" />
+                                    </p:column>  
+                                    <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
+                                                                                     icon="ui-icon-arrowthichk-s">  
+                                            <p:fileDownload value="#{journalistFiles.getCurrentEventFile(File.name)}" />  
+                                        </p:commandButton>  
+
+                                    </p:column>
+
+                                </p:dataTable>  
+                            </h:form> 
+                            <h:outputScript library="js" name="common.js" target="body" />
                         </p:panel>
 
                     </p:layoutUnit>
