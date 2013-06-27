@@ -318,7 +318,7 @@ public class ResponseBean implements Serializable {
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
         // Prozess weiterführen
-        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentParticipant, true, false);
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, true, false);
 
             return "do nothing";
 
@@ -353,7 +353,7 @@ public class ResponseBean implements Serializable {
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
             // Prozess weiterführen
-            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentParticipant, false, false);
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, false, false);
 
             this.outcomemessage = "Viele Dank für Ihre Antwort";
 
@@ -493,9 +493,9 @@ public class ResponseBean implements Serializable {
             toChangeParticipant.setTravelId(myTravelfromDB);
             this.bmwParticipantsController.save(null);
 
-            
+
             // Prozess weiterführen
-            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentParticipant, true, true);
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(toChangeParticipant, true, true);
 
             this.step = "wiz3";
 
@@ -536,7 +536,7 @@ public class ResponseBean implements Serializable {
         System.out.println("Selbstanreise");
 
         // Prozess weiterführen
-        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentParticipant, false, false);
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentPartipantsStati, false, false);
 
         this.step = "wiz3";
 
@@ -584,7 +584,7 @@ public class ResponseBean implements Serializable {
         System.out.print("Comment saved to: " + currentPartipantsStati.getRepComment());
 
         // Prozess weiterführen
-        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentParticipant, false, true);
+        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, false, true);
 
         this.outcomemessage = "Sie haben als Vertretungswunsch" + this.getVorname() + " " + this.getNachname() + ", " + this.getEmail() + "angegeben.";
 

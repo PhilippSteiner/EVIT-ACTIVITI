@@ -51,6 +51,7 @@ public class InvitationProcess {
         if (processHolder.getProcessId() != null) {
             setProcessInstance(
                     Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
+            System.out.println(processHolder.getProcessId().toString());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
         } else {
@@ -63,7 +64,7 @@ public class InvitationProcess {
         setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
 
 
-        processHolder.setProcessId(Integer.valueOf(getProcessInstance().getId()));
+        processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
 
         // nur bei Hauptprozess
         if (processDefinition.equals(PROCESSES[0])) {
@@ -199,7 +200,7 @@ public class InvitationProcess {
         System.out.println("searching signal event subscription " + reference);
         boolean found = false;
         for (Execution exec : Services.getRuntimeService().createExecutionQuery().signalEventSubscriptionName(reference).list()) {
-            if (exec.getProcessInstanceId().equals(processInstance.getId()) || exec.getProcessInstanceId().equals(processInstance.getProcessInstanceId())) {
+            if (exec.getProcessInstanceId().equals(processInstance.getProcessInstanceId())) {
                 Services.getRuntimeService().signalEventReceived(reference, exec.getId());
                 System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
                 found = true;
