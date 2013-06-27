@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwUserCreateDlg" widgetVar="BmwUserCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateBmwUserTitle}">
+
+            <h:form id="BmwUserCreateForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{reisebuero.selected != null}">
+
+                
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_username}" for="username" />
+                        <p:inputText id="username" value="#{reisebuero.selected.username}" title="#{bundle.CreateBmwUserTitle_username}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_pwd}" for="pwd" />
+                        <p:inputText id="pwd" value="#{reisebuero.selected.pwd}" title="#{bundle.CreateBmwUserTitle_pwd}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_rating}" for="rating" />
+                        <p:inputText id="rating" value="#{reisebuero.selected.rating}" title="#{bundle.CreateBmwUserTitle_rating}" />
+
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_seatingPriority}" for="seatingPriority" />
+                        <p:inputText id="seatingPriority" value="#{reisebuero.selected.seatingPriority}" title="#{bundle.CreateBmwUserTitle_seatingPriority}" />
+
+                      
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{reisebuero.saveNew}" value="#{bundle.Save}" update="display,:BmwUserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwUserCreateDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
