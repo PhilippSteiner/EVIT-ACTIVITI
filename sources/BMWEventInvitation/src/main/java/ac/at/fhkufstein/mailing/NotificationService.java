@@ -12,100 +12,80 @@ import org.antlr.stringtemplate.StringTemplate;
 
 /**
  *
- * @author Philipp
- * Diese Klasse wird verwendet um StringTemplates zu parsen und anschließend zu versenden.
+ * @author Philipp Diese Klasse wird verwendet um StringTemplates zu parsen und
+ * anschließend zu versenden.
  */
 public class NotificationService {
+
+
+    //Methoden zum Versenden von Eventspezifischen Templates
+    public static void parseTemplate(List<BmwUser> b, EmailTemplates e) {
+
+        for (BmwUser u : b) {
+            inside(u, e);
+        }
+    }
+
+    public static void parseTemplate(BmwUser[] b, EmailTemplates e) {
+
+        for (BmwUser u : b) {
+            inside(u, e);
+        }
+    }
+
+    public static void inside(BmwUser u, EmailTemplateable e) {
+
+        StringTemplate template = new StringTemplate(e.getEmailContent());
+        template.setAttribute("email", u.getPersonenID().getEMail1());
+        template.setAttribute("password", u.getPwd());
+        template.setAttribute("username", u.getUsername());
+        template.setAttribute("vorname", u.getPersonenID().getVorname());
+        template.setAttribute("nachname", u.getPersonenID().getNachname());
+        template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
+        //System.out.println(template.toString());
+        String mailcontent = template.toString();
+
+        MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+    }
+
+
+    //Methoden zum Versenden von Login/Reset/ForgotPassword Templates
+    public static void parseTemplate(BmwUser[] b, EmailTemplateable e) {
+
+        for (BmwUser u : b) {
+
+            insideT(u, e);
+        }
+    }
 
     public static void parseTemplate(List<BmwUser> b, EmailTemplateable e) {
 
         for (BmwUser u : b) {
 
-            StringTemplate template = new StringTemplate(e.getEmailContent());
-            template.setAttribute("email", u.getPersonenID().getEMail1());
-            template.setAttribute("password", u.getPwd());
-            template.setAttribute("username", u.getUsername());
-            template.setAttribute("vorname", u.getPersonenID().getVorname());
-            template.setAttribute("nachname", u.getPersonenID().getNachname());
-            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
-            String mailcontent = template.toString();
-
-            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
-        }
-    }
-
-    public static void parseTemplate(BmwUser[] b, EmailTemplateable e) {
-
-        for (BmwUser u : b) {
-
-            StringTemplate template = new StringTemplate(e.getEmailContent());
-            template.setAttribute("email", u.getPersonenID().getEMail1());
-            template.setAttribute("password", u.getPwd());
-            template.setAttribute("username", u.getUsername());
-            template.setAttribute("vorname", u.getPersonenID().getVorname());
-            template.setAttribute("nachname", u.getPersonenID().getNachname());
-            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
-            //System.out.println(template.toString());
-            String mailcontent = template.toString();
-
-            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
-        }
-    }
-
-    public static void parseTemplate(BmwUser[] b, BmwEmailTemplates e) {
-
-        for (BmwUser u : b) {
-
-            StringTemplate template = new StringTemplate(e.getEmailContent());
-            template.setAttribute("email", u.getPersonenID().getEMail1());
-            template.setAttribute("password", u.getPwd());
-            template.setAttribute("username", u.getUsername());
-            template.setAttribute("vorname", u.getPersonenID().getVorname());
-            template.setAttribute("nachname", u.getPersonenID().getNachname());
-            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
-            //System.out.println(template.toString());
-            String mailcontent = template.toString();
-
-            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
-        }
-    }
-
-
-    public static void parseTemplate(List<BmwUser> b, BmwEmailTemplates e) {
-
-        for (BmwUser u : b) {
-
-            StringTemplate template = new StringTemplate(e.getEmailContent());
-            template.setAttribute("email", u.getPersonenID().getEMail1());
-            template.setAttribute("password", u.getPwd());
-            template.setAttribute("username", u.getUsername());
-            template.setAttribute("vorname", u.getPersonenID().getVorname());
-            template.setAttribute("nachname", u.getPersonenID().getNachname());
-            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
-            //System.out.println(template.toString());
-            String mailcontent = template.toString();
-
-            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+            insideT(u, e);
         }
     }
 
     public static void parseTemplate(BmwUser u, EmailTemplateable e) {
 
+        insideT(u, e);
+    }
 
-            StringTemplate template = new StringTemplate(e.getEmailContent());
-            template.setAttribute("email", u.getPersonenID().getEMail1());
-            template.setAttribute("password", u.getPwd());
-            template.setAttribute("username", u.getUsername());
-            template.setAttribute("vorname", u.getPersonenID().getVorname());
-            template.setAttribute("nachname", u.getPersonenID().getNachname());
-            template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
-            String mailcontent = template.toString();
+    public static void insideT(BmwUser u, EmailTemplateable e) {
+        StringTemplate template = new StringTemplate(e.getEmailContent());
+        template.setAttribute("email", u.getPersonenID().getEMail1());
+        template.setAttribute("password", u.getPwd());
+        template.setAttribute("username", u.getUsername());
+        template.setAttribute("vorname", u.getPersonenID().getVorname());
+        template.setAttribute("nachname", u.getPersonenID().getNachname());
+        template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
+        String mailcontent = template.toString();
 
-            MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+        MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
 
     }
 
-    public static void parseTemplateNonJournalist(BmwUser u, EmailTemplateable e) {
+public static void parseTemplateNonJournalist(BmwUser u, EmailTemplateable e) {
 
         StringTemplate template = new StringTemplate(e.getEmailContent());
             template.setAttribute("email", u.getEmail());
@@ -128,6 +108,4 @@ public class NotificationService {
             MailService.sendMail(mailAddress, e.getSubject(), mailcontent, e.getType());
 
     }
-
-
 }

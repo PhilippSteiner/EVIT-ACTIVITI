@@ -47,23 +47,30 @@ public class JournalistPastEventBean {
 
         bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
         
-        this.journalistPastEvents = new ArrayList<BmwEvent>();
+        
     }
 
     public List<BmwEvent> getJournalistPastEvents() {
-        
         return this.PastEvents();
     }
 
     public void setJournalistPastEvents(List<BmwEvent> journalistPastEvents) {
         this.journalistPastEvents = journalistPastEvents;
     }
+    
 
     
-    public List PastEvents(){
+    public List<BmwEvent> PastEvents(){
+        
+        this.journalistPastEvents = new ArrayList<BmwEvent>();
+        
+        if(!(this.journalistPastEvents.isEmpty())) {
+        
+            this.journalistPastEvents.clear();
+            
+        }
     
         doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
-        
         
         System.out.println("User ID: "+currentlogin.getUid());
         
@@ -78,7 +85,7 @@ public class JournalistPastEventBean {
             
             System.out.println("Constructor: User Participants Anzahl: " + JournalistParticipants.size());
             
-            Date now = new Date();
+            Date d = new Date(System.currentTimeMillis());
             
             for(int k = 0; k < JournalistParticipants.size() ; k++){
                 
@@ -86,17 +93,17 @@ public class JournalistPastEventBean {
                 
                 System.out.println("Constructor: State of Participant : " + JournalistParticipants.get(k).getPState());
                 
-                if(currentBMWEvent.getEndEventdate().compareTo(now)>0){
+                if(currentBMWEvent.getEndEventdate().compareTo(d)<0){
                 
                     System.out.println("Event in der Vergangenheit: Add Event : " + currentBMWEvent.getName());
                     
-                    journalistPastEvents.add(currentBMWEvent);
+                    this.journalistPastEvents.add(currentBMWEvent);
                     
                 }
                
             }
         
-        return journalistPastEvents;
+        return this.journalistPastEvents;
         
     }
 }

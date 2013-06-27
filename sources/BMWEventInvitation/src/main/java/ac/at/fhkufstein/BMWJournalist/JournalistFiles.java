@@ -2,12 +2,18 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ac.at.fhkufstein.EventFunc;
+package ac.at.fhkufstein.BMWJournalist;
 
 /**
  *
  * @author wolfgangteves
  */
+import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.BmwUserController;
+import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.login.doLogin;
+import ac.at.fhkufstein.service.PersistenceService;
+import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,30 +26,50 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import java.io.Serializable;
 
 /*
  * This Class handles Fileuploads: It saves files in a specific folder with subfolders named after the event id
  */
-@ManagedBean(name = "fileupload")
+@ManagedBean(name = "JournalistFiles")
 @ViewScoped
-public class fileupload {
+public class JournalistFiles {
+
+    String dir;
+
     //This is how you set a property in java
     //System.setProperty("event_upl_path", "/Volumes/Macintosh HD/Uploads");
 
     /*String getPropertyStringRaw = System.getProperty("event_upl_path");
-    String getPropertyString = getPropertyStringRaw.replace("\\", "\\\\");*/
+     String getPropertyString = getPropertyStringRaw.replace("\\", "\\\\");*/
+    public JournalistFiles() {
+
+        BmwParticipantsController bmwParticipantsController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwParticipantsController}", BmwParticipantsController.class);
+
+        JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+
+        doLogin currentlogin = PersistenceService.getManagedBeanInstance(doLogin.class);
+
+        EntityManager em = ((BmwParticipantsFacade) bmwParticipantsController.getFacade()).getEntityManager();
+
+        System.out.println("Parameter Event: " + currentJournalistBean.getSelectedBmwEvent().getName());
+        System.out.println("Parameter UserID: " + PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()));
+
+        BmwParticipants currentPartipantsStati = (BmwParticipants) em.createNamedQuery("BmwParticipants.findByEventIdAndUserId")
+                .setParameter("id", currentJournalistBean.getSelectedBmwEvent())
+                .setParameter("userId", PersistenceService.getManagedBeanInstance(BmwUserController.class).getFacade().find(currentlogin.getUid()))
+                .getSingleResult();
 
 
-    FacesContext facesContext = FacesContext.getCurrentInstance();
-    public Integer eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
-    String dir = System.getProperty("event_upl_path") + "/" + eventID.toString();//Path where the files are saved
-    //String dir = getPropertyString + "/" + eventID.toString();//Path where the files are saved
+        this.dir = System.getProperty("event_upl_path") + "/" + currentPartipantsStati.getEventId().getId().toString();//Path where the files are saved
+        //String dir = getPropertyString + "/" + eventID.toString();//Path where the files are saved
+
+    }
 
     public void handleFileUpload(FileUploadEvent event) throws IOException {
 
@@ -120,14 +146,4 @@ public class fileupload {
         }
     }
 
-    public Integer getEventID() {
-
-        return eventID;
-    }
-
-    public void setEventID(Integer eventID) {
-        this.eventID = eventID;
-        System.out.println("Set:" + eventID);
-    }
-    
 }

@@ -32,6 +32,7 @@ public class doLogin implements Serializable{
 	Integer role;
 	String user;
 	String pw;
+	String name;
 	BmwUserController bmwUserController;
 	BmwUser bmwUser;
 	PersonenController personenController;
@@ -84,7 +85,9 @@ public class doLogin implements Serializable{
 				System.out.println("System Error Login");
 			}
 		}
+
 		if (bmwUser != null) {
+			name=bmwUser.getUsername();
 			//check if one user is found
 			if (pw.equals(bmwUser.getPwd())) {//check if password is correct
 				//Set uid and role
@@ -104,8 +107,8 @@ public class doLogin implements Serializable{
 				} else if (bmwUser.getRole() == 3) {
 					//is Travel Agency
 					//Todo: Redirect to Travel Agency Interface
-					context.addMessage(null, new FacesMessage("Fehler", "Es gibt noch keine Oberfläche für Reisebüros"));
-					return "#";
+					return "/faces/Travelagency/index.xhtml";
+
 				} else {
 					//Unbekannte Rolle
 					context.addMessage(null, new FacesMessage("Fehler", "Diese Rolle (" + bmwUser.getRole().toString() + ") ist dem System nicht bekannt"));
@@ -197,6 +200,22 @@ public class doLogin implements Serializable{
 		}
 	}
 
+
+	public void checkTravelagencySession(){
+		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
+		if(role!=3){
+			System.out.println("invalid access to Travelagency");
+			//Delete Session
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+			try{//redirect to login page
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			}catch(Exception e){
+				System.out.println("Redirect to login page failed");
+			}
+		}
+	}
+
+	
 	public Integer getUid() {
 		//Get uid from session
 		return Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid").toString());
@@ -229,5 +248,13 @@ public class doLogin implements Serializable{
 
 	public void setPw(String pw) {
 		this.pw = pw;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

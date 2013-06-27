@@ -10,81 +10,103 @@
     </h:head>
     <h:body>
 
-        <h:outputStylesheet library="css" name="style.css"  />
 
-        <h:form id="form">
-            
 
-            <p:wizard id="mywizard" widgetVar="wiz"
-                      flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
+        <p:wizard id="mywizard" widgetVar="wiz"
+                  flowListener="#{userWizard.onFlowProcess}" showNavBar="false" step="#{ResponseBean.step}">
 
-                <p:tab id="wiz1" title="Einladung" >
+            <p:tab id="wiz1" title="Einladung" >
 
-                    <p:panel header="Bitte Einladung beantworten">
-                        <h:panelGrid columns="4">
+                <p:panel header="Bitte Einladung beantworten">
+                    <h:panelGrid columns="4">
 
-                            <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
-                                             valueChangeListener="#{ResponseBean.stateChangeListener}" style="width: 150px;">
-                                <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
-                                <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
-                                <p:ajax event="change"/>
-                            </p:selectOneMenu>
-                      
-                            <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
-                            
-                        </h:panelGrid>
-                        
-                    </p:panel>
-                </p:tab>
+                        <p:selectOneMenu id="states" value="#{ResponseBean.auswahl}"
+                                         valueChangeListener="#{ResponseBean.stateChangeListener}" style="width: 150px;">
+                            <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                            <f:selectItems value="#{ResponseBean.auswahlmoeglichkeiten}"/>
+                            <p:ajax event="change"/>
+                        </p:selectOneMenu>
+                        <ui:include src="/BMW_Journalist/#{ResponseBean.einladungsoberflaeche}.xhtml" />
 
-                <p:tab id="wiz2" title="Anreise" >
+                    </h:panelGrid>
 
-                        <p:panel header="Bitte Anreiseoptionen wählen">
+                </p:panel>
+            </p:tab>
 
-                <p:tabView id="tabView">  
+            <p:tab id="wiz2" title="Anreise" >
 
-                    <p:tab id="tab1" title="Fliegen">  
+                <p:panel header="Bitte Anreiseoptionen wählen">
 
-                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                    <p:tabView id="tabView">  
 
-                            <p:selectOneMenu id="eid" value="#{ResponseBean.flugauswahl}" valueChangeListener="#{ResponseBean.stateChangeListener}">
-                                <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
-                                <f:selectItems value="#{ResponseBean.verfuegbareFluege}"/>
-                                <p:ajax event="change"/>
-                            </p:selectOneMenu>
+                        <p:tab id="tab1" title="Fliegen">  
 
-                            <p:commandButton value="Auswählen" onclick="#{ResponseBean.flugauswaehlen()}" update=":form:mywizard"></p:commandButton>
-                            
-                        </h:panelGrid>
+                            <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 
-                    </p:tab>  
+                                <p:selectOneMenu id="states" value="#{ResponseBean.flugauswahl}"
+                                                 valueChangeListener="#{ResponseBean.stateFlugChangeListener}" style="width: 150px;">
+                                    <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                    <f:selectItems value="#{ResponseBean.allFlightsForEvent}"/>
+                                    <p:ajax event="change"/>
+                                </p:selectOneMenu>
 
-                    <p:tab id="tab2" title="Selbstanreise"> 
+                                <h:outputLabel value="Kommentar:"/>
 
-                        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                                <p:inputTextarea rows="6" cols="40" value="#{ResponseBean.kommentar}"/>
 
-                            <h3>Sie wollen wirklich selbst anreisen?</h3>
+                                <p:commandButton value="Auswählen" actionListener="#{ResponseBean.flugauswaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
 
-                        </h:panelGrid>
+                            </h:panelGrid>
 
-                        <p:commandButton value="Auswählen" onclick="#{ResponseBean.selbstanreisewaehlen()}" update=":form:mywizard"></p:commandButton>
-                        
-                    </p:tab> 
+                        </p:tab>  
 
-                </p:tabView>
+                        <p:tab id="tab2" title="Selbstanreise"> 
 
-            </p:panel>
+                            <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
 
-                </p:tab>
+                                <h3>Sie wollen wirklich selbst anreisen?</h3>
 
-                <p:tab id="wiz3" title="Anreisedokumente" >
+                            </h:panelGrid>
 
-                    <h3>Noch keine Anreisedokumente verfügbar</h3>
-                    
-                </p:tab>
+                            <p:commandButton value="Auswählen" actionListener="#{ResponseBean.selbstanreisewaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
 
-            </p:wizard>
+                        </p:tab> 
 
-        </h:form>
+                    </p:tabView>
+
+                </p:panel>
+
+            </p:tab>
+
+            <p:tab id="wiz3" title="Flugticket" >
+
+                <p:panel header="Flugticket">
+                    <h3>#{ResponseBean.ticketPath}</h3>
+                </p:panel>
+
+            </p:tab>
+
+        </p:wizard>
+
+        <p:panel header="Eventdokumente">
+
+            <h:form>  
+                <p:dataTable var="File" value="#{JournalistFiles.getEventFolder()}">  
+                    <p:column headerText="Files">  
+                        <h:outputText value="#{File.name}" />
+                    </p:column>  
+                    <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
+                                                                     icon="ui-icon-arrowthichk-s">  
+                            <p:fileDownload value="#{JournalistFiles.getCurrentEventFile(File.name)}" />  
+                        </p:commandButton>  
+
+                    </p:column>
+
+                </p:dataTable>  
+            </h:form> 
+            <h:outputScript library="js" name="common.js" target="body" />
+
+        </p:panel>
+
     </h:body>
 </html>

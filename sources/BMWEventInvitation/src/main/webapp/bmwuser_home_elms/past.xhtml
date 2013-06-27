@@ -7,9 +7,15 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
+
+<<<<<<< HEAD
+        <p:panel header="Vergangene Events" style="width: 49%; overflow:hidden; ">
+
+=======
     
     				
 					<p:panel header="Vergangene Events" style="width: 49%; overflow:hidden; ">
+>>>>>>> be0ce414ca2247c1414db63aad749bc529b5c8d6
 
             <p:dataTable id="datalist_past" value="#{Events.past()}" var="item"
                          selectionMode="single" selection="#{bmwEventController.selected}"
@@ -17,16 +23,15 @@
                          paginator="true"
                          rows="5"
                          rowsPerPageTemplate="10,20,30"
-                         
                          >
 
 
-				<p:column style="width:4%">  
-                <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">  
-    <f:param name="eventID" value="#{item.id}" />  
-</p:button>  
-        </p:column>  
-				
+                <p:column style="width:4%">  
+                    <p:button outcome="/Event/index" value="Öffnen" icon="ui-icon-search">  
+                        <f:param name="eventID" value="#{item.id}" />  
+                    </p:button>  
+                </p:column>  
+
                 <p:column sortBy="#{item.name}" filterBy="#{item.name}">
                     <f:facet name="header">
                         <h:outputText value="Name"/>
@@ -50,10 +55,10 @@
                     </h:outputText>
                 </p:column>
                 <f:facet name="footer">
-                    
+
                 </f:facet>
 
             </p:dataTable>
-					</p:panel>
-</ui:composition>
+        </p:panel>
+    </ui:composition>
 </html>
