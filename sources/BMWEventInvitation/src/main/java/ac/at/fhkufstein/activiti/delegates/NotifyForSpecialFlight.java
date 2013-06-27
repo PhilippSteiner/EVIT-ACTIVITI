@@ -7,8 +7,11 @@ package ac.at.fhkufstein.activiti.delegates;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.EmailTemplatesController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.EmailTemplates;
+import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
@@ -36,8 +39,19 @@ public class NotifyForSpecialFlight implements JavaDelegate {
 
         try {
 
-                // @todo implementMailFunction
-//            MailService.sendMail(null, null, null);
+                 // send notification for special flight
+
+            String emailType = "special";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
+
+
+
 
                 String mailSentMessage = "Es wurde eine Notification über eine Spezialflug des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " an den Mitarbeiter " + event.getResponsibleUser() + " gesendet.";
 

@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import java.io.Serializable;
 
 /*
  * This Class handles Fileuploads: It saves files in a specific folder with subfolders named after the event id
@@ -37,8 +38,8 @@ public class fileupload {
 
     /*String getPropertyStringRaw = System.getProperty("event_upl_path");
     String getPropertyString = getPropertyStringRaw.replace("\\", "\\\\");*/
-    
-    
+
+
     FacesContext facesContext = FacesContext.getCurrentInstance();
     public Integer eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
     String dir = System.getProperty("event_upl_path") + "/" + eventID.toString();//Path where the files are saved
@@ -128,4 +129,5 @@ public class fileupload {
         this.eventID = eventID;
         System.out.println("Set:" + eventID);
     }
+    
 }

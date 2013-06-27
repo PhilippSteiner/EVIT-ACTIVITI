@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "BmwUser.findByEmail", query = "SELECT b FROM BmwUser b WHERE b.email = :email"),
     @NamedQuery(name = "BmwUser.findByUsername", query = "SELECT b FROM BmwUser b WHERE b.username = :username"),
     @NamedQuery(name = "BmwUser.findByRating", query = "SELECT b FROM BmwUser b WHERE b.rating = :rating"),
-    @NamedQuery(name = "BmwUser.findBySeatingPriority", query = "SELECT b FROM BmwUser b WHERE b.seatingPriority = :seatingPriority")})
+    @NamedQuery(name = "BmwUser.findBySeatingPriority", query = "SELECT b FROM BmwUser b WHERE b.seatingPriority = :seatingPriority"),
+    @NamedQuery(name = "BmwUser.findAllReisebuero", query = "SELECT b FROM BmwUser b WHERE b.role = 3")})
 public class BmwUser implements Serializable {
     @Column(name = "loginSent")
     private Boolean loginSent = false;
@@ -190,8 +191,8 @@ public class BmwUser implements Serializable {
     public void setLoginSent(Boolean loginSent) {
         this.loginSent = loginSent;
     }
-    
-    
+
+
     public String getUsername() {
         return username;
     }
@@ -297,5 +298,5 @@ public class BmwUser implements Serializable {
     public void setBmwEventCollection(Collection<BmwEvent> bmwEventCollection) {
         this.bmwEventCollection = bmwEventCollection;
     }
-    
+
 }
