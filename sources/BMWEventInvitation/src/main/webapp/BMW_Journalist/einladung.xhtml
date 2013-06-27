@@ -7,8 +7,10 @@
         <title>Wizard Example</title>
     </h:head>
     <h:body>
-        
-        <p:commandButton value="Auswählen" onclick="#{ResponseBean.beantworten()}" update=":formEDF:formED:mywizard"></p:commandButton>
-    
+
+        <p:growl id="growl" showDetail="true" sticky="true" /> 
+
+        <p:commandButton value="Auswählen" actionListener="#{ResponseBean.beantworten()}" update=":formEDF:formED:mywizard , growl"></p:commandButton>
+
     </h:body>
 </html>
