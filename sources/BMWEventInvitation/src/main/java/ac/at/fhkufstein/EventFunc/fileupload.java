@@ -87,6 +87,8 @@ public class fileupload {
     }
 
     public List<File> listFilesForFolder(final File folder) {
+        
+        try{
         List<File> files = new ArrayList<File>();
         if (folder.listFiles().length > 0) {
             for (final File fileEntry : folder.listFiles()) {
@@ -101,6 +103,11 @@ public class fileupload {
             System.out.println("Keine Dateien Vorhanden");
         }
         return files;
+        
+        } catch (Exception e) {
+            System.out.println("File nicht gefunden");
+            return null;
+        }
     }
 
     public StreamedContent getCurrentEventFile(String name) {
