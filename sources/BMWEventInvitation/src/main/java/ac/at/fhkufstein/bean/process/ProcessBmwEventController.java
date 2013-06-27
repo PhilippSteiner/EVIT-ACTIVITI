@@ -30,6 +30,7 @@ import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
+import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
 
@@ -52,7 +53,9 @@ public class ProcessBmwEventController implements Serializable {
 
             // to get the id of the inserted event immediately a transacion has to be executed
             UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
-            transaction.begin();
+            if(transaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
+                transaction.begin();
+            }
 
             try {
                 EntityManager em = ((BmwEventFacade) eventController.getFacade()).getEntityManager();
@@ -65,15 +68,9 @@ public class ProcessBmwEventController implements Serializable {
             EventTemplate a = PersistenceService.getManagedBeanInstance(EventTemplate.class);
             a.createTemplate(eventController.getSelected());
 
-            // starting process in Thread
-            new Thread() {
 
-                @Override
-                public void run() {
-                    startEventProcess(eventController.getSelected());
-                }
-            }.start();
-
+            // starting activiti process
+            startEventProcess(eventController.getSelected());
 
 
             FacesContext context = FacesContext.getCurrentInstance();

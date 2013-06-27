@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EmailTemplates.findById", query = "SELECT e FROM EmailTemplates e WHERE e.id = :id"),
     @NamedQuery(name = "EmailTemplates.findBySubject", query = "SELECT e FROM EmailTemplates e WHERE e.subject = :subject"),
     @NamedQuery(name = "EmailTemplates.findByType", query = "SELECT e FROM EmailTemplates e WHERE e.type = :type"),
-    @NamedQuery(name = "EmailTemplates.findByEventIdAndType", query = "SELECT e FROM EmailTemplates e WHERE e.id = :eventId AND e.type = :type")})
+    @NamedQuery(name = "EmailTemplates.findByEventIdAndType", query = "SELECT e FROM EmailTemplates e WHERE e.eid = :eventId AND e.type = :type")})
 public class EmailTemplates implements Serializable, EmailTemplateable {
     private static final long serialVersionUID = 1L;
     @Id

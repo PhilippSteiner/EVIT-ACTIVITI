@@ -26,13 +26,14 @@ import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import java.io.Serializable;
 
 /*
  * This Class handles Fileuploads: It saves files in a specific folder with subfolders named after the event id
  */
 @ManagedBean(name = "fileupload")
 @ViewScoped
-public class fileupload {
+public class fileupload implements Serializable{
 	//This is how you set a property in java
 	//System.setProperty("event_upl_path", "/Volumes/Macintosh HD/Uploads");
 
@@ -98,11 +99,11 @@ public class fileupload {
 	}
 
 	public StreamedContent getCurrentEventFile(String name) {
-		
+
 		try{
 
 		System.out.println("Opening File..."+name);
-		
+
 		File f = new File(dir + "/" + name);
 		System.out.println("Got File"+f.getName());
 		InputStream stream = new FileInputStream(dir + "/" + name);

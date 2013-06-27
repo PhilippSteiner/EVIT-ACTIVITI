@@ -13,6 +13,7 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.service.PersistenceService;
+import java.util.Iterator;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -33,15 +34,15 @@ public class StartSingleProcesses implements JavaDelegate {
 
 
         execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_STARTED, true);
-        
+
         BmwEventController eventController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwEventController}", BmwEventController.class);
         BmwEvent event = eventController.getFacade().find( Integer.parseInt(String.valueOf( execution.getVariable(InvitationProcess.DATABASE_EVENTID) )) );
 
+        for (Iterator it = PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).getFacade().getEntityManager().createNamedQuery("BmwParticipants.findByEventId").setParameter("id", event).getResultList().iterator(); it.hasNext();) {
 
-        for(BmwParticipants participant : event.getBmwParticipantsCollection()) {
+            BmwParticipants participant = (BmwParticipants) it.next();
 
             InvitationProcess.startSingleProcess(event, participant);
-
         }
 
     }

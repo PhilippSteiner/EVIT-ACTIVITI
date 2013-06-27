@@ -17,6 +17,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 /**
  *
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpSession;
  */
 @ManagedBean(name = "login")
 @SessionScoped
-public class doLogin {
+public class doLogin implements Serializable{
 
 	Integer uid;
 	Integer role;
@@ -89,13 +90,13 @@ public class doLogin {
 				//Set uid and role
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("uid", bmwUser.getUid());
 				FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", bmwUser.getRole());
-				
+
 				System.out.println("Role:" + bmwUser.getRole()); //output role
 				if (bmwUser.getRole() == null) { //Return error if no role is defined
 					context.addMessage(null, new FacesMessage("Fehler", "Für diesen User ist keine Rolle Definiert"));
 					return "#";
 				} else if (bmwUser.getRole() == 1) {
-					//is BMW User -> Redirect to BMW User 
+					//is BMW User -> Redirect to BMW User
 					return "/faces/index.xhtml";
 				} else if (bmwUser.getRole() == 2) {
 					//is Journalist -> Redirect to Journalist interface
@@ -127,18 +128,18 @@ public class doLogin {
 	}
 
 	public String logout() {
-		
+
 		System.out.println("logout called: trying to get session...");
-		
+
 		if(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("old_admin")!=null){
-			
+
 			//Its a admin going back
-			
+
 		Integer ol =Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("old_admin").toString());
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("uid", ol);
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", 1);
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("old_admin", null);
-			
+
 			System.out.println("Its a admin going back");
 			return "/faces/index.xhtml";
 		}else{
@@ -150,7 +151,7 @@ public class doLogin {
 		}
 
 	}
-	
+
 	public String loginAsJournalist(Integer jid){
 		System.out.println("login as journalist called");
 		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
@@ -161,13 +162,13 @@ public class doLogin {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("uid", jid);
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("role", 2);
 		System.out.println("Logging in as Journalist... JID:"+jid);
-		
+
 		return "/faces/BMW_Journalist/journalistmenue.xhtml";
 		}else{
 			return "/faces/login.xhtml";
 		}
 	}
-	
+
 	public void checkBmwSession(){
 		Integer role=Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role").toString());
 		if(role!=1){
@@ -195,7 +196,7 @@ public class doLogin {
 			}
 		}
 	}
-	
+
 	public Integer getUid() {
 		//Get uid from session
 		return Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid").toString());

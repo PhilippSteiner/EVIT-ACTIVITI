@@ -53,9 +53,12 @@ public class SendInvitationmail implements JavaDelegate {
 
                 NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
 
+                participant.setInvitationDate(new Date());
+                PersistenceService.save(BmwParticipantsController.class, participant);
+
                 execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
 
-                Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getUrgencyDayLimit());
+                Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getSendReminder());
 
                 execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
 
@@ -94,11 +97,7 @@ public class SendInvitationmail implements JavaDelegate {
             }
 
         } catch (Exception ex) {
-            String mailSentMessage = ex.getMessage();
-
-            System.err.println(mailSentMessage);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
+            ex.printStackTrace();
         }
 
     }

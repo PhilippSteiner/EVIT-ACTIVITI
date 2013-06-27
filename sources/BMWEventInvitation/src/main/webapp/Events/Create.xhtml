@@ -47,6 +47,9 @@
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
                         <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
 
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_closeInvitation}" for="closeInvitation" />
+                        <p:calendar id="closeInvitation" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.closeInvitation}" title="#{bundle.EditBmwEventTitle_closeInvitation}" required="true" showOn="button"/>
+
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" />
                         <p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.EditBmwEventTitle_embargoDate}" required="false" requiredMessage="#{bundle.EditBmwEventRequiredMessage_embargoDate}" showOn="button"/>
 
