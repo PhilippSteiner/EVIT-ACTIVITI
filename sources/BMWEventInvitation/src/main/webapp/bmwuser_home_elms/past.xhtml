@@ -7,15 +7,9 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-<<<<<<< HEAD
 
+        <p:panel header="Vergangene Events" style="width: 49%; overflow:hidden; ">
 
-        <p:panel header="Vergangene Events">
-=======
-    
-    				
-					<p:panel header="Vergangene Events" style="width: 49%; overflow:hidden; ">
->>>>>>> 551ee87652eeb034b14f579f13bed23e89c73be6
 
             <p:dataTable id="datalist_past" value="#{Events.past()}" var="item"
                          selectionMode="single" selection="#{bmwEventController.selected}"
@@ -23,7 +17,6 @@
                          paginator="true"
                          rows="5"
                          rowsPerPageTemplate="10,20,30"
-
                          >
 
 
