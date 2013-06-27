@@ -4,6 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns="http://www.w3.org/1999/xhtml"
                 template="/template.xhtml">
 
     <ui:define name="title">
@@ -13,7 +14,7 @@
 
 
 
-        <h:outputText style="font-size: x-large" value="#{Participants.current.name}"></h:outputText>
+        <h2>#{Participants.current.name}</h2>
         <p:tabMenu activeIndex="3">  
             <ui:include src="../Event/menu.xhtml"></ui:include>
         </p:tabMenu>
