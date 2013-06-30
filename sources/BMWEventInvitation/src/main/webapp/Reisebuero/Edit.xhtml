@@ -15,22 +15,27 @@
                 <h:panelGroup id="display">
                     <p:panelGrid  columns="2" rendered="#{reisebuero.selected != null}">
 
-                        <h:outputLabel value="#{bundle.EditBmwUserLabel_uid}" for="uid" />
-                        <h:outputText id="uid" value="#{reisebuero.selected.uid}" />
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_companyName}" for="companyName" />
+                        <p:inputText id="companyName" value="#{reisebuero.selected.companyName}" title="#{bundle.EditBmwUserTitle_companyName}" required="true"/>
 
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_firstName}" for="firstName" />
+                        <p:inputText id="firstName" value="#{reisebuero.selected.firstName}" title="#{bundle.EditBmwUserTitle_firstName}" required="true"/>
+
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_lastName}" for="lastName" />
+                        <p:inputText id="lastName" value="#{reisebuero.selected.lastName}" title="#{bundle.EditBmwUserTitle_lastName}" required="true"/>
+
+                        
                         <p:outputLabel value="#{bundle.EditBmwUserLabel_username}" for="username" />
-                        <p:inputText id="username" value="#{reisebuero.selected.username}" title="#{bundle.EditBmwUserTitle_username}" />
+                        <p:inputText id="username" value="#{reisebuero.selected.username}" title="#{bundle.EditBmwUserTitle_username}" required="true"/>
+                        
+                        <p:outputLabel value="#{bundle.EditBmwUserLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{reisebuero.selected.email}" title="#{bundle.EditBmwUserTitle_email}" required="true"/>
                         
                         <p:outputLabel value="#{bundle.EditBmwUserLabel_pwd}" for="pwd" />
-                        <p:inputText id="pwd" value="#{reisebuero.selected.pwd}" title="#{bundle.EditBmwUserTitle_pwd}" />
+                        <p:inputText id="pwd" value="#{reisebuero.selected.pwd}" title="#{bundle.EditBmwUserTitle_pwd}" required="true"/>
 
-                        <p:outputLabel value="#{bundle.EditBmwUserLabel_rating}" for="rating" />
-                        <p:inputText id="rating" value="#{reisebuero.selected.rating}" title="#{bundle.EditBmwUserTitle_rating}" />
-
-                   
-                        <p:outputLabel value="#{bundle.EditBmwUserLabel_seatingPriority}" for="seatingPriority" />
-                        <p:inputText id="seatingPriority" value="#{reisebuero.selected.seatingPriority}" title="#{bundle.EditBmwUserTitle_seatingPriority}" />
-
+    
+        
                         
                     </p:panelGrid>
                     <p:commandButton actionListener="#{reisebuero.save}" value="#{bundle.Save}" update="display,:BmwUserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserEditDialog);"/>
