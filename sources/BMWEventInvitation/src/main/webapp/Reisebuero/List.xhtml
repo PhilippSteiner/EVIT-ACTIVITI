@@ -8,7 +8,7 @@
 
     <h:form id="BmwUserListForm">
 
-        <p:panel header="#{bundle.ListBmwUserTitle}">
+        <p:panel header="Reisebüros verwalten">
 
             <p:dataTable id="datalist" value="#{reisebuero.roleUser}" var="item"
                          selectionMode="single" selection="#{reisebuero.selected}"
@@ -21,11 +21,24 @@
                 <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                 <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
 
-                <p:column sortBy="#{item.uid}" filterBy="#{item.uid}">
+                
+                <p:column sortBy="#{item.companyName}" filterBy="#{item.companyName}">
                     <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_uid}"/>
+                        <h:outputText value="Firma"/>
                     </f:facet>
-                    <h:outputText value="#{item.uid}"/>
+                    <h:outputText value="#{item.companyName}"/>
+                </p:column>
+                <p:column sortBy="#{item.firstName}" filterBy="#{item.firstName}">
+                    <f:facet name="header">
+                        <h:outputText value="Vorname"/>
+                    </f:facet>
+                    <h:outputText value="#{item.firstName}"/>
+                </p:column>
+                <p:column sortBy="#{item.lastName}" filterBy="#{item.lastName}">
+                    <f:facet name="header">
+                        <h:outputText value="Nachname"/>
+                    </f:facet>
+                    <h:outputText value="#{item.lastName}"/>
                 </p:column>
                 <p:column sortBy="#{item.username}" filterBy="#{item.username}">
                     <f:facet name="header">
@@ -33,52 +46,35 @@
                     </f:facet>
                     <h:outputText value="#{item.username}"/>
                 </p:column>
+                <p:column sortBy="#{item.email}" filterBy="#{item.email}">
+                    <f:facet name="header">
+                        <h:outputText value="E-mail"/>
+                    </f:facet>
+                    <h:outputText value="#{item.email}"/>
+                </p:column>
+                
                 <p:column sortBy="#{item.pwd}" filterBy="#{item.pwd}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle.ListBmwUserTitle_pwd}"/>
                     </f:facet>
                     <h:outputText value="#{item.pwd}"/>
                 </p:column>
-                <p:column sortBy="#{item.role}" filterBy="#{item.role}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_role}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.role}"/>
-                </p:column>
-                <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_rating}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.rating}"/>
-                </p:column>
-                <p:column sortBy="#{item.seatingPriority}" filterBy="#{item.seatingPriority}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_seatingPriority}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.seatingPriority}"/>
-                </p:column>
-                <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.personenID.vorname}"/>
-                </p:column>
-				
-                <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle.ListBmwUserTitle_personenID}"/>
-                    </f:facet>
-                    <h:outputText value="#{item.personenID.nachname}"/>
-                </p:column>
+    
+                
+
+                
                 <f:facet name="footer">
                     <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{reisebuero.prepareCreate}" update=":BmwUserCreateForm" oncomplete="BmwUserCreateDialog.show()"/>
-                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty bmwUserController.selected}"/>
-                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty bmwUserController.selected}"/>
-                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{bmwUserController.delete}" update=":growl,datalist" disabled="#{empty bmwUserController.selected}"/>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty reisebuero.selected}"/>
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty reisebuero.selected}"/>
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{reisebuero.delete}" update=":growl,datalist" disabled="#{empty reisebuero.selected}"/>
                 </f:facet>
 
             </p:dataTable>
+            <p:blockUI id="block" block="datalist" >
+                <p:graphicImage value="/resources/img/ajax-loader.gif"/>
 
+            </p:blockUI>
         </p:panel>
 
     </h:form>
