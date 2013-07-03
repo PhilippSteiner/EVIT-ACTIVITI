@@ -8,185 +8,42 @@
 
     <ui:composition>
 
-        <p:dialog id="BmwUserViewDlg" widgetVar="BmwUserViewDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.ViewBmwUserTitle}">
+        <p:dialog id="BmwUserViewDlg" widgetVar="BmwUserViewDialog" modal="true" resizable="false" appendToBody="true" header="Reisebüro anzeigen">
 
             <h:form id="BmwUserViewForm">
 
                 <h:panelGroup id="display">
-					<p:scrollPanel  scrollMode="native">
-                    <p:panelGrid columns="2" >
+                    
+                        <p:panelGrid columns="2" >
 
-                        <h:outputText value="#{bundle.ViewBmwUserLabel_uid}"/>
-                        <h:outputText value="#{bmwUserController.selected.uid}" title="#{bundle.ViewBmwUserTitle_uid}"/>
+                            <h:outputText value="Firma:"/>
+                            <h:outputText value="#{reisebuero.selected.companyName}" title="Firma"/>
 
-                        <h:outputText value="#{bundle.ViewBmwUserLabel_pwd}"/>
-                        <h:outputText value="#{bmwUserController.selected.pwd}" title="#{bundle.ViewBmwUserTitle_pwd}"/>
+                            <h:outputText value="Vorname:"/>
+                            <h:outputText value="#{reisebuero.selected.firstName}" title="Firstname"/>
 
-                        <h:outputText value="#{bundle.ViewBmwUserLabel_rating}"/>
-                        <h:outputText value="#{bmwUserController.selected.rating}" title="#{bundle.ViewBmwUserTitle_rating}"/>
+                            <h:outputText value="Nachname:"/>
+                            <h:outputText value="#{reisebuero.selected.lastName}" title="Nachname"/>
 
-                        <h:outputText value="#{bundle.ViewBmwUserLabel_seatingPriority}"/>
-                        <h:outputText value="#{bmwUserController.selected.seatingPriority}" title="#{bundle.ViewBmwUserTitle_seatingPriority}"/>
+                            <h:outputText value="Username:"/>
+                            <h:outputText value="#{reisebuero.selected.username}" title="Username"/>
 
-                     
+                            <h:outputText value="#{bundle.ViewBmwUserLabel_pwd}"/>
+                            <h:outputText value="#{reisebuero.selected.pwd}" title="#{bundle.ViewBmwUserTitle_pwd}"/>
 
-                        <h:outputText value="Personal ID"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.personalID}"/>
-						
-						<h:outputText value="Speichern Unter"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.speichernUnter}"/>
-						
-						<h:outputText value="OrgEinheit"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.orgEinheit}"/>
-						
-						<h:outputText value="Firma"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.firma}"/>
-						
-						
-						<h:outputText value="Anrede"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.anrede}"/>
-						
-						
-						<h:outputText value="Akademischer Titel"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.akadTitel}"/>
-						
-						<h:outputText value="Berufstitel"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.berufstitel}"/>
-						
-						
-						<h:outputText value="Vorname"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.vorname}"/>
-						
-						
-						<h:outputText value="Nachname"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.nachname}"/>
-						
-						
-						<h:outputText value="Name Vollständig"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.nameVollstaendig}"/>
-						
-						
-						<h:outputText value="Abteilung"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.abteilung}"/>
-						
-						
-						<h:outputText value="Position"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.position}"/>
-						
-						
-						<h:outputText value="Strasse"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.strasse}"/>
-						
-						
-						<h:outputText value="PLZ"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.plz}"/>
-						
-						
-						<h:outputText value="Ort"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.ort}"/>
-						
-						
-						<h:outputText value="Land"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.land}"/>
-						
-						
-						<h:outputText value="Briefkopf"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.briefkopf}"/>
-						
-						
-						<h:outputText value="Weitere Straße"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.weitereStrasse}"/>
-						
-						<h:outputText value="Weitere PLZ"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.weiterePLZ}"/>
-						
-						<h:outputText value="Weitere PLZ"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.weitereOrt}"/>
-						
-						<h:outputText value="Weiteres Land"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.weiteresLand}"/>
-						
-						<h:outputText value="Weiterer Briefkopf"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.weitererBriefkopf}"/>
-						
-						<h:outputText value="Briefanrede Sie"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.briefanredeSie}"/>
-						
-						<h:outputText value="EMail1"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.eMail1}"/>
-						
-						<h:outputText value="EMail2"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.eMail2}"/>
-						
-						<h:outputText value="Website"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.website}"/>
-						
-						<h:outputText value="Telefon Geschäftlich"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.telefonGeschaeftlich}"/>
-						
-						<h:outputText value="Telefon Privat"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.telefonPrivat}"/>
-						
-						<h:outputText value="Fax"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.fax}"/>
-						
-						<h:outputText value="Telefon Mobil"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.telefonMobil}"/>
-						
-						<h:outputText value="Geburtsdatum"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.geburtsdatum}"/>
-						
-						<h:outputText value="Kinder Partner"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.kinderPartner}"/>
-						
-						<h:outputText value="Hobby"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.hobby}"/>
-						
-						<h:outputText value="Kategorie"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.kategorie}"/>
-						
-						<h:outputText value="Verteiler"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.verteiler}"/>
-						
-						<h:outputText value="Foto Name"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.fotoName}"/>
-						
-						<h:outputText value="KIDS Kontaktnummer"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.kIDSKontaktNr}"/>
-						
-					    <h:outputText value="Führerscheinnummer"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.fuehrerscheinNummer}"/>
-						
-						<h:outputText value="Führerscheindatum"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.fuehrerscheinDatum}"/>
-						
-						<h:outputText value="Führerscheinbehörde"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.fuehrerscheinBehoerde}"/>
-						
-						<h:outputText value="Gelöscht"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.geloescht}"/>
-						
-						<h:outputText value="Letzte Änderung am"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.letzteAenderungAm}"/>
-						
-						<h:outputText value="Letzte Änderung durch"/>
-                        <h:outputText value="#{bmwUserController.selected.personenID.letzteAenderungDurch}"/>
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						</p:panelGrid>
-						</p:scrollPanel>
+                        
+             
+
+
+
+
+
+
+
+
+
+                        </p:panelGrid>
+                    
                     <p:commandButton value="#{bundle.Close}" onclick="BmwUserViewDialog.hide()"/>
                 </h:panelGroup>
 

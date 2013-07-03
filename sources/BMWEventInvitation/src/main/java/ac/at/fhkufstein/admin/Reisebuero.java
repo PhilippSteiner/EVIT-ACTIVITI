@@ -11,25 +11,28 @@ import ac.at.fhkufstein.entity.Personen;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwUserFacade;
 import ac.at.fhkufstein.session.PersonenFacade;
+import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author Philipp
  */
-@ManagedBean(name="reisebuero")
-@RequestScoped
-public class Reisebuero {
+@ManagedBean(name = "reisebuero")
+@ViewScoped
+public class Reisebuero implements Serializable {
 
     private BmwUserController bmwUserController;
     private PersonenController personenController;
     private List<BmwUser> roleUser;
     private BmwUser selected;
     private Personen person;
-    
     private Boolean loginSent = false;
     private String username;
     private Integer role;
@@ -47,35 +50,40 @@ public class Reisebuero {
     private Integer rating;
     private String seatingPriority;
     private Personen personenID;
-    
-    
+
     /**
      * Creates a new instance of Reisebuero
      */
     public Reisebuero() {
-        
+
         bmwUserController = PersistenceService.getManagedBeanInstance(BmwUserController.class);
         personenController = PersistenceService.getManagedBeanInstance(PersonenController.class);
         EntityManager emp = ((PersonenFacade) personenController.getFacade()).getEntityManager();
-        person = personenController.getFacade().find("9ff20e6c-dec0-4548-82db-005825Aaf1c8"); 
-         
+        person = personenController.getFacade().find("9ff20e6c-dec0-4548-82db-005825Aaf1c8");
+
+        update();
+
+    }
+    
+    public void update(){
+    
         EntityManager emu = ((BmwUserFacade) bmwUserController.getFacade()).getEntityManager();
-	roleUser = emu.createNamedQuery("BmwUser.findByRole")
-					.setParameter("role", 3)
-					.getResultList();
-        
+        roleUser = emu.createNamedQuery("BmwUser.findByRole")
+                .setParameter("role", 3)
+                .getResultList();
     }
-    
-    public void prepareCreate(){
+
+    public void prepareCreate() {
         selected = bmwUserController.prepareCreate(null);
     }
-    
-    
-    public void saveNew(){
-    
-    
+
+    public void saveNew() {
+
+
         selected = bmwUserController.prepareCreate(null);
-        /*
+        selected.setPersonenID(person);
+        selected.setRole(3);
+        selected.setUsername(username);
         selected.setCity(city);
         selected.setCompanyName(companyName);
         selected.setEmail(email);
@@ -84,20 +92,32 @@ public class Reisebuero {
         selected.setLoginSent(loginSent);
         selected.setPhone(phone);
         selected.setPostalCode(postalCode);
-        selected.setPwd(pwd);
-        */
-        selected.setRole(3);
-        selected.setPersonenID(person);
+        selected.setPwd(ResetPassword.getRandomPassword());
+
+
         bmwUserController.setSelected(selected);
         bmwUserController.saveNew(null);
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Reisebüro hinzugefügt", "Aktualisieren sie die Seite um die Änderungen zu sehen")); //Send message 
+        update();
     }
-    
-    public void save(){
-    
+
+    public void save() {
+
         bmwUserController.setSelected(selected);
         bmwUserController.saveNew(null);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Reisebüro geändert", "Erfolgreich geändert!")); //Send message 
+
     }
     
+    public void delete(){
+        bmwUserController.setSelected(selected);
+        System.out.println(selected);
+        bmwUserController.delete(null);
+        update();
+    }
 
     public Boolean getLoginSent() {
         return loginSent;
@@ -235,8 +255,6 @@ public class Reisebuero {
         this.personenID = personenID;
     }
 
-    
-    
     public BmwUser getSelected() {
         return selected;
     }
@@ -245,7 +263,6 @@ public class Reisebuero {
         this.selected = selected;
     }
 
-    
     public List<BmwUser> getRoleUser() {
         return roleUser;
     }
@@ -253,7 +270,4 @@ public class Reisebuero {
     public void setRoleUser(List<BmwUser> roleUser) {
         this.roleUser = roleUser;
     }
-    
-    
-    
 }

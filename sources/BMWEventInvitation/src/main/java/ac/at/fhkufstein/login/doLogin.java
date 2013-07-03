@@ -100,7 +100,7 @@ public class doLogin implements Serializable{
 					return "#";
 				} else if (bmwUser.getRole() == 1) {
 					//is BMW User -> Redirect to BMW User
-					return "/faces/index.xhtml";
+					return "index.xhtml";
 				} else if (bmwUser.getRole() == 2) {
 					//is Journalist -> Redirect to Journalist interface
 					return "/faces/BMW_Journalist/journalistmenue.xhtml";
@@ -144,13 +144,13 @@ public class doLogin implements Serializable{
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("old_admin", null);
 
 			System.out.println("Its a admin going back");
-			return "/faces/index.xhtml";
+			return "index.xhtml";
 		}else{
 			//Its a regular user logging out
 		//Delete Session
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		//redirect to login page
-		return "/faces/login.xhtml";
+		return "login.xhtml";
 		}
 
 	}
@@ -168,7 +168,7 @@ public class doLogin implements Serializable{
 
 		return "/faces/BMW_Journalist/journalistmenue.xhtml";
 		}else{
-			return "/faces/login.xhtml";
+			return "login.xhtml";
 		}
 	}
 
@@ -179,7 +179,7 @@ public class doLogin implements Serializable{
 			//Delete Session
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			try{//redirect to login page
-			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("login.xhtml");
 			}catch(Exception e){
 				System.out.println("Redirect to login page failed");
 			}
@@ -193,7 +193,7 @@ public class doLogin implements Serializable{
 			//Delete Session
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			try{//redirect to login page
-			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("login.xhtml");
 			}catch(Exception e){
 				System.out.println("Redirect to login page failed");
 			}
@@ -208,7 +208,7 @@ public class doLogin implements Serializable{
 			//Delete Session
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 			try{//redirect to login page
-			FacesContext.getCurrentInstance().getExternalContext().dispatch("/faces/login.xhtml");
+			FacesContext.getCurrentInstance().getExternalContext().dispatch("login.xhtml");
 			}catch(Exception e){
 				System.out.println("Redirect to login page failed");
 			}
