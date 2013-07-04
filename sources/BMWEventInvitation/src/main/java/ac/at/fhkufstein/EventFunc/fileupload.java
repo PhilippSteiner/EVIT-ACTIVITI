@@ -79,21 +79,21 @@ public class fileupload {
 
     public List<File> getEventFolder() {
 
-        //System.setProperty("event_upl_path", "C:\\BMW_Folder");
-        //System.out.println("Property set to: "+System.getProperty("event_upl_path"));
+        System.setProperty("event_upl_path", "C:\\BMW_Folder");
+        System.out.println("Property set to: "+System.getProperty("event_upl_path"));
 
         final File folder = new File(dir);
-        return listFilesForFolder(folder);
+        return listFilesForEventFolder(folder);
     }
 
-    public List<File> listFilesForFolder(final File folder) {
+    public List<File> listFilesForEventFolder(final File folder) {
         
         try{
         List<File> files = new ArrayList<File>();
         if (folder.listFiles().length > 0) {
             for (final File fileEntry : folder.listFiles()) {
                 if (fileEntry.isDirectory()) {
-                    listFilesForFolder(fileEntry);
+                    listFilesForEventFolder(fileEntry);
                 } else {
                     files.add(fileEntry);
                     System.out.println(fileEntry.getName());
