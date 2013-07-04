@@ -125,7 +125,7 @@ public class ProcessBmwEventController implements Serializable {
 
 
         InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
-
+        System.out.println(process.getCurrentActivity());
         if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_RELEASE_ACTIVITY)) {
 
             event.setReleased(true);
