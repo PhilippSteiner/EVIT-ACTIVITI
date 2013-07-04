@@ -10,6 +10,7 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
+import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -21,7 +22,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "processParticipants")
 @ViewScoped
-public class ProcessParticipants {
+public class ProcessParticipants implements Serializable{
 
     private final String ACTIVITI_ADD_ACTIVITY = "addJournalists";
     private final String ACTIVITI_SELECTIVE_INVITATION = "selectiveInvitation";

@@ -6,6 +6,7 @@ package ac.at.fhkufstein.EventFunc;
 
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.entity.BmwEvent;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
@@ -17,7 +18,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "status")
 @ViewScoped
-public class Eventstatus {
+public class Eventstatus implements Serializable{
 
     final static public Integer EVENT_STATUS_CREATED = 10;
     final static public Integer EVENT_STATUS_JOURNALIST_INVITE = 20;

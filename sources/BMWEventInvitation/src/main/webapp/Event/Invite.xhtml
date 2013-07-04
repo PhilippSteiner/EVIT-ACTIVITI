@@ -67,8 +67,11 @@
                         <p:growl id="growl" showDetail="true" />
                         <p:commandButton id="Submit" value="Speichern" action="#{Participants.saveSelected()}" update="growl" oncomplete="cityDialog.show()" style="margin-top:5px"/>
                     </f:facet>
-
+                    
                 </p:dataTable>
+                    <p:blockUI id="block" block="datalist" trigger="datalist:Submit">
+                        <p:graphicImage value="/resources/img/ajax-loader.gif"/>
+                    </p:blockUI>
 
 
 
