@@ -53,7 +53,7 @@ public class emailTemplatebean implements Serializable{
         this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
 
         bmwevent = bmweventController.getFacade().find(eventID);
-        System.out.println(bmwevent);
+        //System.out.println(bmwevent);
         try {
 
 			EntityManager em = ((EmailTemplatesFacade) emailController.getFacade()).getEntityManager();
