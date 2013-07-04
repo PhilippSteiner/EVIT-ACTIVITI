@@ -6,6 +6,7 @@ package ac.at.fhkufstein.EventFunc;
 
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.entity.BmwEvent;
+import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
@@ -17,7 +18,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "status")
 @ViewScoped
-public class Eventstatus {
+public class Eventstatus implements Serializable{
 
     final static public Integer EVENT_STATUS_CREATED = 10;
     final static public Integer EVENT_STATUS_JOURNALIST_INVITE = 20;
@@ -68,35 +69,35 @@ public class Eventstatus {
 
     public boolean isInvited() {
         if(current.getProgress() == EVENT_STATUS_JOURNALIST_INVITE){
-            created = Boolean.TRUE;
+            invited = Boolean.TRUE;
         }
         return invited;
     }
 
     public boolean isReleased() {
         if(current.getProgress() == EVENT_STATUS_RELEASE){
-            created = Boolean.TRUE;
+            released = Boolean.TRUE;
         }
         return released;
     }
 
     public boolean isEnd() {
         if(current.getProgress() == EVENT_STATUS_EVENT_END){
-            created = Boolean.TRUE;
+            end = Boolean.TRUE;
         }
         return end;
     }
 
     public boolean isFollowup() {
         if(current.getProgress() == EVENT_STATUS_FOLLOWUP){
-            created = Boolean.TRUE;
+            followup = Boolean.TRUE;
         }
         return followup;
     }
 
     public boolean isFinished() {
         if(current.getProgress() == EVENT_STATUS_FINISHED){
-            created = Boolean.TRUE;
+            finished = Boolean.TRUE;
         }
         return finished;
     }
