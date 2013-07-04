@@ -242,19 +242,24 @@ public class Participants implements Serializable {
                 pc.setUserId(b);
                 pc.setEventId(current);
                 pc.setPState("eingeladen");//Set state to eingeladen. This is the initial State
-                System.out.println("Added:" + b.getPersonenID().getNameVollstaendig());
+                System.out.println("Added: " + b.getPersonenID().getNameVollstaendig());
                 bmwParticipantsController.setSelected(pc);
                 bmwParticipantsController.saveNew(null);//save to database
-
+                
+                //Event Progress weiterschalten
+                current.setProgress(20);
+                bmwEventController.setSelected(current);
+                bmwEventController.save(null);
+                
                 PersistenceService.getManagedBeanInstance(ProcessParticipants.class).inviteParticpantManually(current, pc);
             }
             ii++;
         }
 
         FacesContext context = FacesContext.getCurrentInstance();
-
         context.addMessage(null, new FacesMessage("Event", "Teilnehmer gespeichert")); //Send message
-
+        
+        //Prozess wird fortgesetzt
         PersistenceService.getManagedBeanInstance(ProcessParticipants.class).confirmInvitedParticipants(current);
 
     }

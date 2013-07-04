@@ -84,7 +84,7 @@ public class InvitationProcess {
 
         setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
-        System.out.println("Proccess Instance #" + processHolder.getProcessId() + " started");
+        System.out.println("Proccess Instance # " + processHolder.getProcessId() + " started");
     }
 
     public void setVariable(String name, Object value) {

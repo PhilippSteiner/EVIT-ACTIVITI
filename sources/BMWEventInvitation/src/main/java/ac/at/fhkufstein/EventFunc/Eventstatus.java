@@ -69,35 +69,35 @@ public class Eventstatus implements Serializable{
 
     public boolean isInvited() {
         if(current.getProgress() == EVENT_STATUS_JOURNALIST_INVITE){
-            created = Boolean.TRUE;
+            invited = Boolean.TRUE;
         }
         return invited;
     }
 
     public boolean isReleased() {
         if(current.getProgress() == EVENT_STATUS_RELEASE){
-            created = Boolean.TRUE;
+            released = Boolean.TRUE;
         }
         return released;
     }
 
     public boolean isEnd() {
         if(current.getProgress() == EVENT_STATUS_EVENT_END){
-            created = Boolean.TRUE;
+            end = Boolean.TRUE;
         }
         return end;
     }
 
     public boolean isFollowup() {
         if(current.getProgress() == EVENT_STATUS_FOLLOWUP){
-            created = Boolean.TRUE;
+            followup = Boolean.TRUE;
         }
         return followup;
     }
 
     public boolean isFinished() {
         if(current.getProgress() == EVENT_STATUS_FINISHED){
-            created = Boolean.TRUE;
+            finished = Boolean.TRUE;
         }
         return finished;
     }

@@ -10,7 +10,7 @@
 
 
         <h:form id="BmwEventEditForm">
-            <p:growl id="growl" showDetail="true" sticky="true" />
+            <p:growl id="growl" showDetail="true" />
             <p:layout id="layoutevent" style="min-height: 600px">
                 <p:layoutUnit position="west" style="border-style: none">
                     <p:panel header="Eventinfo" >
@@ -82,7 +82,7 @@
                                 <p:commandButton value="Event erstellt" disabled="true"/>
                             </p:column>
                             <p:column>
-                                <p:button value="Journalisten hinzugefügen" rendered="#{status.created}" outcome="/faces/Event/Invite.xhtml?eventID=#{param.eventID}"/>
+                                <p:button value="Journalisten hinzufügen" rendered="#{status.created}" outcome="/Event/Invite.xhtml?eventID=#{param.eventID}"/>
                                 <p:button value="Journalisten hinzugefügt" rendered="#{!status.created}" disabled="true"/>
                             </p:column>
                             <p:column>
