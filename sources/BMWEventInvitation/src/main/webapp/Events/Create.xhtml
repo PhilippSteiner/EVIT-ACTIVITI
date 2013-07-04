@@ -14,6 +14,7 @@
                 <p:growl id="growl" showDetail="true"/>
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{bmwEventController.selected != null}">
+
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_name}" for="name" />
                         <p:inputText id="name" value="#{bmwEventController.selected.name}" title="#{bundle.CreateBmwEventTitle_name}" required="true" requiredMessage="#{bundle.CreateBmwEventRequiredMessage_name}"/>
 
@@ -58,29 +59,34 @@
                                            />
                             <f:converter binding="#{bmwUserConverter}"/>
                         </p:selectOneMenu>
-<!--
-                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
-                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
--->
-                        
-                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
-						<p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
-						<p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
-							<p:ajax event="change" update=":BmwEventCreateForm" />
-						</p:selectBooleanCheckbox>
+                        <!--
+                                                <p:outputLabel value="#{bundle.CreateBmwEventLabel_responsibleUser}" for="responsibleUser" />
+                                                <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}"  required="true" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+                        -->
 
-						 <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" rendered="#{bmwEventController.selected.embargo}"/>
-                      	<p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.CreateBmwEventTitle_embargoDate}" rendered="#{bmwEventController.selected.embargo}" showOn="button"/>
+                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
+                        <p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
+                            <p:ajax event="change" update=":BmwEventCreateForm" />
+                        </p:selectBooleanCheckbox>
+
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" rendered="#{bmwEventController.selected.embargo}"/>
+                        <p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.CreateBmwEventTitle_embargoDate}" rendered="#{bmwEventController.selected.embargo}" showOn="button"/>
 
 
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{processBmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwEventCreateDialog.hide()"/>
+                    <p:commandButton id="save" actionListener="#{processBmwEventController.saveNew}" value="#{bundle.Save}" update="display,:BmwEventListForm:datalist,:growl" onclick="#{bmwEventController.selected.setEventCreated()}" oncomplete="handleSubmit(xhr,status,args,BmwEventCreateDialog);" style="margin-top: 10px"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwEventCreateDialog.hide()" style="margin-top: 10px"/>
+ 
                 </h:panelGroup>
+                <p:blockUI id="block" block=":BmwEventCreateForm" trigger="save">
+                    <p:graphicImage value="/resources/img/ajax-loader.gif"/>
+                </p:blockUI>
 
             </h:form>
 
         </p:dialog>
+
 
     </ui:composition>
 
