@@ -50,6 +50,7 @@ public class InvitationProcess {
 
         if (processHolder.getProcessId() != null) {
             setProcessInstance(
+                    // problem returns null
                     Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
             System.out.println(processHolder.getProcessId().toString());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
@@ -65,7 +66,8 @@ public class InvitationProcess {
 
 
         processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
-
+        //Progress wird verwendet um den Status des Prozesses zu kontrollieren
+        processHolder.setProgress(10);
         // nur bei Hauptprozess
         if (processDefinition.equals(PROCESSES[0])) {
             setVariable(ACTIVITI_INVITATION_STARTED, false);
@@ -82,7 +84,7 @@ public class InvitationProcess {
 
         setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
-        System.out.println("Proccess Instance #" + processHolder.getProcessId() + " started");
+        System.out.println("Proccess Instance # " + processHolder.getProcessId() + " started");
     }
 
     public void setVariable(String name, Object value) {
@@ -122,7 +124,7 @@ public class InvitationProcess {
     }
 
     public void resumeProcess() {
-        System.out.println("resume Process with Id " + processHolder.getProcessId());
+        System.out.println("Resume Process with Id " + processHolder.getProcessId());
         Services.getRuntimeService().signal(String.valueOf(processHolder.getProcessId()));
     }
 
@@ -198,6 +200,7 @@ public class InvitationProcess {
 
     public static boolean signalEvent(ProcessInstance processInstance, String reference) {
         System.out.println("searching signal event subscription " + reference);
+        //System.out.println("Prozess-Instanz: " + processInstance.getId());
         boolean found = false;
         for (Execution exec : Services.getRuntimeService().createExecutionQuery().signalEventSubscriptionName(reference).list()) {
             if (exec.getProcessInstanceId().equals(processInstance.getProcessInstanceId())) {

@@ -17,5 +17,9 @@ public interface ActivitiProcessHolder {
     public Integer getProcessId();
 
     public void setProcessId(Integer processId);
+    
+    public void setProgress(Integer progress);
+    
+    public Integer getProgress();
 
 }
