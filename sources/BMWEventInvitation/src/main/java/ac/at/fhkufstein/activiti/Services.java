@@ -33,6 +33,12 @@ public class Services {
 //        }
 
     }
+    
+    public static void testProcess() {
+        Services.getRuntimeService().createProcessInstanceQuery().processInstanceId("83923").singleResult();
+        
+        System.out.println("Process tested");
+    }
 
     private static void instantiateProcessEngine() {
         processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault().buildProcessEngine();

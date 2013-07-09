@@ -37,6 +37,17 @@ public class SendBookingMail implements JavaDelegate {
 
         // send notification for manual invitation
 
+        send(event);
+
+
+        String mailSentMessage = "Email wurde an das Reisebüro " + event.getTravelAgency().getCompanyName() + " gesendet.";
+
+        System.out.println(mailSentMessage);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(mailSentMessage));
+    }
+
+    public static void send(BmwEvent event) {
         String emailType = "booking";
 
         EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
@@ -45,12 +56,5 @@ public class SendBookingMail implements JavaDelegate {
                 .getSingleResult();
 
         NotificationService.parseTemplateNonJournalist(event.getTravelAgency(), mailTemplate);
-
-
-        String mailSentMessage = "Email wurde an das Reisebüro " + event.getTravelAgency().getCompanyName() + " gesendet.";
-
-        System.out.println(mailSentMessage);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(mailSentMessage));
     }
 }

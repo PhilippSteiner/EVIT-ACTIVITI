@@ -49,6 +49,7 @@ public class InvitationProcess {
         this.processDefinition = processDefinition;
 
         if (processHolder.getProcessId() != null) {
+            
             setProcessInstance(
                     Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
             System.out.println(processHolder.getProcessId().toString());

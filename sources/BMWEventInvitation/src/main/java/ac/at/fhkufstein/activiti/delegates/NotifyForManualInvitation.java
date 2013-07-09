@@ -39,24 +39,17 @@ public class NotifyForManualInvitation implements JavaDelegate {
 
         try {
 
-               // send notification for manual invitation
+            // send notification for manual invitation
 
-            String emailType = "manuel";
-
-            EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                    .setParameter("eventId", event)
-                    .setParameter("type", emailType)
-                    .getSingleResult();
-
-            NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
+            send(event);
 
 
 
-                String mailSentMessage = "Es wurde eine Notification über eine manuelle Nachladung an den Mitarbeiter " + event.getResponsibleUser() + " gesendet. Momentaner Teilnehmer: " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname();
+            String mailSentMessage = "Es wurde eine Notification über eine manuelle Nachladung an den Mitarbeiter " + event.getResponsibleUser() + " gesendet. Momentaner Teilnehmer: " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname();
 
-                System.out.println(mailSentMessage);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
+            System.out.println(mailSentMessage);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(mailSentMessage));
 
 
         } catch (Exception ex) {
@@ -67,5 +60,17 @@ public class NotifyForManualInvitation implements JavaDelegate {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
         }
 
+    }
+
+    public static void send(BmwEvent event) {
+
+        String emailType = "manuel";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
     }
 }

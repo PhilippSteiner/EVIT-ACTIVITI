@@ -38,15 +38,7 @@ public class SendTicketNotification implements JavaDelegate {
 
         // send ticket notification mail
 
-        String emailType = "ticket";
-
-        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                .setParameter("eventId", event)
-                .setParameter("type", emailType)
-                .getSingleResult();
-
-        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
-
+        send(event, participant);
 
 
 
@@ -55,5 +47,16 @@ public class SendTicketNotification implements JavaDelegate {
         System.out.println(mailSentMessage);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(mailSentMessage));
+    }
+
+    public static void send(BmwEvent event, BmwParticipants participant) {
+         String emailType = "ticket";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
     }
 }

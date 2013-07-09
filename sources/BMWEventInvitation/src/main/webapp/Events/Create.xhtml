@@ -63,14 +63,13 @@
                             <f:converter binding="#{bmwUserConverter}"/>
                         </p:selectOneMenu>
 
-                        <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
-						<p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
-						<p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
-							<p:ajax event="change" update=":BmwEventCreateForm" />
-						</p:selectBooleanCheckbox>
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
+                        <p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
+                            <p:ajax event="change" update=":BmwEventCreateForm" />
+                        </p:selectBooleanCheckbox>
 
-						 <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" rendered="#{bmwEventController.selected.embargo}"/>
-                      	<p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.CreateBmwEventTitle_embargoDate}" rendered="#{bmwEventController.selected.embargo}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateBmwEventLabel_embargoDate}" for="embargoDate" rendered="#{bmwEventController.selected.embargo}"/>
+                        <p:calendar id="embargoDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{bmwEventController.selected.embargoDate}" title="#{bundle.CreateBmwEventTitle_embargoDate}" rendered="#{bmwEventController.selected.embargo}" showOn="button"/>
 
 
                     </p:panelGrid>

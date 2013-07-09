@@ -44,14 +44,7 @@ public class SendInvitationmail implements JavaDelegate {
                 //erstmalige Einladung
 
                 // send invitation mail
-                String emailType = "invite";
-
-                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                        .setParameter("eventId", event)
-                        .setParameter("type", emailType)
-                        .getSingleResult();
-
-                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+                sendInvite(event, participant);
 
                 participant.setInvitationDate(new Date());
                 PersistenceService.save(BmwParticipantsController.class, participant);
@@ -72,15 +65,8 @@ public class SendInvitationmail implements JavaDelegate {
                 // Urgenzmail
 
                 // send urgenz mail
-                String emailType = "urgenz";
 
-                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                        .setParameter("eventId", event)
-                        .setParameter("type", emailType)
-                        .getSingleResult();
-
-                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
-
+                sendReminder(event, participant);
 
 
                 execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
@@ -100,5 +86,27 @@ public class SendInvitationmail implements JavaDelegate {
             ex.printStackTrace();
         }
 
+    }
+
+    public static void sendInvite(BmwEvent event, BmwParticipants participant) {
+        String emailType = "invite";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+    }
+
+    public static void sendReminder(BmwEvent event, BmwParticipants participant) {
+        String emailType = "urgenz";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
     }
 }
