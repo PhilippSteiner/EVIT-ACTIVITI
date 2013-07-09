@@ -12,14 +12,15 @@
             <h:outputText value="#{bundle.AppName}"></h:outputText>
         </ui:define>
 
-        <ui:define name="body">
+        <ui:define name="body" >
 
-
-            <ui:include src="/bmwuser_home_elms/upcoming.xhtml"/>
+            <p:layout id="dashlayout">
+            <ui:include src="/bmwuser_home_elms/upcoming.xhtml" />
             <ui:include src="/bmwuser_home_elms/past.xhtml"/>
+       
             <ui:include src="/bmwuser_home_elms/emails_notifications.xhtml"/>
 
-
+</p:layout>
             <h:form >
                 <p:panelGrid columns="2">	
                     <h:outputText value="Eingeloggt als: #{login.uid}"/>
