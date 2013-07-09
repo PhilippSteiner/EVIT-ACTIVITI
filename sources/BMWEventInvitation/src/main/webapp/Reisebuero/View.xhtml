@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwUserViewDlg" widgetVar="BmwUserViewDialog" modal="true" resizable="false" appendToBody="true" header="Reisebüro anzeigen">
+
+            <h:form id="BmwUserViewForm">
+
+                <h:panelGroup id="display">
+                    
+                        <p:panelGrid columns="2" >
+
+                            <h:outputText value="Firma:"/>
+                            <h:outputText value="#{reisebuero.selected.companyName}" title="Firma"/>
+
+                            <h:outputText value="Vorname:"/>
+                            <h:outputText value="#{reisebuero.selected.firstName}" title="Firstname"/>
+
+                            <h:outputText value="Nachname:"/>
+                            <h:outputText value="#{reisebuero.selected.lastName}" title="Nachname"/>
+
+                            <h:outputText value="Username:"/>
+                            <h:outputText value="#{reisebuero.selected.username}" title="Username"/>
+
+                            <h:outputText value="#{bundle.ViewBmwUserLabel_pwd}"/>
+                            <h:outputText value="#{reisebuero.selected.pwd}" title="#{bundle.ViewBmwUserTitle_pwd}"/>
+
+                        
+             
+
+
+
+
+
+
+
+
+
+                        </p:panelGrid>
+                    
+                    <p:commandButton value="#{bundle.Close}" onclick="BmwUserViewDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

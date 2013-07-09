@@ -13,7 +13,7 @@
         <ui:define name="body">
             <h:form id="loginform" >
                 <p:growl id="growl" showDetail="true"/>
-                <p:panel header="Login BMW Eventmanagement" style="width: 300px; text-align: center;margin: 0 auto;margin-top: 150px">
+                <p:panel id="panel" header="Login BMW Eventmanagement" style="width: 300px; text-align: center;margin: 0 auto;margin-top: 150px">
 
                     <p:panelGrid styleClass="noBorder" columns="2" style="width: min-content">
 
@@ -32,7 +32,12 @@
 
                 </p:panel>
 
+                <p:blockUI id="block" block="panel" trigger="welcome">
+                    <p:graphicImage value="/resources/img/ajax-loader.gif"/>
+                </p:blockUI>
             </h:form>
+
+
 
             <p:dialog appendToBody="true" id="pwdialog" header="Passwort anfordern" widgetVar="pdlg" height="100" modal="true" style="text-align: center">
                 <h:form>

@@ -494,7 +494,6 @@ public class ResponseBean implements Serializable {
 
                 BmwTravel mytravel = new BmwTravel();
                 mytravel.setFlightId(myflight);
-                mytravel.setPdfTicketUrl("Noch kein Flugticket vorhanden");
                 mytravel.setComment(this.getKommentar());
                 mytravel.setType("typeFlug");
                 mytravel.setArrivalDatetime(myflight.getArrivalTime());

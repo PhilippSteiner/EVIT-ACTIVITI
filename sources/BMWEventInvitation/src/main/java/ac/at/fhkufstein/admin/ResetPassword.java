@@ -74,7 +74,7 @@ public class ResetPassword implements Serializable{
     
     }
     
-    public String getRandomPassword() {
+    public static String getRandomPassword() {
         StringBuilder password = new StringBuilder(8);
         password.append(RandomStringUtils.randomAlphanumeric(8));
         return password.toString();

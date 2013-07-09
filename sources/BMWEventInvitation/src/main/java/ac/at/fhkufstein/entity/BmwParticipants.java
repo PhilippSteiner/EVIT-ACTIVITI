@@ -44,6 +44,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "BmwParticipants.findByBmwAuth", query = "SELECT b FROM BmwParticipants b WHERE b.bmwAuth = :bmwAuth")})
 public class BmwParticipants implements Serializable, ActivitiProcessHolder {
 
+    @Column(name = "progress")
+    private Integer progress;
     @Column(name = "invitation_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date invitationDate;
@@ -192,4 +194,22 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
     public void setInvitationDate(Date invitationDate) {
         this.invitationDate = invitationDate;
     }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
+    }
+
+    public String getpState() {
+        return pState;
+    }
+
+    public void setpState(String pState) {
+        this.pState = pState;
+    }
+    
+    
 }

@@ -9,63 +9,64 @@
     <ui:composition>
 
 
-		<p:panel header="Emails">  <h:form id="form">
+        <p:panel header="Emails">  
+            <h:form id="form">
 
-				<p:growl id="growl" showDetail="true"/>  
-				<p:dataTable id="emails" value="#{bmwEmailHistoryController.items}" var="item"
-							 selectionMode="single" selection="#{bmwEmailHistoryController.selected}"
-							 rowKey="#{item.id}"
-							 paginator="true"
-							 rows="10"
-							 rowsPerPageTemplate="10,20,30"
-							 >
+                <p:growl id="growl" showDetail="true"/>  
+                <p:dataTable id="emails" value="#{bmwEmailHistoryController.items}" var="item"
+                             selectionMode="single" selection="#{bmwEmailHistoryController.selected}"
+                             rowKey="#{item.id}"
+                             paginator="true"
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30"
+                             >
 
-					<p:ajax event="rowSelect" 
-							update=":form:display :form:growl" oncomplete="carDialog.show()" />  
-					<p:ajax event="rowUnselect"  update=":form:growl"/>  
-					<p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
-						<f:facet name="header">
-							<h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
-						</f:facet>
-						<h:outputText value="#{item.emailFrom}"/>
-					</p:column>
+                    <p:ajax event="rowSelect" 
+                            update=":form:display :form:growl" oncomplete="carDialog.show()" />  
+                    <p:ajax event="rowUnselect"  update=":form:growl"/>  
+                    <p:column sortBy="#{item.emailFrom}" filterBy="#{item.emailFrom}">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailFrom}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.emailFrom}"/>
+                    </p:column>
 
-					<p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
-						<f:facet name="header">
-							<h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
-						</f:facet>
-						<h:outputText value="#{item.emailTo}"/>
-					</p:column>
-					
-					<p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
-						<f:facet name="header">
-							<h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
-						</f:facet>
-						<h:outputText value="#{item.emailSubject}"/>
-					</p:column>
-					
-				</p:dataTable>
+                    <p:column sortBy="#{item.emailTo}" filterBy="#{item.emailTo}">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailTo}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.emailTo}"/>
+                    </p:column>
 
+                    <p:column sortBy="#{item.emailSubject}" filterBy="#{item.emailSubject}">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListBmwEmailHistoryTitle_emailSubject}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.emailSubject}"/>
+                    </p:column>
 
-				<p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
-						  showEffect="fade" hideEffect="explode">  
-
-					<h:panelGrid id="display" columns="2" cellpadding="4">  
-
-<h:outputText value="Von:" />  
-						<h:outputText value="#{bmwEmailHistoryController.selected.emailFrom}" />
-						<h:outputText value="An:" />  
-						<h:outputText value="#{bmwEmailHistoryController.selected.emailTo}" />  
-						<h:outputText value="Betreff:" />  
-						<h:outputText value="#{bmwEmailHistoryController.selected.emailSubject}" />
-						<h:outputText value="Inhalt:" />  
-						<h:outputText value="#{bmwEmailHistoryController.selected.emailContent}" />
+                </p:dataTable>
 
 
-					</h:panelGrid>  
-				</p:dialog>  
+                <p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
+                          showEffect="fade" hideEffect="explode">  
 
-			</h:form>
-		</p:panel>
-	</ui:composition>
+                    <h:panelGrid id="display" columns="2" cellpadding="4">  
+
+                        <h:outputText value="Von:" />  
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailFrom}" />
+                        <h:outputText value="An:" />  
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailTo}" />  
+                        <h:outputText value="Betreff:" />  
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailSubject}" />
+                        <h:outputText value="Inhalt:" />  
+                        <h:outputText value="#{bmwEmailHistoryController.selected.emailContent}" />
+
+
+                    </h:panelGrid>  
+                </p:dialog>  
+
+            </h:form>
+        </p:panel>
+    </ui:composition>
 </html>

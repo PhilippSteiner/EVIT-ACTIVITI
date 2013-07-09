@@ -48,6 +48,9 @@ public class SendInvitationmail implements JavaDelegate {
 
                 participant.setInvitationDate(new Date());
                 PersistenceService.save(BmwParticipantsController.class, participant);
+                //Event Progress wird entsprechend weitergeschalten
+                event.setProgress(40);
+                PersistenceService.save(BmwEventController.class, event);
 
                 execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
 

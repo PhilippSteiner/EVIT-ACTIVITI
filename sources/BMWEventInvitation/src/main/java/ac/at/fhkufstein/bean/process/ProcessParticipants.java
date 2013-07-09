@@ -10,6 +10,7 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
+import java.io.Serializable;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -21,9 +22,10 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean(name = "processParticipants")
 @ViewScoped
-public class ProcessParticipants {
+public class ProcessParticipants implements Serializable{
 
     private final String ACTIVITI_ADD_ACTIVITY = "addJournalists";
+    private final String ACTIVITI_ADD_ANOTHER_ACTIVITY = "releaseEvent";
     private final String ACTIVITI_SELECTIVE_INVITATION = "selectiveInvitation";
 
     public void confirmInvitedParticipants(BmwEvent event) {
@@ -36,9 +38,15 @@ public class ProcessParticipants {
 
             process.resumeProcess();
 
-            MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess wird fortgefahren.");
-        } else {
-            MessageService.showError(FacesContext.getCurrentInstance(), "Der Prozess kann nicht fortgesetzt werden." + (process.getCurrentActivity() != null ? " current Activity: "+process.getCurrentActivity()  : ""));
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Prozess", "Der Prozess wird fortgefahren.");
+        /* Prozess soll nicht fortgesetzt werden wenn bereits mindestens ein Journalist als Teilnehmer zum 
+         * Event hinzugefügt worden ist und weitere Journalisten als Teilnehmer hinzugefügt werden.
+         * Der Prozess wird dann einfach beim "release" des Events fortfahren!
+         */
+        } else if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_ADD_ANOTHER_ACTIVITY)){
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Prozess", "Der Prozess ist bereits im nächsten Abschnitt.");
+        } else{    
+            MessageService.showError(FacesContext.getCurrentInstance(), "Prozess", "Der Prozess kann nicht fortgesetzt werden." + (process.getCurrentActivity() != null ? " Current Activity: "+process.getCurrentActivity()  : ""));
         }
     }
 
@@ -46,7 +54,7 @@ public class ProcessParticipants {
 
         InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
         if((Boolean) process.getVariable(InvitationProcess.ACTIVITI_INVITATION_STARTED)) {
-            // Teilnehmer wird eingeladen
+            // Teilnehmer wird nachgeladen
             InvitationProcess.startSingleProcess(event, participant);
 
             MessageService.showError(FacesContext.getCurrentInstance(), "Der Teilnehmer " + participant + " wurde nachgeladen.");
