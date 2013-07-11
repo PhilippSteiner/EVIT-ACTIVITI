@@ -2,12 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ac.at.fhkufstein.EventFunc;
+package ac.at.fhkufstein.BMWJournalist;
 
-/**
- *
- * @author wolfgangteves
- */
+import ac.at.fhkufstein.service.PersistenceService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,13 +23,14 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import java.io.Serializable;
+import javax.faces.bean.SessionScoped;
 
 /*
  * This Class handles Fileuploads: It saves files in a specific folder with subfolders named after the event id
  */
-@ManagedBean(name = "fileupload")
-@ViewScoped
-public class fileupload {
+@ManagedBean(name = "JournalistData")
+@SessionScoped
+public class JournalistData {
     //This is how you set a property in java
     //System.setProperty("event_upl_path", "/Volumes/Macintosh HD/Uploads");
 
@@ -40,9 +38,10 @@ public class fileupload {
     String getPropertyString = getPropertyStringRaw.replace("\\", "\\\\");*/
 
 
-    FacesContext facesContext = FacesContext.getCurrentInstance();
-    public Integer eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
-    String dir = System.getProperty("event_upl_path") + "/" + eventID.toString();//Path where the files are saved
+    JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
+    
+    
+    String dir = System.getProperty("event_upl_path") + "/" + currentJournalistBean.getSelectedBmwEvent().getId();//Path where the files are saved
     //String dir = getPropertyString + "/" + eventID.toString();//Path where the files are saved
 
     public void handleFileUpload(FileUploadEvent event) throws IOException {
@@ -126,15 +125,23 @@ public class fileupload {
             return null;
         }
     }
+    
+    public StreamedContent getCurrentImageFile(String name) {
 
-    public Integer getEventID() {
+        try {
+            
 
-        return eventID;
-    }
+            System.out.println("Opening File..." + name);
 
-    public void setEventID(Integer eventID) {
-        this.eventID = eventID;
-        System.out.println("Set:" + eventID);
+            File f = new File(dir + "/" + name);
+            System.out.println("Got Image File: " + f.getName());
+            InputStream stream = new FileInputStream(dir + "/" + name);
+
+            return new  DefaultStreamedContent(stream, "image/jpeg");
+        } catch (Exception e) {
+            System.out.println("File nicht gefunden");
+            return null;
+        }
     }
     
 }
