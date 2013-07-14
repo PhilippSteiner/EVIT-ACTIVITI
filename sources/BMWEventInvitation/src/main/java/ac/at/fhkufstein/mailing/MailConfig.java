@@ -37,9 +37,6 @@ public class MailConfig {
      * Creates a new instance of MailConfig
      */
     public MailConfig() {
-    }
-
-    static {
         MailConfigController.unmarshalConfig();
     }
 

@@ -8,7 +8,7 @@
 
     <ui:composition>
 
-
+        <p:layoutUnit position="south" style="border-style: none">
         <p:panel header="Emails">  
             <h:form id="form">
 
@@ -46,7 +46,9 @@
                     </p:column>
 
                 </p:dataTable>
-
+                <p:blockUI id="datalistblocker" block="emails" trigger="emails">
+                    <p:graphicImage value="/resources/img/ajax-loader.gif"/>
+                </p:blockUI>
 
                 <p:dialog id="dialog" header="Email Anzeigen" widgetVar="carDialog" resizable="false"  
                           showEffect="fade" hideEffect="explode">  
@@ -68,5 +70,6 @@
 
             </h:form>
         </p:panel>
+            </p:layoutUnit>
     </ui:composition>
 </html>

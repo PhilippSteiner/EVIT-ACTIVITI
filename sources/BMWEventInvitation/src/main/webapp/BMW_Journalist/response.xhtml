@@ -105,13 +105,16 @@
         <p:panel header="Eventdokumente">
 
             <h:form>  
-                <p:dataTable var="File" value="#{JournalistFiles.getEventFolder()}">  
+                <p:dataTable var="File" value="#{JournalistData.getEventFolder()}">  
                     <p:column headerText="Files">  
                         <h:outputText value="#{File.name}" />
-                    </p:column>  
+                    </p:column>
+                    <p:column headerText="Anzeige">  
+                        <p:graphicImage value="#{JournalistData.getCurrentImageFile(File.name)}" />
+                    </p:column>
                     <p:column headerText="Download"><p:commandButton id="downloadLink" value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"   
                                                                      icon="ui-icon-arrowthichk-s">  
-                            <p:fileDownload value="#{JournalistFiles.getCurrentEventFile(File.name)}" />  
+                            <p:fileDownload value="#{JournalistData.getCurrentEventFile(File.name)}" />  
                         </p:commandButton>  
 
                     </p:column>

@@ -49,10 +49,21 @@ public class InvitationProcess {
         this.processDefinition = processDefinition;
 
         if (processHolder.getProcessId() != null) {
+
+            //Problem returns null: aus irgendwelchem Grund wird der Eventprozess an einem Punkt beendet und deshalb
+            //wird hier bei einer Abfrage null zurückgegeben da der Prozess nicht mehr aktiv ist!
             
-            setProcessInstance(
-                    // problem returns null
-                    Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
+            /*
+            List<ProcessInstance> list = Services.getRuntimeService().createProcessInstanceQuery().active().list();
+            
+            for(ProcessInstance p:list){
+                System.out.println("Aktiver Prozess: " + p.getProcessInstanceId());
+                
+            }
+            */
+            
+            setProcessInstance(Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
+            
             System.out.println(processHolder.getProcessId().toString());
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 

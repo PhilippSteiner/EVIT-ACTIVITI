@@ -4,61 +4,45 @@
  */
 package ac.at.fhkufstein.BMWJournalist;
 
-import ac.at.fhkufstein.bean.BmwEventController;
-import ac.at.fhkufstein.bean.BmwFlightController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.BmwUserController;
 import ac.at.fhkufstein.entity.BmwEvent;
-import ac.at.fhkufstein.entity.BmwFlight;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.login.doLogin;
-import ac.at.fhkufstein.login.login;
 import ac.at.fhkufstein.service.PersistenceService;
-import ac.at.fhkufstein.session.BmwEventFacade;
-import ac.at.fhkufstein.session.BmwFlightFacade;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.persistence.EntityManager;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 @ManagedBean(name = "JournalistBean")
 @SessionScoped
-//@PersistenceContext
 public class JournalistBean {
 
     private BmwUserController bmwUserController;
     private BmwParticipantsController bmwParticipantsController;
-    private BmwEventController bmwEventController;
-    private BmwUser cev;
     private List <BmwParticipants>JournalistParticipants;
     private List<BmwEvent> journalistEvents;
-    //private JournalistEvent selectedEvent;
     private BmwEvent selectedBmwEvent;
-    private Integer UserID;
     private String von;
     private String bis;
-    //private String status;
-    //select stuff
     private List<SelectItem> auswahlmoeglichkeiten;
     private String auswahl;
     private String flugauswahl;
+ 
+    private StreamedContent dbImage;
 
     public JournalistBean() {
-
-        //some inits
-
 
         bmwUserController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwUserController}", BmwUserController.class);
 
@@ -69,9 +53,6 @@ public class JournalistBean {
         auswahlmoeglichkeiten.add(new SelectItem("Zusagen"));
         auswahlmoeglichkeiten.add(new SelectItem("Absagen"));
         auswahlmoeglichkeiten.add(new SelectItem("Vertretung schicken"));
-        
-        //FacesContext facesContext = FacesContext.getCurrentInstance();
-        //this.UserID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
         
     }
 
@@ -142,6 +123,21 @@ public class JournalistBean {
         this.flugauswahl = flugauswahl;
     }
 
+    public StreamedContent getDbImage() {
+        
+        InputStream dbStream = getClass().getClassLoader().getResourceAsStream("C:\\BMW_Bilder\test.png");
+        
+        this.dbImage = new DefaultStreamedContent(dbStream, "image/png");
+        
+        return dbImage;
+    }
+
+    public void setDbImage(StreamedContent dbImage) {
+        this.dbImage = dbImage;
+    }
+    
+    
+
     //######################################################################################################################################
     //######################################################################################################################################
     //######################################################################################################################################
@@ -177,25 +173,7 @@ public class JournalistBean {
 
     }
 
-   /* public void einladungBeantworten() {
 
-        System.out.println("Einladung beant mit: " + this.auswahl);
-
-    }
-
-    public void autoWaehlen() {
-
-        System.out.println("+++++++++++++++++++++++++autowählen");
-    }
-
-    public void flugwaehlen() {
-
-        System.out.println("++++++++++++++++++++++++++flugwählen mit flug: " + this.flugauswahl);
-
-
-    }*/
-    
-        
         public void stateChangeListener(ValueChangeEvent event) {
         
         System.out.println("Listener Beantwortet mit: "+this.auswahl);
