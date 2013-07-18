@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  
+  <collaboration id="Collaboration">
+    <participant id="JournalistInvitationResponsePool" name="Journalist Einladungsantwort" processRef="Journalist_Invitation_Response"></participant>
+  </collaboration>
+  <process id="Journalist_Invitation_Response" name="Journalist_Invitation_Response" isExecutable="true">
+    <laneSet id="laneSet_Journalist_Invitation_Response">
+      <lane id="bmwMitarbeiter" name="BMW Mitarbeiter">
+        <flowNodeRef>startevent1</flowNodeRef>
+        <flowNodeRef>variablesDefinedSignal</flowNodeRef>
+        <flowNodeRef>sendInvitationmail</flowNodeRef>
+        <flowNodeRef>reminderSent</flowNodeRef>
+        <flowNodeRef>evaluateEventStatus</flowNodeRef>
+        <flowNodeRef>eventIsOpen</flowNodeRef>
+        <flowNodeRef>inviteNextParticipant</flowNodeRef>
+        <flowNodeRef>endevent1</flowNodeRef>
+        <flowNodeRef>endevent2</flowNodeRef>
+        <flowNodeRef>selectiveInvitation</flowNodeRef>
+        <flowNodeRef>inviteSelectedParticipant</flowNodeRef>
+        <flowNodeRef>endevent3</flowNodeRef>
+        <flowNodeRef>cancelInvitation</flowNodeRef>
+        <flowNodeRef>notifyForManualInvitation</flowNodeRef>
+      </lane>
+      <lane id="journalist" name="Journalist">
+        <flowNodeRef>answerInvitation</flowNodeRef>
+        <flowNodeRef>supplyTravelInfos</flowNodeRef>
+        <flowNodeRef>typeOfJourney</flowNodeRef>
+        <flowNodeRef>endevent4</flowNodeRef>
+        <flowNodeRef>endevent6</flowNodeRef>
+        <flowNodeRef>whichFlight</flowNodeRef>
+        <flowNodeRef>kindOfRejection</flowNodeRef>
+        <flowNodeRef>sendBookingMail</flowNodeRef>
+        <flowNodeRef>answer</flowNodeRef>
+        <flowNodeRef>notifyForSpecialFlight</flowNodeRef>
+      </lane>
+      <lane id="travelagency" name="Reisbüro">
+        <flowNodeRef>supplyFlightInfos</flowNodeRef>
+        <flowNodeRef>sendTicketNotification</flowNodeRef>
+        <flowNodeRef>endevent5</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <sequenceFlow id="flow28" sourceRef="startevent1" targetRef="variablesDefinedSignal"></sequenceFlow>
+    <userTask id="variablesDefinedSignal" name="Variablen definiert Signal">
+      
+    </userTask>
+    <sequenceFlow id="flow30" sourceRef="variablesDefinedSignal" targetRef="sendInvitationmail"></sequenceFlow>
+    <serviceTask id="sendInvitationmail" name="Einladungsmail verschicken" activiti:class="ac.at.fhkufstein.activiti.delegates.SendInvitationmail"></serviceTask>
+    <sequenceFlow id="flow4" sourceRef="sendInvitationmail" targetRef="answerInvitation"></sequenceFlow>
+    <userTask id="answerInvitation" name="Einladung beantworten" activiti:formKey="answerInvitation.xhtml"></userTask>
+    <sequenceFlow id="flow11" sourceRef="answerInvitation" targetRef="answer"></sequenceFlow>
+    <boundaryEvent id="answerInvitationBoundarytimer" name="answerInvitationBoundarytimer" attachedToRef="answerInvitation" cancelActivity="true">
+      <timerEventDefinition>
+        <timeDate>${cancelInvitationTime}</timeDate>
+      </timerEventDefinition>
+    </boundaryEvent>
+    <exclusiveGateway id="reminderSent" name="Reminder Sent"></exclusiveGateway>
+    <sequenceFlow id="flow6" name="noch kein Urgenzmail versendet" sourceRef="reminderSent" targetRef="sendInvitationmail">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reminderSent == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow7" name="Urgenzmail bereits versendet" sourceRef="reminderSent" targetRef="cancelInvitation">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${reminderSent == true}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="supplyTravelInfos" name="Reiseinformationen eingeben"></userTask>
+    <sequenceFlow id="flow26" sourceRef="supplyTravelInfos" targetRef="typeOfJourney"></sequenceFlow>
+    <serviceTask id="evaluateEventStatus" name="Event Status evaluieren" activiti:class="ac.at.fhkufstein.activiti.delegates.EvaluateEventStatus"></serviceTask>
+    <sequenceFlow id="flow25" sourceRef="evaluateEventStatus" targetRef="eventIsOpen"></sequenceFlow>
+    <exclusiveGateway id="eventIsOpen" name="eventIsOpen"></exclusiveGateway>
+    <sequenceFlow id="flow8" name="Event offen" sourceRef="eventIsOpen" targetRef="inviteNextParticipant">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${eventIsOpen == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow10" name="Event geschlossen" sourceRef="eventIsOpen" targetRef="endevent2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${eventIsOpen == false}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="inviteNextParticipant" name="nächsten Journalisten nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteNextParticipant"></serviceTask>
+    <sequenceFlow id="flow9" sourceRef="inviteNextParticipant" targetRef="endevent1"></sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <exclusiveGateway id="typeOfJourney" name="Type of Journey"></exclusiveGateway>
+    <sequenceFlow id="car" name="Auto" sourceRef="typeOfJourney" targetRef="endevent4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flight" name="Flug" sourceRef="typeOfJourney" targetRef="whichFlight">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesFlight == true}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="whichFlight" name="whichFlight"></exclusiveGateway>
+    <sequenceFlow id="specialFlight" name="Spezialflug" sourceRef="whichFlight" targetRef="notifyForSpecialFlight">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == false}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="predefinedFlight" name="Standardflug" sourceRef="whichFlight" targetRef="sendBookingMail">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${takesPredefinedFlight == true}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent4" name="End"></endEvent>
+    <serviceTask id="sendBookingMail" name="Buchungsmail senden" activiti:class="ac.at.fhkufstein.activiti.delegates.SendBookingMail"></serviceTask>
+    <sequenceFlow id="flow21" sourceRef="sendBookingMail" targetRef="supplyFlightInfos"></sequenceFlow>
+    <userTask id="supplyFlightInfos" name="Flugdaten eingeben"></userTask>
+    <sequenceFlow id="flow22" sourceRef="supplyFlightInfos" targetRef="sendTicketNotification"></sequenceFlow>
+    <serviceTask id="sendTicketNotification" name="Ticketbenachrichtigung senden" activiti:class="ac.at.fhkufstein.activiti.delegates.SendTicketNotification"></serviceTask>
+    <sequenceFlow id="flow27" sourceRef="sendTicketNotification" targetRef="endevent5"></sequenceFlow>
+    <endEvent id="endevent5" name="End"></endEvent>
+    <endEvent id="endevent2" name="End"></endEvent>
+    <userTask id="selectiveInvitation" name="Selektive Nachladung"></userTask>
+    <sequenceFlow id="flow17" sourceRef="selectiveInvitation" targetRef="inviteSelectedParticipant"></sequenceFlow>
+    <serviceTask id="inviteSelectedParticipant" name="ausgewählten Journalist nachladen" activiti:class="ac.at.fhkufstein.activiti.delegates.InviteSelectedParticipant"></serviceTask>
+    <sequenceFlow id="flow18" sourceRef="inviteSelectedParticipant" targetRef="endevent3"></sequenceFlow>
+    <endEvent id="endevent3" name="End"></endEvent>
+    <exclusiveGateway id="answer" name="answer"></exclusiveGateway>
+    <sequenceFlow id="flow12" name="Zusage" sourceRef="answer" targetRef="supplyTravelInfos">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow14" name="Absage" sourceRef="answer" targetRef="kindOfRejection">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${invitationAccepted == false}]]></conditionExpression>
+    </sequenceFlow>
+    <exclusiveGateway id="kindOfRejection" name="kindOfRejection"></exclusiveGateway>
+    <sequenceFlow id="flow15" name="keine Vertretung" sourceRef="kindOfRejection" targetRef="evaluateEventStatus">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="notifyForManualInvitation">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="cancelInvitation" name="Einladung stornieren" activiti:class="ac.at.fhkufstein.activiti.delegates.CancelInvitation"></serviceTask>
+    <sequenceFlow id="flow31" sourceRef="cancelInvitation" targetRef="evaluateEventStatus"></sequenceFlow>
+    <serviceTask id="notifyForManualInvitation" name="Für manuelle Nachladung benachrichtigen" activiti:class="ac.at.fhkufstein.activiti.delegates.NotifyForManualInvitation"></serviceTask>
+    <sequenceFlow id="flow32" sourceRef="notifyForManualInvitation" targetRef="selectiveInvitation"></sequenceFlow>
+    <serviceTask id="notifyForSpecialFlight" name="Für Spezialflug benachrichtigen" activiti:class="ac.at.fhkufstein.activiti.delegates.NotifyForSpecialFlight"></serviceTask>
+    <sequenceFlow id="flow33" sourceRef="notifyForSpecialFlight" targetRef="endevent6"></sequenceFlow>
+    <sequenceFlow id="flow34" sourceRef="answerInvitationBoundarytimer" targetRef="reminderSent"></sequenceFlow>
+    <endEvent id="endevent6" name="End"></endEvent>
+    <association id="association3" sourceRef="textannotation3" targetRef="sendInvitationmail"></association>
+    <textAnnotation id="textannotation4">
+      <text>Benutzeraktivität für die Beantwortung der Einladung vom Journalist. Er kann Zusagen, Absagen oder eine Vertretung schicken.</text>
+    </textAnnotation>
+    <association id="association4" sourceRef="textannotation4" targetRef="answerInvitation"></association>
+    <textAnnotation id="textannotation5">
+      <text>Zeit Event, das ausgelöst wird, wenn der Journalist nach einem bei Prozessbeginn definierten Zeitraum die Einladung nicht beantwortet.</text>
+    </textAnnotation>
+    <association id="association5" sourceRef="textannotation5" targetRef="answerInvitationBoundarytimer"></association>
+    <textAnnotation id="textannotation6">
+      <text>Entscheidung ob bereits ein Urgenzmail gesendet wurde. Ist dies der Fall wird die Einladung darauffolgend storniert. Wurde keine Urgenzmail ausgesendet, wird es bei der darauffolgenden Aktivität verschickt.</text>
+    </textAnnotation>
+    <association id="association6" sourceRef="textannotation6" targetRef="reminderSent"></association>
+    <association id="association7" sourceRef="textannotation8" targetRef="cancelInvitation"></association>
+    <association id="association8" sourceRef="textannotation7" targetRef="eventIsOpen"></association>
+    <association id="association9" sourceRef="textannotation9" targetRef="evaluateEventStatus"></association>
+    <association id="association10" sourceRef="textannotation10" targetRef="endevent2"></association>
+    <association id="association11" sourceRef="textannotation10" targetRef="endevent1"></association>
+    <association id="association12" sourceRef="textannotation10" targetRef="endevent3"></association>
+    <textAnnotation id="textannotation12">
+      <text>Der Einladungsprozess für den nächstgereihten Jorunalisten wird gestartet.</text>
+    </textAnnotation>
+    <association id="association15" sourceRef="textannotation12" targetRef="inviteNextParticipant"></association>
+    <textAnnotation id="textannotation13">
+      <text>Entscheidung ob die Einladung als Zusage oder als Absage beantwortet wurde. Bei Vertretung wird hier der Weg der Absage gewählt, da der eingeladene Journalist selbst nicht am Event teilnehmen wird.
+</text>
+    </textAnnotation>
+    <association id="association16" sourceRef="textannotation13" targetRef="answer"></association>
+    <textAnnotation id="textannotation14">
+      <text>Entscheidung ob der Journalist eine Vertretung schickt oder nicht.</text>
+    </textAnnotation>
+    <association id="association17" sourceRef="textannotation14" targetRef="kindOfRejection"></association>
+    <textAnnotation id="textannotation17">
+      <text>Benutzeraktivität zur Eingabe der Informationen zur Anreise des Journalisten, vor allem das Transportmittel zur Anreise muss gewählt werden.</text>
+    </textAnnotation>
+    <association id="association20" sourceRef="textannotation17" targetRef="supplyTravelInfos"></association>
+    <textAnnotation id="textannotation18">
+      <text>Entscheidung welche Art der Anreise gewählt wurde. Bei der Anreise 'Auto' wird vom System keine weitere Aktion benötigt, die auf den einzelnen Journalisten spezifiziert ist.</text>
+    </textAnnotation>
+    <association id="association21" sourceRef="textannotation18" targetRef="typeOfJourney"></association>
+    <textAnnotation id="textannotation19">
+      <text>Der Prozess zur Einladung des Journalisten wird beendet. Bei der Anreiseart 'Auto' werden keinen Journalist spezifischen Aktionen mehr vom System ausgeführt.</text>
+    </textAnnotation>
+    <association id="association22" sourceRef="textannotation19" targetRef="endevent4"></association>
+    <textAnnotation id="textannotation20">
+      <text>Entscheidung ob ein im Event definierter Standardflug oder ein Spezialflug gewählt wurde. Bei einem individuellen Flug (Spezialflug) wird keine weitere, für den Journalisten individuelle Maßnahme getroffen, da dieser Ausnahmefall manuell abgearbeitet werden muss. </text>
+    </textAnnotation>
+    <association id="association23" sourceRef="textannotation20" targetRef="whichFlight"></association>
+    <textAnnotation id="textannotation21">
+      <text>Der Prozess zur Einladung des Journalisten wird beendet. Es werden vom System keine weiteren individuellen Maßnahmen getroffen.</text>
+    </textAnnotation>
+    <association id="association24" sourceRef="textannotation21" targetRef="endevent6"></association>
+    <textAnnotation id="textannotation22">
+      <text>Es wird eine Mail an das Reisebüro versandt, das die Informationen zur Buchung des ausgewählten Fluges beinhaltet.</text>
+    </textAnnotation>
+    <association id="association25" sourceRef="textannotation22" targetRef="sendBookingMail"></association>
+    <association id="association26" sourceRef="textannotation24" targetRef="supplyFlightInfos"></association>
+    <association id="association27" sourceRef="textannotation25" targetRef="sendTicketNotification"></association>
+    <association id="association28" sourceRef="textannotation26" targetRef="endevent5"></association>
+    <textAnnotation id="textannotation27">
+      <text>Benutzeraktivität zur selektiven Nachladung der Vertretungen. Diese wird manuell vom BMW Mitarbeiter ausgeführt.</text>
+    </textAnnotation>
+    <association id="association29" sourceRef="textannotation27" targetRef="selectiveInvitation"></association>
+    <textAnnotation id="textannotation28">
+      <text>Der vom BMW Mitarbeiter ausgewählte Journalist wird nachgeladen, das bedeutet der Einladungsprozess wird für diesen Kontakt gestartet.</text>
+    </textAnnotation>
+    <association id="association30" sourceRef="textannotation28" targetRef="inviteSelectedParticipant"></association>
+    <textAnnotation id="textannotation29">
+      <text>Es wird eine Benachrichtigung an den BMW Mitarbeiter gesendet, dass weitere manuelle Maßnahmen ergriffen werden müssen um die Anreise des Journalisten zu organisieren.</text>
+    </textAnnotation>
+    <association id="association31" sourceRef="textannotation29" targetRef="notifyForSpecialFlight"></association>
+    <textAnnotation id="textannotation30">
+      <text>Es wird eine Benachrichtigung an den für das Event verantwortlichen BMW Mitarbeiter ausgesendet, dass eine Vertretung eines Journalisten manuell nachzuladen ist.</text>
+    </textAnnotation>
+    <association id="association32" sourceRef="textannotation30" targetRef="notifyForManualInvitation"></association>
+	<textAnnotation id="textannotation1">
+      <text>Startevent des Journalistenprozesses.
+Wird entweder von Eventprozess direkt nach Freigabe des Events im Hauptsystem gestartet, oder nach Freigabe und erneuter Einladung von einer Instanz dieses Journalistenprozesses.
+</text>
+    </textAnnotation>
+    <association id="association1" sourceRef="textannotation1" targetRef="startevent1"></association>
+    <textAnnotation id="textannotation2">
+      <text>Signal Event, das darauf wartet bis das Hauptsystem die Werte der benötigten Variablen an den Prozess weitergegeben hat.</text>
+    </textAnnotation>
+    <association id="association2" sourceRef="textannotation2" targetRef="variablesDefinedSignal"></association>
+    <textAnnotation id="textannotation3">
+      <text>Der Journalist erhält eine Einladungsmail, die er im System beantworten sollte.
+</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation7">
+      <text>Entscheidung ob das Event noch für Einladungen geöffnet ist oder nicht.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation8">
+      <text>Dem Journalist wird mitgeteilt, dass seine Einladung abgelaufen ist, da er nicht auf sie geantwortet hat.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation9">
+      <text>Das System evaluiert, ob das System noch für Einladungen geöffnet oder bereits geschlossen ist und teilt dem Prozess den Status mit.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation10">
+      <text>Der Prozess zur Einladung des Journalisten wird beendet.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation24">
+      <text>Benutzeraktivität für die Eingabe der Flugdaten(Ticket) in das System, ausgeführt vom Reisebüro.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation25">
+      <text>Es wird eine Benachrichtigung an den Journalisten gesendet, dass seine Flugdaten bzw. das Ticket auf dem System verfügbar ist.</text>
+    </textAnnotation>
+    <textAnnotation id="textannotation26">
+      <text>Der Prozess zur Einladung des Journalisten wird beendet.</text>
+    </textAnnotation>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Collaboration">
+    <bpmndi:BPMNPlane bpmnElement="Collaboration" id="BPMNPlane_Collaboration">
+      <bpmndi:BPMNShape bpmnElement="sendInvitationmail" id="BPMNShape_sendInvitationmail">
+        <omgdc:Bounds height="55.0" width="105.0" x="341.0" y="240.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="answerInvitation" id="BPMNShape_answerInvitation">
+        <omgdc:Bounds height="55.0" width="105.0" x="341.0" y="631.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="answerInvitationBoundarytimer" id="BPMNShape_answerInvitationBoundarytimer">
+        <omgdc:Bounds height="30.0" width="30.0" x="431.0" y="634.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="reminderSent" id="BPMNShape_reminderSent">
+        <omgdc:Bounds height="40.0" width="40.0" x="551.0" y="490.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="eventIsOpen" id="BPMNShape_eventIsOpen">
+        <omgdc:Bounds height="40.0" width="40.0" x="910.0" y="327.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inviteNextParticipant" id="BPMNShape_inviteNextParticipant">
+        <omgdc:Bounds height="67.0" width="105.0" x="1036.0" y="314.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1071.0" y="206.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
+        <omgdc:Bounds height="35.0" width="35.0" x="913.0" y="206.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="answer" id="BPMNShape_answer">
+        <omgdc:Bounds height="40.0" width="40.0" x="373.0" y="753.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="selectiveInvitation" id="BPMNShape_selectiveInvitation">
+        <omgdc:Bounds height="55.0" width="105.0" x="1200.0" y="476.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent3" id="BPMNShape_endevent3">
+        <omgdc:Bounds height="35.0" width="35.0" x="1235.0" y="206.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="typeOfJourney" id="BPMNShape_typeOfJourney">
+        <omgdc:Bounds height="40.0" width="40.0" x="1060.0" y="750.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent4" id="BPMNShape_endevent4">
+        <omgdc:Bounds height="35.0" width="35.0" x="1063.0" y="870.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sendBookingMail" id="BPMNShape_sendBookingMail">
+        <omgdc:Bounds height="55.0" width="105.0" x="1378.0" y="860.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="supplyFlightInfos" id="BPMNShape_supplyFlightInfos">
+        <omgdc:Bounds height="55.0" width="105.0" x="1380.0" y="1029.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sendTicketNotification" id="BPMNShape_sendTicketNotification">
+        <omgdc:Bounds height="55.0" width="126.0" x="1590.0" y="1029.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent5" id="BPMNShape_endevent5">
+        <omgdc:Bounds height="35.0" width="35.0" x="1800.0" y="1039.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent6" id="BPMNShape_endevent6">
+        <omgdc:Bounds height="35.0" width="35.0" x="1580.0" y="620.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="inviteSelectedParticipant" id="BPMNShape_inviteSelectedParticipant">
+        <omgdc:Bounds height="61.0" width="105.0" x="1200.0" y="317.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="evaluateEventStatus" id="BPMNShape_evaluateEventStatus">
+        <omgdc:Bounds height="55.0" width="105.0" x="720.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="supplyTravelInfos" id="BPMNShape_supplyTravelInfos">
+        <omgdc:Bounds height="58.0" width="117.0" x="712.0" y="742.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation1" id="BPMNShape_textannotation1">
+        <omgdc:Bounds height="123.0" width="173.0" x="40.0" y="19.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="101.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="variablesDefinedSignal" id="BPMNShape_variablesDefinedSignal">
+        <omgdc:Bounds height="35.0" width="35.0" x="221.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation2" id="BPMNShape_textannotation2">
+        <omgdc:Bounds height="97.0" width="134.0" x="242.0" y="70.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="JournalistInvitationResponsePool" id="BPMNShape_JournalistInvitationResponsePool">
+        <omgdc:Bounds height="953.0" width="1912.0" x="20.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="bmwMitarbeiter" id="BPMNShape_bmwMitarbeiter">
+        <omgdc:Bounds height="391.0" width="1892.0" x="40.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="journalist" id="BPMNShape_journalist">
+        <omgdc:Bounds height="390.0" width="1892.0" x="40.0" y="571.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="travelagency" id="BPMNShape_travelagency">
+        <omgdc:Bounds height="169.0" width="1892.0" x="40.0" y="961.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation3" id="BPMNShape_textannotation3">
+        <omgdc:Bounds height="70.0" width="121.0" x="419.0" y="81.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation4" id="BPMNShape_textannotation4">
+        <omgdc:Bounds height="93.0" width="141.0" x="110.0" y="638.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation5" id="BPMNShape_textannotation5">
+        <omgdc:Bounds height="86.0" width="141.0" x="510.0" y="590.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation7" id="BPMNShape_textannotation7">
+        <omgdc:Bounds height="75.0" width="121.0" x="790.0" y="19.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="cancelInvitation" id="BPMNShape_cancelInvitation">
+        <omgdc:Bounds height="55.0" width="105.0" x="519.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation6" id="BPMNShape_textannotation6">
+        <omgdc:Bounds height="131.0" width="151.0" x="170.0" y="400.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation8" id="BPMNShape_textannotation8">
+        <omgdc:Bounds height="71.0" width="113.0" x="539.0" y="11.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation9" id="BPMNShape_textannotation9">
+        <omgdc:Bounds height="82.0" width="141.0" x="640.0" y="85.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation10" id="BPMNShape_textannotation10">
+        <omgdc:Bounds height="75.0" width="131.0" x="995.0" y="43.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation12" id="BPMNShape_textannotation12">
+        <omgdc:Bounds height="74.0" width="131.0" x="870.0" y="410.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation13" id="BPMNShape_textannotation13">
+        <omgdc:Bounds height="101.0" width="171.0" x="120.0" y="790.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="whichFlight" id="BPMNShape_whichFlight">
+        <omgdc:Bounds height="40.0" width="40.0" x="1410.0" y="753.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="kindOfRejection" id="BPMNShape_kindOfRejection">
+        <omgdc:Bounds height="40.0" width="40.0" x="750.0" y="638.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation14" id="BPMNShape_textannotation14">
+        <omgdc:Bounds height="53.0" width="141.0" x="860.0" y="678.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="notifyForManualInvitation" id="BPMNShape_notifyForManualInvitation">
+        <omgdc:Bounds height="68.0" width="126.0" x="980.0" y="483.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation17" id="BPMNShape_textannotation17">
+        <omgdc:Bounds height="81.0" width="161.0" x="552.0" y="834.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation18" id="BPMNShape_textannotation18">
+        <omgdc:Bounds height="101.0" width="161.0" x="828.0" y="837.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation24" id="BPMNShape_textannotation24">
+        <omgdc:Bounds height="71.0" width="171.0" x="1270.0" y="1160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation25" id="BPMNShape_textannotation25">
+        <omgdc:Bounds height="91.0" width="141.0" x="1547.0" y="1160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation26" id="BPMNShape_textannotation26">
+        <omgdc:Bounds height="69.0" width="120.0" x="1790.0" y="1165.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="notifyForSpecialFlight" id="BPMNShape_notifyForSpecialFlight">
+        <omgdc:Bounds height="55.0" width="105.0" x="1378.0" y="610.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation19" id="BPMNShape_textannotation19">
+        <omgdc:Bounds height="85.0" width="161.0" x="1170.0" y="860.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation20" id="BPMNShape_textannotation20">
+        <omgdc:Bounds height="117.0" width="171.0" x="1719.0" y="740.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation21" id="BPMNShape_textannotation21">
+        <omgdc:Bounds height="90.0" width="141.0" x="1730.0" y="614.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation22" id="BPMNShape_textannotation22">
+        <omgdc:Bounds height="88.0" width="130.0" x="1620.0" y="859.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation27" id="BPMNShape_textannotation27">
+        <omgdc:Bounds height="64.0" width="161.0" x="1390.0" y="360.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation28" id="BPMNShape_textannotation28">
+        <omgdc:Bounds height="81.0" width="151.0" x="1380.0" y="234.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation29" id="BPMNShape_textannotation29">
+        <omgdc:Bounds height="105.0" width="161.0" x="1470.0" y="451.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation30" id="BPMNShape_textannotation30">
+        <omgdc:Bounds height="100.0" width="171.0" x="1110.0" y="620.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="631.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="571.0" y="490.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="295.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="100.0" x="-44.0" y="18.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="571.0" y="490.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="375.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="100.0" x="9.0" y="-6.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="950.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1036.0" y="347.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="55.0" x="-20.0" y="-20.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="1088.0" y="314.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="241.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="930.0" y="327.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="241.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="93.0" x="10.0" y="-22.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="393.0" y="686.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="753.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="413.0" y="773.0"></omgdi:waypoint>
+        <omgdi:waypoint x="712.0" y="771.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="37.0" x="-37.0" y="7.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="393.0" y="753.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="678.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="37.0" x="-31.0" y="14.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
+        <omgdi:waypoint x="1252.0" y="476.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="378.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
+        <omgdi:waypoint x="1252.0" y="317.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="241.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="770.0" y="638.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1043.0" y="551.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="51.0" x="-15.0" y="12.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="car" id="BPMNEdge_car">
+        <omgdi:waypoint x="1080.0" y="790.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.0" y="870.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="22.0" x="10.0" y="-10.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="1430.0" y="915.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1432.0" y="1029.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="1485.0" y="1056.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1590.0" y="1056.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="825.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="910.0" y="347.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="829.0" y="771.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1060.0" y="770.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow27" id="BPMNEdge_flow27">
+        <omgdi:waypoint x="1716.0" y="1056.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1800.0" y="1056.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow28" id="BPMNEdge_flow28">
+        <omgdi:waypoint x="136.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="221.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association1" id="BPMNEdge_association1">
+        <omgdi:waypoint x="126.0" y="142.0"></omgdi:waypoint>
+        <omgdi:waypoint x="118.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow30" id="BPMNEdge_flow30">
+        <omgdi:waypoint x="256.0" y="267.0"></omgdi:waypoint>
+        <omgdi:waypoint x="341.0" y="267.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association2" id="BPMNEdge_association2">
+        <omgdi:waypoint x="309.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="238.0" y="250.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association3" id="BPMNEdge_association3">
+        <omgdi:waypoint x="479.0" y="151.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="240.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association4" id="BPMNEdge_association4">
+        <omgdi:waypoint x="251.0" y="684.0"></omgdi:waypoint>
+        <omgdi:waypoint x="341.0" y="658.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association5" id="BPMNEdge_association5">
+        <omgdi:waypoint x="510.0" y="633.0"></omgdi:waypoint>
+        <omgdi:waypoint x="461.0" y="649.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow31" id="BPMNEdge_flow31">
+        <omgdi:waypoint x="624.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="720.0" y="347.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association6" id="BPMNEdge_association6">
+        <omgdi:waypoint x="321.0" y="465.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="485.0"></omgdi:waypoint>
+        <omgdi:waypoint x="591.0" y="510.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association7" id="BPMNEdge_association7">
+        <omgdi:waypoint x="595.0" y="82.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="320.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association8" id="BPMNEdge_association8">
+        <omgdi:waypoint x="850.0" y="94.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="327.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association9" id="BPMNEdge_association9">
+        <omgdi:waypoint x="710.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="772.0" y="320.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association10" id="BPMNEdge_association10">
+        <omgdi:waypoint x="1060.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association11" id="BPMNEdge_association11">
+        <omgdi:waypoint x="1060.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association12" id="BPMNEdge_association12">
+        <omgdi:waypoint x="1060.0" y="118.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="206.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association15" id="BPMNEdge_association15">
+        <omgdi:waypoint x="935.0" y="410.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="381.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association16" id="BPMNEdge_association16">
+        <omgdi:waypoint x="291.0" y="840.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="856.0"></omgdi:waypoint>
+        <omgdi:waypoint x="393.0" y="793.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flight" id="BPMNEdge_flight">
+        <omgdi:waypoint x="1100.0" y="770.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1410.0" y="773.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="21.0" x="-35.0" y="8.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="specialFlight" id="BPMNEdge_specialFlight">
+        <omgdi:waypoint x="1430.0" y="753.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1430.0" y="665.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="52.0" x="10.0" y="1.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="predefinedFlight" id="BPMNEdge_predefinedFlight">
+        <omgdi:waypoint x="1430.0" y="793.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1430.0" y="860.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="61.0" x="10.0" y="-16.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
+        <omgdi:waypoint x="770.0" y="638.0"></omgdi:waypoint>
+        <omgdi:waypoint x="772.0" y="375.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="36.0" width="60.0" x="9.0" y="64.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association17" id="BPMNEdge_association17">
+        <omgdi:waypoint x="860.0" y="704.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="678.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow32" id="BPMNEdge_flow32">
+        <omgdi:waypoint x="1106.0" y="517.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1200.0" y="503.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association20" id="BPMNEdge_association20">
+        <omgdi:waypoint x="632.0" y="834.0"></omgdi:waypoint>
+        <omgdi:waypoint x="770.0" y="800.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow33" id="BPMNEdge_flow33">
+        <omgdi:waypoint x="1483.0" y="637.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1580.0" y="637.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association21" id="BPMNEdge_association21">
+        <omgdi:waypoint x="908.0" y="837.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1038.0" y="821.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.0" y="790.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association22" id="BPMNEdge_association22">
+        <omgdi:waypoint x="1170.0" y="902.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1098.0" y="887.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association23" id="BPMNEdge_association23">
+        <omgdi:waypoint x="1719.0" y="798.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1450.0" y="773.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association24" id="BPMNEdge_association24">
+        <omgdi:waypoint x="1730.0" y="659.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1615.0" y="637.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association25" id="BPMNEdge_association25">
+        <omgdi:waypoint x="1620.0" y="903.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1483.0" y="887.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association26" id="BPMNEdge_association26">
+        <omgdi:waypoint x="1355.0" y="1160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1432.0" y="1084.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association27" id="BPMNEdge_association27">
+        <omgdi:waypoint x="1617.0" y="1160.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1653.0" y="1084.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association28" id="BPMNEdge_association28">
+        <omgdi:waypoint x="1850.0" y="1165.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1817.0" y="1074.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association29" id="BPMNEdge_association29">
+        <omgdi:waypoint x="1470.0" y="424.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="476.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association30" id="BPMNEdge_association30">
+        <omgdi:waypoint x="1380.0" y="274.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1252.0" y="317.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association31" id="BPMNEdge_association31">
+        <omgdi:waypoint x="1550.0" y="556.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1430.0" y="610.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association32" id="BPMNEdge_association32">
+        <omgdi:waypoint x="1195.0" y="620.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1088.0" y="587.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1043.0" y="551.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow34" id="BPMNEdge_flow34">
+        <omgdi:waypoint x="446.0" y="634.0"></omgdi:waypoint>
+        <omgdi:waypoint x="571.0" y="530.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
