@@ -61,7 +61,7 @@ public class Events implements Serializable{
 			List p = em.createNamedQuery("BmwEvent.upcoming")
 					.setParameter("now", d)
 					.getResultList();
-			System.out.println("upcoming"+p.size());
+			System.out.println("Events: Upcoming: " + p.size());
 			return p;
 	
 }
@@ -72,7 +72,7 @@ public class Events implements Serializable{
 			List p = em.createNamedQuery("BmwEvent.past")
 					.setParameter("now", d)
 					.getResultList();
-			System.out.println("past"+p.size());
+			System.out.println("Events: Past: " + p.size());
 			return p;
 	
 }
