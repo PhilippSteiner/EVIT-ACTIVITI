@@ -72,7 +72,7 @@ public class login implements PhaseListener {
 		if (!isLoginPage) {
 			//System.out.println("no Login Page");	
 			if (session == null) {
-				System.out.println("Session is null");
+				System.out.println("Login: Session is null");
 				try {
 					//No login page and session is null
 					ec.redirect(ec.getRequestContextPath() + "/faces/login.xhtml");
@@ -85,7 +85,7 @@ public class login implements PhaseListener {
 				//System.out.println("Session not null");
 
 				try {
-					System.out.println("try to access uid");
+					System.out.println("Login: Try to access uid");
 					if (session.getAttribute("uid") == null) {
 						//no login page but session var is null, redirect to login page
 						ec.redirect(ec.getRequestContextPath() + "/faces/login.xhtml");

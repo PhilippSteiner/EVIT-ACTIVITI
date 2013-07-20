@@ -38,7 +38,7 @@ public class EventTemplate {
      */
     public EventTemplate() {
         
-          FacesContext facesContext = FacesContext.getCurrentInstance();
+         // FacesContext facesContext = FacesContext.getCurrentInstance();
         //this.eventID = (Integer) Integer.parseInt(facesContext.getExternalContext().getRequestParameterMap().get("eventID"));
     
         
