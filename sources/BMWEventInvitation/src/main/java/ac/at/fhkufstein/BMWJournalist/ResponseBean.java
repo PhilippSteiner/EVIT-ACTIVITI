@@ -369,7 +369,7 @@ public class ResponseBean implements Serializable {
         // Prozess weiterführen
         PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, true, false);
 
-            context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Zugesagt"));
+           // context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Zugesagt"));
 
             return "do nothing";
 
@@ -410,7 +410,7 @@ public class ResponseBean implements Serializable {
 
             this.eventdetailview = "eventoutcome";
 
-            context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Abgesagt"));
+           // context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Abgesagt"));
 
             return "eventoutcome";
 
@@ -596,7 +596,7 @@ public class ResponseBean implements Serializable {
 
         this.step = "wiz3";
 
-        context.addMessage(null, new FacesMessage("Selbstanreise", "Selbstanreise ausgewählt."));
+        //context.addMessage(null, new FacesMessage("Selbstanreise", "Selbstanreise ausgewählt."));
 
     }
 

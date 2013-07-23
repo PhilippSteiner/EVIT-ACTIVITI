@@ -42,21 +42,19 @@ public class ProcessTravelController implements Serializable {
 
     private static final String ACTIVITI_FLIGHTDATA_ACTIVITY = "supplyFlightInfos";
 
-
     public void processFlightData(BmwParticipants participant) {
 
 
         InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
 
-        if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_FLIGHTDATA_ACTIVITY)) {
+        participant.setPState("ticket");
+        PersistenceService.save(BmwParticipantsController.class, participant);
 
-            participant.setPState("ticket");
-            PersistenceService.save(BmwParticipantsController.class, participant);
-
-            process.resumeProcess();
+        if (process.resumeProcess(ACTIVITI_FLIGHTDATA_ACTIVITY)) {
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Die Flugdaten wurden eingegeben.");
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess wurde fortgefahren.");
+
         } else {
             MessageService.showError(FacesContext.getCurrentInstance(), "Die Flugdaten konnten nicht eingegeben werden.");
             MessageService.showError(FacesContext.getCurrentInstance(), "Der Prozess konnte nicht fortgesetzt werden.");

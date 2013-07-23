@@ -13,6 +13,7 @@ import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.MailService;
 import ac.at.fhkufstein.mailing.NotificationService;
+import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -52,8 +53,6 @@ public class SendTicketNotification implements JavaDelegate {
 
         String mailSentMessage = "Ticket Notification wurde an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
-        System.out.println(mailSentMessage);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(mailSentMessage));
+        MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
     }
 }

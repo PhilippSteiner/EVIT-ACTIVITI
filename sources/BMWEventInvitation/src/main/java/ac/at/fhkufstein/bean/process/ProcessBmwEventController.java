@@ -7,6 +7,7 @@ package ac.at.fhkufstein.bean.process;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import static ac.at.fhkufstein.activiti.InvitationProcess.ACTIVITI_SIGNAL_VARIABLES_DEFINED;
 import static ac.at.fhkufstein.activiti.InvitationProcess.signalEvent;
+import ac.at.fhkufstein.activiti.SignalProcessThread;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.mailing.EventTemplate;
@@ -53,7 +54,7 @@ public class ProcessBmwEventController implements Serializable {
 
             // to get the id of the inserted event immediately a transacion has to be executed
             UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
-            if(transaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
+            if (transaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
                 transaction.begin();
             }
 
@@ -110,7 +111,9 @@ public class ProcessBmwEventController implements Serializable {
             }
 
             InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
-            signalEvent(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED);
+            
+            // works straight after creation of process, but for security implement it this way because otherwise it is not working on each process
+            new SignalProcessThread(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED).start();
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess für dieses Event wurde gestartet.");
         } catch (Exception ex) {
@@ -126,12 +129,11 @@ public class ProcessBmwEventController implements Serializable {
 
         InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
         System.out.println("Current ProzessID: " + process.getCurrentActivity());
-        if (process.getCurrentActivity() != null && process.getCurrentActivity().equals(ACTIVITI_RELEASE_ACTIVITY)) {
 
-            event.setReleased(true);
-            PersistenceService.save(BmwEventController.class, event);
+        event.setReleased(true);
+        PersistenceService.save(BmwEventController.class, event);
 
-            process.resumeProcess();
+        if (process.resumeProcess(ACTIVITI_RELEASE_ACTIVITY)) {
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Das Event wurde freigegeben.");
             MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Prozess wurde fortgefahren.");

@@ -13,12 +13,18 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.NotificationService;
+import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
+import static ac.at.fhkufstein.service.PersistenceService.JNDI_LOOKUP;
+import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.mail.Message;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 
@@ -29,78 +35,68 @@ import org.activiti.engine.delegate.JavaDelegate;
 public class SendInvitationmail implements JavaDelegate {
 
     @Override
-    public void execute(DelegateExecution execution) {
+    public void execute(DelegateExecution execution) throws NamingException, Exception {
 
 
         System.out.println("################# sending invitation mails #################");
 
-
         BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
-        try {
-            if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
+        if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
 
-                //erstmalige Einladung
+            //erstmalige Einladung
 
-                // send invitation mail
-                String emailType = "invite";
+            // send invitation mail
+            String emailType = "invite";
 
-                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                        .setParameter("eventId", event)
-                        .setParameter("type", emailType)
-                        .getSingleResult();
+            EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                    .setParameter("eventId", event)
+                    .setParameter("type", emailType)
+                    .getSingleResult();
 
-                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+            NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
 
-                participant.setInvitationDate(new Date());
-                PersistenceService.save(BmwParticipantsController.class, participant);
-                //Event Progress wird entsprechend weitergeschalten
-                event.setProgress(40);
-                PersistenceService.save(BmwEventController.class, event);
+            participant.setInvitationDate(new Date());
+            PersistenceService.save(BmwParticipantsController.class, participant);
+            //Event Progress wird entsprechend weitergeschalten
+            event.setProgress(40);
+            PersistenceService.save(BmwEventController.class, event);
 
-                execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
+            execution.setVariable(InvitationProcess.ACTIVITI_INVITATION_SENT, true);
 
-                Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getSendReminder());
+            Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getSendReminder());
 
-                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
+            execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
 
-                String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+            String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
-                System.out.println(mailSentMessage);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
-            } else {
+            MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
+        } else {
 
-                // Urgenzmail
+            // Urgenzmail
 
-                // send urgenz mail
-                String emailType = "urgenz";
+            // send urgenz mail
+            String emailType = "urgenz";
 
-                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                        .setParameter("eventId", event)
-                        .setParameter("type", emailType)
-                        .getSingleResult();
+            EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                    .setParameter("eventId", event)
+                    .setParameter("type", emailType)
+                    .getSingleResult();
 
-                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+            NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
 
 
 
-                execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
+            execution.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, true);
 
-                Long cancelInvitationTime = InvitationProcess.getDueTime(event, participant, event.getCancelInvitation());
+            Long cancelInvitationTime = InvitationProcess.getDueTime(event, participant, event.getCancelInvitation());
 
-                execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(cancelInvitationTime));
+            execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(cancelInvitationTime));
 
-                String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
+            String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
-                System.out.println(mailSentMessage);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
         }
 
     }

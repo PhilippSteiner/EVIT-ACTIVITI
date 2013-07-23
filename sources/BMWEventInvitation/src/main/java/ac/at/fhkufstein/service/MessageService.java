@@ -16,10 +16,12 @@ public class MessageService {
     public static void showInfo(FacesContext context, String message) {
         showInfo(context, null, message);
     }
+
     public static void showInfo(FacesContext context, String summary, String message) {
         System.out.println(message);
-        context.addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, summary, message));
+        if (context != null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, summary, message));
+        }
     }
 
     public static void showError(FacesContext context, String message) {
@@ -27,8 +29,9 @@ public class MessageService {
     }
 
     public static void showError(FacesContext context, String summary, String message) {
-        System.out.println(message);
-        context.addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, message));
+        System.err.println(message);
+        if (context != null) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, message));
+        }
     }
 }

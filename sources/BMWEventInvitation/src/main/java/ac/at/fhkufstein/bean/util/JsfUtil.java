@@ -24,15 +24,18 @@ public class JsfUtil {
     }
 
     public static void addErrorMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
-        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
-        FacesContext.getCurrentInstance().validationFailed(); // Invalidate JSF page if we raise an error message
-
+        if (FacesContext.getCurrentInstance() != null) {
+            FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+            FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+            FacesContext.getCurrentInstance().validationFailed(); // Invalidate JSF page if we raise an error message
+        }
     }
 
     public static void addSuccessMessage(String msg) {
-        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
-        FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
+        if (FacesContext.getCurrentInstance() != null) {
+            FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
+            FacesContext.getCurrentInstance().addMessage("successInfo", facesMsg);
+        }
     }
 
     public static Throwable getRootCause(Throwable cause) {
@@ -48,6 +51,9 @@ public class JsfUtil {
     }
 
     public static boolean isValidationFailed() {
+        if(FacesContext.getCurrentInstance() == null) {
+            return false;
+        }
         return FacesContext.getCurrentInstance().isValidationFailed();
     }
 

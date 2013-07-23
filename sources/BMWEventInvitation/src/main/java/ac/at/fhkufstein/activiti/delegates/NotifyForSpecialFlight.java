@@ -12,6 +12,7 @@ import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.NotificationService;
+import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
@@ -37,11 +38,10 @@ public class NotifyForSpecialFlight implements JavaDelegate {
         BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
-        try {
 
-                 // send notification for special flight
+        // send notification for special flight
 
-            String emailType = "special";
+        String emailType = "special";
 
         EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
                 .setParameter("eventId", event)
@@ -51,22 +51,10 @@ public class NotifyForSpecialFlight implements JavaDelegate {
         NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
 
 
+        String mailSentMessage = "Es wurde eine Notification über eine Spezialflug des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " an den Mitarbeiter " + event.getResponsibleUser() + " gesendet.";
 
+        MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
 
-                String mailSentMessage = "Es wurde eine Notification über eine Spezialflug des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " an den Mitarbeiter " + event.getResponsibleUser() + " gesendet.";
-
-                System.out.println(mailSentMessage);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
-
-
-        } catch (Exception ex) {
-            String mailSentMessage = ex.getMessage();
-
-            System.err.println(mailSentMessage);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
-        }
 
     }
 }

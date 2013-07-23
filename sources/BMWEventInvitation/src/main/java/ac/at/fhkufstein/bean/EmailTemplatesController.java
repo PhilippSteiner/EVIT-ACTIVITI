@@ -1,6 +1,8 @@
 package ac.at.fhkufstein.bean;
 
 import ac.at.fhkufstein.entity.EmailTemplates;
+import ac.at.fhkufstein.service.PersistenceService;
+import ac.at.fhkufstein.session.BmwTravelFacade;
 import ac.at.fhkufstein.session.EmailTemplatesFacade;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -18,6 +20,14 @@ public class EmailTemplatesController extends AbstractController<EmailTemplates>
 
     public EmailTemplatesController() {
         super(EmailTemplates.class);
+    }
+    
+    public EmailTemplatesController(Boolean jndiLookup) {
+        super(EmailTemplates.class);
+        
+        if(jndiLookup == true) {
+            super.setFacade(PersistenceService.getFacadeJndiLookup(EmailTemplatesFacade.class));
+        }
     }
 
     @PostConstruct

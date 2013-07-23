@@ -12,6 +12,7 @@ import ac.at.fhkufstein.bean.PersonenController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -41,9 +42,7 @@ public class InviteSelectedParticipant implements JavaDelegate {
 
         String nextParticipantInvited = "Der Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " wurde manuell nachgeladen.";
 
-        System.out.println(nextParticipantInvited);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(nextParticipantInvited));
+        MessageService.showInfo(FacesContext.getCurrentInstance(), nextParticipantInvited);
 
     }
 }

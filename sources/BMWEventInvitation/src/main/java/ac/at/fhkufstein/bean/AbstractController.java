@@ -75,28 +75,28 @@ public abstract class AbstractController<T> {
     }
 
     public void save(ActionEvent event) {
-        String msg = ResourceBundle.getBundle("/Bundle").getString(itemClass.getSimpleName() + "Updated");
-        persist(PersistAction.UPDATE, msg);
+            String msg = ResourceBundle.getBundle("/Bundle").getString(itemClass.getSimpleName() + "Updated");
+        persist(PersistAction.UPDATE);
     }
 
     public void saveNew(ActionEvent event) {
-        String msg = ResourceBundle.getBundle("/Bundle").getString(itemClass.getSimpleName() + "Created");
-        persist(PersistAction.CREATE, msg);
+            String msg = ResourceBundle.getBundle("/Bundle").getString(itemClass.getSimpleName() + "Created");
+        persist(PersistAction.CREATE);
         if (!isValidationFailed()) {
             items = null; // Invalidate list of items to trigger re-query.
         }
     }
 
     public void delete(ActionEvent event) {
-        String msg = ResourceBundle.getBundle("/Bundle").getString(itemClass.getSimpleName() + "Deleted");
-        persist(PersistAction.DELETE, msg);
+            String msg = ResourceBundle.getBundle("/Bundle").getString(itemClass.getSimpleName() + "Deleted");
+        persist(PersistAction.DELETE);
         if (!isValidationFailed()) {
             selected = null; // Remove selection
             items = null; // Invalidate list of items to trigger re-query.
         }
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
+    private void persist(PersistAction persistAction) {
         if (selected != null) {
             this.setEmbeddableKeys();
             try {

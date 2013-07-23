@@ -2,10 +2,12 @@ package ac.at.fhkufstein.activiti;
 
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.process.ProcessParticipants;
 import ac.at.fhkufstein.entity.ActivitiProcessHolder;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.util.logging.Level;
@@ -18,6 +20,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.faces.application.FacesMessage;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 import org.activiti.engine.runtime.Execution;
 
 public class InvitationProcess {
@@ -51,19 +60,21 @@ public class InvitationProcess {
         if (processHolder.getProcessId() != null) {
             //Problem returns null: aus irgendwelchem Grund wird der Eventprozess an einem Punkt beendet und deshalb
             //wird hier bei einer Abfrage null zurückgegeben da der Prozess nicht mehr aktiv ist!
-            
+
             /*
-            List<ProcessInstance> list = Services.getRuntimeService().createProcessInstanceQuery().active().list();
+             List<ProcessInstance> list = Services.getRuntimeService().createProcessInstanceQuery().active().list();
             
-            for(ProcessInstance p:list){
-                System.out.println("Aktiver Prozess: " + p.getProcessInstanceId());
+             for(ProcessInstance p:list){
+             System.out.println("Aktiver Prozess: " + p.getProcessInstanceId());
                 
-            }
-            */
-            
+             }
+             */
+
             setProcessInstance(Services.getRuntimeService().createProcessInstanceQuery().processInstanceId(processHolder.getProcessId().toString()).singleResult());
-            
+
             System.out.println(processHolder.getProcessId().toString());
+            System.out.println("processInstance: " + getProcessInstance());
+
             setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
 
         } else {
@@ -73,29 +84,43 @@ public class InvitationProcess {
 
     public void startProcess() {
 
-        setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
+            try {
+
+                /*
+                 * do this in an transaction to allow operations on process after start
+                 */
 
 
-        processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
-        //Progress wird verwendet um den Status des Prozesses zu kontrollieren
-        processHolder.setProgress(10);
-        // nur bei Hauptprozess
-        if (processDefinition.equals(PROCESSES[0])) {
-            setVariable(ACTIVITI_INVITATION_STARTED, false);
-            PersistenceService.save(BmwEventController.class, processHolder);
-        }
+                setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
 
-        if (processHolder instanceof BmwEvent) {
-            BmwEvent event = (BmwEvent) processHolder;
-            setVariable(DATABASE_EVENTID, processHolder.getId());
-            setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate(event.getEndEventdate().getTime() + getDaysInMilliSeconds(event.getSendFollowup())));
-        } else if (processHolder instanceof BmwParticipants) {
-            setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
-        }
+                processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
+                //Progress wird verwendet um den Status des Prozesses zu kontrollieren
+                processHolder.setProgress(10);
+                // nur bei Hauptprozess
+                if (processDefinition.equals(PROCESSES[0])) {
+                    setVariable(ACTIVITI_INVITATION_STARTED, false);
+                    PersistenceService.save(BmwEventController.class, processHolder);
+                }
 
-        setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
+                if (processHolder instanceof BmwEvent) {
+                    BmwEvent event = (BmwEvent) processHolder;
+                    setVariable(DATABASE_EVENTID, processHolder.getId());
+                    setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate(event.getEndEventdate().getTime() + getDaysInMilliSeconds(event.getSendFollowup())));
+                } else if (processHolder instanceof BmwParticipants) {
+                    setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
+                }
 
-        System.out.println("Proccess Instance # " + processHolder.getProcessId() + " started");
+                setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
+
+                System.out.println("Process Instance # " + processHolder.getProcessId() + " started");
+
+            } catch (Exception ex) {
+                Logger.getLogger(InvitationProcess.class.getName()).log(Level.SEVERE, null, ex);
+
+                System.err.println("Process could not be started; supposed processHolder: " + processHolder);
+            }
+
+
     }
 
     public void setVariable(String name, Object value) {
@@ -119,7 +144,7 @@ public class InvitationProcess {
     public String getNextFormKey() {
 
 
-        resumeProcess();
+        resumeProcess(getCurrentActivity());
 
         String formKey;
 
@@ -134,9 +159,21 @@ public class InvitationProcess {
         return formKey;
     }
 
-    public void resumeProcess() {
-        System.out.println("Resume Process with Id " + processHolder.getProcessId());
-        Services.getRuntimeService().signal(String.valueOf(processHolder.getProcessId()));
+    public boolean resumeProcess(String activityId) {
+        try {
+
+            System.out.println("Resume Process with Id " + processHolder.getProcessId());
+            Execution execution = Services.getRuntimeService().createExecutionQuery().processInstanceId(String.valueOf(processHolder.getProcessId())).activityId(activityId).singleResult();
+            Services.getRuntimeService().signal(execution.getId());
+
+            return true;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MessageService.showError(null, "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId);
+        }
+
+        return false;
     }
 
     public boolean processStarted() {
@@ -186,7 +223,7 @@ public class InvitationProcess {
 
     public static InvitationProcess startSingleProcess(BmwEvent event, BmwParticipants participant) {
 
-        InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
+        final InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
         process.setVariable(DATABASE_EVENTID, event.getId());
 
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
@@ -197,14 +234,9 @@ public class InvitationProcess {
 
         participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));
         PersistenceService.save(BmwParticipantsController.class, participant);
-
-        if(!signalEvent(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED)) {
-
-            Services.getRuntimeService().signal(process.getProcessInstance().getId());
-
-        }
-
-        System.out.println("Start Single Process");
+        
+        // works only after a period of time, probably the execution of the process is not persistent straight after creation
+        new SignalProcessThread(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED).start();
 
         return process;
     }
@@ -213,12 +245,30 @@ public class InvitationProcess {
         System.out.println("searching signal event subscription " + reference);
         //System.out.println("Prozess-Instanz: " + processInstance.getId());
         boolean found = false;
-        for (Execution exec : Services.getRuntimeService().createExecutionQuery().signalEventSubscriptionName(reference).list()) {
-            if (exec.getProcessInstanceId().equals(processInstance.getProcessInstanceId())) {
-                Services.getRuntimeService().signalEventReceived(reference, exec.getId());
-                System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
-                found = true;
-            }
+        try {
+
+            Execution execution = Services.getRuntimeService().createExecutionQuery().processInstanceId(processInstance.getProcessInstanceId()).signalEventSubscriptionName(reference).singleResult();
+
+            found = signalEvent(execution, reference);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return found;
+    }
+
+    public static boolean signalEvent(Execution execution, String reference) {
+        boolean found = false;
+        try {
+
+            System.out.println("execid " + execution.getId());
+            Services.getRuntimeService().signalEventReceived(reference, execution.getId());
+            System.out.println("Event with signal event subscription \"" + reference + "\" fortgesetzt");
+            found = true;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
         return found;

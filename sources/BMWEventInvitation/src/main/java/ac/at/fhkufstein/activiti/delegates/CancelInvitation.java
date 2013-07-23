@@ -13,6 +13,7 @@ import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.mailing.NotificationService;
+import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.Date;
 import javax.faces.application.FacesMessage;
@@ -38,40 +39,28 @@ public class CancelInvitation implements JavaDelegate {
         BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
-        try {
 
-            participant.setPState(ParticipantStatus.CANCELED);
-            PersistenceService.save(BmwParticipantsController.class, participant);
+        participant.setPState(ParticipantStatus.CANCELED);
+        PersistenceService.save(BmwParticipantsController.class, participant);
 
 
-                // send cancel mail
+        // send cancel mail
 
-                String emailType = "storno";
+        String emailType = "storno";
 
-                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                        .setParameter("eventId", event)
-                        .setParameter("type", emailType)
-                        .getSingleResult();
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
 
-                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
-
+        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
 
 
 
-                String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
 
-                System.out.println(mailSentMessage);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
+        String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
 
-
-        } catch (Exception ex) {
-            String mailSentMessage = ex.getMessage();
-
-            System.err.println(mailSentMessage);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
-        }
+        MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
 
     }
 }

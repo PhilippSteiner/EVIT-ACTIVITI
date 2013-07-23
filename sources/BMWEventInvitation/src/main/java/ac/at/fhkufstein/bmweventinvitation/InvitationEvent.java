@@ -35,8 +35,8 @@ public class InvitationEvent {
         }
     }
 
-    public void resumeProcess() {
-        getProcess().resumeProcess();
+    public void resumeProcess(String activityId) {
+        getProcess().resumeProcess(activityId);
     }
 
     public String getStartFormKey() {

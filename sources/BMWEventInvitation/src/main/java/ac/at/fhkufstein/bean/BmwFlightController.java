@@ -1,6 +1,8 @@
 package ac.at.fhkufstein.bean;
 
 import ac.at.fhkufstein.entity.BmwFlight;
+import ac.at.fhkufstein.service.PersistenceService;
+import ac.at.fhkufstein.session.BmwEmailTemplatesFacade;
 import ac.at.fhkufstein.session.BmwFlightFacade;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -17,6 +19,14 @@ public class BmwFlightController extends AbstractController<BmwFlight> implement
 
     public BmwFlightController() {
         super(BmwFlight.class);
+    }
+    
+    public BmwFlightController(Boolean jndiLookup) {
+        super(BmwFlight.class);
+        
+        if(jndiLookup == true) {
+            super.setFacade(PersistenceService.getFacadeJndiLookup(BmwFlightFacade.class));
+        }
     }
 
     @PostConstruct
