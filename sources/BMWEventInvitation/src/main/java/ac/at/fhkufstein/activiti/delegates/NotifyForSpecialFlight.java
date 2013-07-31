@@ -41,16 +41,9 @@ public class NotifyForSpecialFlight implements JavaDelegate {
 
                  // send notification for special flight
 
-            String emailType = "special";
-
-        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                .setParameter("eventId", event)
-                .setParameter("type", emailType)
-                .getSingleResult();
-
-        NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
 
 
+                send(event);
 
 
                 String mailSentMessage = "Es wurde eine Notification über eine Spezialflug des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " an den Mitarbeiter " + event.getResponsibleUser() + " gesendet.";
@@ -68,5 +61,16 @@ public class NotifyForSpecialFlight implements JavaDelegate {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
         }
 
+    }
+
+    public static void send(BmwEvent event) {
+     String emailType = "special";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
     }
 }

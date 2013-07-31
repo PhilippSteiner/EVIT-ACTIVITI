@@ -4,19 +4,19 @@
  */
 package ac.at.fhkufstein.activiti;
 
-import javax.faces.bean.ApplicationScoped;
 import org.activiti.engine.FormService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.designer.test.ProcessTestMyProcess;
 
 /**
  *
  * @author mike
  */
-@ApplicationScoped
+
 public class Services {
 
     private static ProcessEngine processEngine;
@@ -25,10 +25,11 @@ public class Services {
         instantiateProcessEngine();
 
 //        if(getRepositoryService().createProcessDefinitionQuery().processDefinitionKey(InvitationProcess.PROCESS_DEFINITION).list().isEmpty()) {
-        for (String process : InvitationProcess.PROCESSES) {
+        for (String process : ProcessTestMyProcess.PROCESSES) {
             getRepositoryService().createDeployment()
-                    .addClasspathResource(InvitationProcess.PROCESS_FILE_LOCATION + process + InvitationProcess.SUFFIX)
+                    .addClasspathResource(ProcessTestMyProcess.PROCESS_FILE_LOCATION + process + ProcessTestMyProcess.SUFFIX)
                     .deploy();
+            System.out.println("Process "+process+" deployed");
         }
 //        }
 

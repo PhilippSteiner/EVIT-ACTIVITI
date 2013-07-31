@@ -44,25 +44,18 @@ public class CancelInvitation implements JavaDelegate {
             PersistenceService.save(BmwParticipantsController.class, participant);
 
 
-                // send cancel mail
+            // send cancel mail
 
-                String emailType = "storno";
 
-                EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
-                        .setParameter("eventId", event)
-                        .setParameter("type", emailType)
-                        .getSingleResult();
-
-                NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+            send(event, participant);
 
 
 
+            String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
 
-                String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
-
-                System.out.println(mailSentMessage);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(mailSentMessage));
+            System.out.println(mailSentMessage);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(mailSentMessage));
 
 
         } catch (Exception ex) {
@@ -73,5 +66,17 @@ public class CancelInvitation implements JavaDelegate {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mailSentMessage));
         }
 
+    }
+
+    public static void send(BmwEvent event, BmwParticipants participant) {
+
+        String emailType = "storno";
+
+        EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
+                .setParameter("eventId", event)
+                .setParameter("type", emailType)
+                .getSingleResult();
+
+        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
     }
 }

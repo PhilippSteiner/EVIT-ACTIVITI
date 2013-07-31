@@ -5,6 +5,7 @@
 package ac.at.fhkufstein.mailing;
 
 import ac.at.fhkufstein.bean.PersonenController;
+import ac.at.fhkufstein.service.PersistenceService;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -36,14 +37,11 @@ public class MailConfig {
      * Creates a new instance of MailConfig
      */
     public MailConfig() {
-    }
-
-    static {
         MailConfigController.unmarshalConfig();
     }
 
     public static MailConfig getInstance() {
-        return FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{mailConfig}", MailConfig.class);
+        return PersistenceService.getManagedBeanInstance(MailConfig.class);
     }
 
     /**
