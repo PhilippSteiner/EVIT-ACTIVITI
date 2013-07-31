@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="BmwUserCreateDlg" widgetVar="BmwUserCreateDialog" modal="true" resizable="false" appendToBody="true" header="#{bundle.CreateBmwUserTitle}">
+
+            <h:form id="BmwUserCreateForm">
+
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{reisebuero.selected != null}">
+
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_companyName}" for="companyName" />
+                        <p:inputText id="companyName" value="#{reisebuero.companyName}" title="#{bundle.CreateBmwUserTitle_companyName}" required="true"/>
+                
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_firstName}" for="firstName" />
+                        <p:inputText id="firstName" value="#{reisebuero.firstName}" title="#{bundle.CreateBmwUserTitle_firstName}" required="true"/>
+                
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_lastName}" for="lastName" />
+                        <p:inputText id="lastName" value="#{reisebuero.lastName}" title="#{bundle.CreateBmwUserTitle_lastName}" required="true"/>
+                
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_username}" for="username" />
+                        <p:inputText id="username" value="#{reisebuero.username}" title="#{bundle.CreateBmwUserTitle_username}" required="true"/>
+
+                        <p:outputLabel value="#{bundle.CreateBmwUserLabel_email}" for="email" />
+                        <p:inputText id="email" value="#{reisebuero.email}" title="#{bundle.CreateBmwUserTitle_email}" required="true"/>
+
+             
+                      
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{reisebuero.saveNew()}" value="#{bundle.Save}" update="display,:BmwUserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="BmwUserCreateDialog.hide()"/>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
