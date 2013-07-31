@@ -12,15 +12,16 @@
         </ui:define>
         <ui:define name="body">
             <h:form>
-            <p:tabMenu activeIndex="3">
-                <p:menuitem value="Allgemeine Einstellungen" url="/faces/admin/index.xhtml"></p:menuitem>
-                <p:menuitem value="Passwort zurücksetzen" url="/faces/admin/PWReset.xhtml"></p:menuitem>
-                <p:menuitem value="Registration versenden" url="/faces/admin/SendLogin.xhtml"></p:menuitem>
-                <p:menuitem value="CSV-Import" url="/faces/admin/CsvImport.xhtml"></p:menuitem>
-             <p:menuitem value="Reisebüros verwalten" url="/faces/Reisebuero/index.xhtml"></p:menuitem>
-            </p:tabMenu>
+                <p:tabMenu activeIndex="3">
+                    <p:menuitem value="Allgemeine Einstellungen" url="/faces/admin/index.xhtml"></p:menuitem>
+                    <p:menuitem value="Passwort zurücksetzen" url="/faces/admin/PWReset.xhtml"></p:menuitem>
+                    <p:menuitem value="Registration versenden" url="/faces/admin/SendLogin.xhtml"></p:menuitem>
+                    <p:menuitem value="CSV-Import" url="/faces/admin/CsvImport.xhtml"></p:menuitem>
+                    <p:menuitem value="Reisebüros verwalten" url="/faces/Reisebuero/index.xhtml"></p:menuitem>
+                    <p:menuitem value="BMWMitarbeiter verwalten" url="/faces/Mitarbeiter/index.xhtml"></p:menuitem>
+                </p:tabMenu>
             </h:form>
-            
+
             <p:panel header="CSV Import">
                 <h:outputText value="Wilkommen beim CSV Import. Bitte wählen Sie eine Datei von ihrem Lokalen System."></h:outputText>
 
@@ -145,7 +146,7 @@
 
             </h:form>
 
-            
+
 
         </ui:define>
 
