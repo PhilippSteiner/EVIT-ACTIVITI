@@ -2,9 +2,9 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
     <signal id="variablesDefined" name="variablesDefined"></signal>
     <collaboration id="Collaboration">
-        <participant id="invitationProcessPool" name="Einladungsprozess" processRef="InvitationProcess"></participant>
+        <participant id="invitationProcessPool" name="InvitationProcess" processRef="InvitationProcess"></participant>
     </collaboration>
-    <process id="InvitationProcess" name="Einladungsprozess" isExecutable="true">
+    <process id="InvitationProcess" name="InvitationProcess" isExecutable="true">
         <laneSet id="laneSet_InvitationProcess">
             <lane id="eventLane" name="Event (BMW Mitarbeiter)">
                 <flowNodeRef>createEvent</flowNodeRef>

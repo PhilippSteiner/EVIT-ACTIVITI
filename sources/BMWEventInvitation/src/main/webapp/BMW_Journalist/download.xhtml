@@ -20,7 +20,7 @@ and open the template in the editor.
 
         <h:form id="form">  
 
-            <p:dataTable var="File" value="#{fileupload.getEventFolder()}">  
+            <p:dataTable var="File" value="#{fileupload.eventFolder}">  
                 <p:column headerText="Files">  
                     <h:outputText value="#{File.name}" />
                 </p:column>  

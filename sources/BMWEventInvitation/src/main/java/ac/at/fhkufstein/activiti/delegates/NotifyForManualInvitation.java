@@ -14,10 +14,6 @@ import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
-import java.util.Date;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
@@ -48,7 +44,7 @@ public class NotifyForManualInvitation implements JavaDelegate {
                 .setParameter("type", emailType)
                 .getSingleResult();
 
-        NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate);
+        NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
         String mailSentMessage = "Es wurde eine Notification über eine manuelle Nachladung an den Mitarbeiter " + event.getResponsibleUser() + " gesendet. Momentaner Teilnehmer: " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname();
 

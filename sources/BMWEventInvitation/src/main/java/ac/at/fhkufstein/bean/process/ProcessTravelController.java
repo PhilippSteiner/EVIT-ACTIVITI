@@ -40,7 +40,7 @@ import javax.transaction.Transaction;
 @ViewScoped
 public class ProcessTravelController implements Serializable {
 
-    private static final String ACTIVITI_FLIGHTDATA_ACTIVITY = "supplyFlightInfos";
+    private static final String ACTIVITI_FLIGHTDATA_ACTIVITY = "supplyTravelInfos";
 
     public void processFlightData(BmwParticipants participant) {
 

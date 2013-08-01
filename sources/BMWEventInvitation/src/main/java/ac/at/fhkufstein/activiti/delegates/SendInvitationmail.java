@@ -8,22 +8,14 @@ import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.EmailTemplatesController;
-import ac.at.fhkufstein.entity.BmwEmailTemplates;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
-import static ac.at.fhkufstein.service.PersistenceService.JNDI_LOOKUP;
-import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.util.Date;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.mail.Message;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
@@ -55,7 +47,7 @@ public class SendInvitationmail implements JavaDelegate {
                     .setParameter("type", emailType)
                     .getSingleResult();
 
-            NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+            NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
             participant.setInvitationDate(new Date());
             PersistenceService.save(BmwParticipantsController.class, participant);
@@ -67,7 +59,8 @@ public class SendInvitationmail implements JavaDelegate {
 
             Long sendReminderTime = InvitationProcess.getDueTime(event, participant, event.getSendReminder());
 
-            execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
+            // @todo uncommented for testing only
+            //execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(sendReminderTime));
 
             String mailSentMessage = "Es wurde eine Einladungsmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 
@@ -84,7 +77,7 @@ public class SendInvitationmail implements JavaDelegate {
                     .setParameter("type", emailType)
                     .getSingleResult();
 
-            NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+            NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
 
 
@@ -92,7 +85,8 @@ public class SendInvitationmail implements JavaDelegate {
 
             Long cancelInvitationTime = InvitationProcess.getDueTime(event, participant, event.getCancelInvitation());
 
-            execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(cancelInvitationTime));
+            // @todo uncommented for testing only
+            //execution.setVariable(InvitationProcess.ACTIVITI_CANCEL_INVITATION_TIME, InvitationProcess.formatActivitiDate(cancelInvitationTime));
 
             String mailSentMessage = "Es wurde eine Urgenzmail an den Teilnehmer " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " gesendet.";
 

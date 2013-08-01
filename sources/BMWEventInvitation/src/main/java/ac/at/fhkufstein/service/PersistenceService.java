@@ -5,7 +5,9 @@
 package ac.at.fhkufstein.service;
 
 import ac.at.fhkufstein.bean.AbstractController;
+import ac.at.fhkufstein.bean.process.ProcessBmwEventController;
 import ac.at.fhkufstein.session.AbstractFacade;
+import ac.at.fhkufstein.session.BmwEventFacade;
 import java.lang.reflect.InvocationTargetException;
 import javax.faces.context.FacesContext;
 import java.util.List;
@@ -14,6 +16,11 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.transaction.NotSupportedException;
+import javax.transaction.Status;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -38,7 +45,7 @@ public class PersistenceService {
 
     public static Object loadByInteger(Class<? extends AbstractController> controllerClass, Object id) {
         AbstractFacade facade = getManagedBeanInstance(controllerClass).getFacade();
-        System.err.println("facade of controller "+controllerClass+" is "+facade);
+//        System.err.println("facade of controller "+controllerClass+" is "+facade);
         return facade.find(Integer.parseInt(String.valueOf(id)));
 
     }
@@ -49,26 +56,26 @@ public class PersistenceService {
 
     public static <T> T getManagedBeanInstance(Class<T> managedBeanClass) {
         if (FacesContext.getCurrentInstance() == null) {
-            System.out.println("FacesContext null, so requesting plain class "+managedBeanClass);
+//            System.out.println("FacesContext null, so requesting plain class "+managedBeanClass);
             return getPlainClass(managedBeanClass);
         }
-        System.out.println("FacesContext instance exists, so get class "+managedBeanClass);
+//        System.out.println("FacesContext instance exists, so get class "+managedBeanClass);
         return FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{" + managedBeanClass.getAnnotation(ManagedBean.class).name() + "}", managedBeanClass);
     }
 
     private static <T> T getPlainClass(Class<T> desiredClass) {
         T plainClass = null;
         try {
-            
-            System.out.println("getting plain class "+desiredClass);
+
+//            System.out.println("getting plain class "+desiredClass);
             if (desiredClass.getSuperclass().equals(AbstractController.class)) {
-                System.out.println("getting plain class "+desiredClass+"(instance of abstractcontroller)");
+//                System.out.println("getting plain class "+desiredClass+"(instance of abstractcontroller)");
                 plainClass = desiredClass.getConstructor(Boolean.class).newInstance(true);
             } else {
                 plainClass = desiredClass.newInstance();
             }
-            
-            System.out.println("got plain class "+plainClass);
+
+//            System.out.println("got plain class "+plainClass);
         } catch (InstantiationException ex) {
             Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -82,21 +89,57 @@ public class PersistenceService {
         } catch (InvocationTargetException ex) {
             Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return plainClass;
     }
 
     public static <T extends AbstractFacade> T getFacadeJndiLookup(Class<T> facadeClass) {
         T ejbFacade = null;
         try {
-            System.out.println("starting jndi_lookup...");
+//            System.out.println("starting jndi_lookup...");
             InitialContext context = new InitialContext();
             ejbFacade = (T) context.lookup(JNDI_LOOKUP + facadeClass.getSimpleName());
-            System.out.println("jndi_lookup: "+ejbFacade);
+//            System.out.println("jndi_lookup: "+ejbFacade);
         } catch (NamingException ex) {
             Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return ejbFacade;
+    }
+
+    public static Object getSessionValue(String sessionObjectKey) {
+        Object sessionObject = null;
+        try {
+            if (FacesContext.getCurrentInstance() != null) {
+                sessionObject = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(sessionObjectKey);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sessionObject;
+    }
+    
+    public static void saveSingleTransaction(Class<? extends AbstractController> controllerClass, Object entity) {
+
+            try {
+            UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
+                if (transaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
+                    transaction.begin();
+                }
+
+                try {
+                    save(controllerClass, entity);
+                    transaction.commit();
+                } catch (Exception ex) {
+                    Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+                    transaction.rollback();
+                }
+        } catch (NamingException ex) {
+                Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SystemException ex) {
+            Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NotSupportedException ex) {
+            Logger.getLogger(PersistenceService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -8,6 +8,7 @@ import ac.at.fhkufstein.entity.BmwEmailTemplates;
 import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.entity.EmailTemplates;
 import java.util.List;
+import javax.faces.context.FacesContext;
 import org.antlr.stringtemplate.StringTemplate;
 
 /**
@@ -22,18 +23,25 @@ public class NotificationService {
     public static void parseTemplate(List<BmwUser> b, EmailTemplates e) {
 
         for (BmwUser u : b) {
-            inside(u, e);
+            parseTemplate(u, e);
+        }
+    }
+    
+    public static void parseTemplate(List<BmwUser> b, EmailTemplates e, Object loggedInUID) {
+
+        for (BmwUser u : b) {
+            inside(u, e, loggedInUID);
         }
     }
 
     public static void parseTemplate(BmwUser[] b, EmailTemplates e) {
 
         for (BmwUser u : b) {
-            inside(u, e);
+            parseTemplate(u, e);
         }
     }
 
-    public static void inside(BmwUser u, EmailTemplateable e) {
+    public static void inside(BmwUser u, EmailTemplateable e, Object loggedInUID) {
 
         StringTemplate template = new StringTemplate(e.getEmailContent());
         template.setAttribute("email", u.getPersonenID().getEMail1());
@@ -45,7 +53,7 @@ public class NotificationService {
         //System.out.println(template.toString());
         String mailcontent = template.toString();
 
-        MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+        MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType(), loggedInUID);
     }
 
 
@@ -54,7 +62,7 @@ public class NotificationService {
 
         for (BmwUser u : b) {
 
-            insideT(u, e);
+            parseTemplate(u, e);
         }
     }
 
@@ -62,16 +70,21 @@ public class NotificationService {
 
         for (BmwUser u : b) {
 
-            insideT(u, e);
+            parseTemplate(u, e);
         }
     }
 
     public static void parseTemplate(BmwUser u, EmailTemplateable e) {
 
-        insideT(u, e);
+        insideT(u, e, FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid"));
     }
 
-    public static void insideT(BmwUser u, EmailTemplateable e) {
+    public static void parseTemplate(BmwUser u, EmailTemplateable e, Object loggedInUID) {
+
+        insideT(u, e, loggedInUID);
+    }
+
+    public static void insideT(BmwUser u, EmailTemplateable e, Object loggedInUID) {
         StringTemplate template = new StringTemplate(e.getEmailContent());
         template.setAttribute("email", u.getPersonenID().getEMail1());
         template.setAttribute("password", u.getPwd());
@@ -81,11 +94,11 @@ public class NotificationService {
         template.setAttribute("briefanrede", u.getPersonenID().getBriefanredeSie());
         String mailcontent = template.toString();
 
-        MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType());
+        MailService.sendMail(u.getPersonenID().getEMail1(), e.getSubject(), mailcontent, e.getType(), loggedInUID);
 
     }
 
-public static void parseTemplateNonJournalist(BmwUser u, EmailTemplateable e) {
+public static void parseTemplateNonJournalist(BmwUser u, EmailTemplateable e, Object loggedInUID) {
 
         StringTemplate template = new StringTemplate(e.getEmailContent());
             template.setAttribute("email", u.getEmail());
@@ -95,17 +108,17 @@ public static void parseTemplateNonJournalist(BmwUser u, EmailTemplateable e) {
             template.setAttribute("nachname", u.getLastName());
             String mailcontent = template.toString();
 
-            MailService.sendMail(u.getEmail(), e.getSubject(), mailcontent, e.getType());
+            MailService.sendMail(u.getEmail(), e.getSubject(), mailcontent, e.getType(), loggedInUID);
 
     }
 
-    public static void parseTemplateByMailAddress(String mailAddress, EmailTemplateable e) {
+    public static void parseTemplateByMailAddress(String mailAddress, EmailTemplateable e, Object loggedInUID) {
 
         StringTemplate template = new StringTemplate(e.getEmailContent());
             template.setAttribute("email", mailAddress);
             String mailcontent = template.toString();
 
-            MailService.sendMail(mailAddress, e.getSubject(), mailcontent, e.getType());
+            MailService.sendMail(mailAddress, e.getSubject(), mailcontent, e.getType(), loggedInUID);
 
     }
 }

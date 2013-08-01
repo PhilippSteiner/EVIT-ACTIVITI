@@ -244,7 +244,7 @@ public class Participants implements Serializable {
                 pc.setPState("eingeladen");//Set state to eingeladen. This is the initial State
                 System.out.println("Added: " + b.getPersonenID().getNameVollstaendig());
                 bmwParticipantsController.setSelected(pc);
-                PersistenceService.getManagedBeanInstance(ProcessParticipants.class).saveNow(bmwParticipantsController);//save to database
+                PersistenceService.getManagedBeanInstance(ProcessParticipants.class).saveNow(bmwParticipantsController);
                 
                 //Event Progress weiterschalten
                 current.setProgress(20);

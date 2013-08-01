@@ -4,17 +4,12 @@
  */
 package ac.at.fhkufstein.bean.process;
 
-import ac.at.fhkufstein.EventFunc.Participants;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.activiti.Services;
-import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
-import ac.at.fhkufstein.mailing.EventTemplate;
 import ac.at.fhkufstein.service.MessageService;
-import ac.at.fhkufstein.service.PersistenceService;
-import ac.at.fhkufstein.session.BmwEventFacade;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -23,7 +18,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -39,6 +33,8 @@ import javax.transaction.UserTransaction;
 @ManagedBean(name = "processParticipants")
 @ViewScoped
 public class ProcessParticipants implements Serializable {
+    
+    public static final String DATABASE_INVITED_STATE = "eingeladen";
 
     private final String ACTIVITI_ADD_ACTIVITY = "addJournalists";
     private final String ACTIVITI_ADD_ANOTHER_ACTIVITY = "releaseEvent";
@@ -111,7 +107,7 @@ public class ProcessParticipants implements Serializable {
             // Teilnehmer wird nachgeladen
             InvitationProcess.startSingleProcess(event, participant);
 
-            MessageService.showError(FacesContext.getCurrentInstance(), "Der Teilnehmer " + participant + " wurde nachgeladen.");
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Der Teilnehmer " + participant + " wurde nachgeladen.");
 
         }
     }

@@ -98,7 +98,7 @@ public class mailBean extends MailService{
     }
 
     public void send(){
-        MailService.sendMail(to, subject, message, type);
+        MailService.sendMail(to, subject, message, type, FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid"));
     }
     
     

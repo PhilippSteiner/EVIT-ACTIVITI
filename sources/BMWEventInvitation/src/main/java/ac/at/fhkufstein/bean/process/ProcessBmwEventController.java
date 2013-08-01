@@ -44,8 +44,6 @@ import javax.transaction.Transaction;
 public class ProcessBmwEventController implements Serializable {
 
     private static final String ACTIVITI_RELEASE_ACTIVITY = "releaseEvent";
-    @Resource
-    UserTransaction ut;
 
     public void saveNew(ActionEvent event) {
         try {

@@ -20,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -45,9 +46,12 @@ public class InvitationProcess {
     final static public String ACTIVITI_SIGNAL_VARIABLES_DEFINED = "variablesDefined";
     final static public String ACTIVITI_INVITATION_STARTED = "invitationStarted";
     final static public String DATABASE_NEXT_PARTICIPANTID = "nextParticipantId";
+    final static public String DATABASE_LOGIN_UID = "loginUID";
     final static public String[] PROCESSES = {"InvitationProcess", "Journalist_Invitation_Response"};
     final static public String PROCESS_FILE_LOCATION = "diagrams/";
     final static public String SUFFIX = ".bpmn";
+    private final int RESUME_MAX_FAILURES = 10;
+    private final int RESUME_BREAK_DURATION = 15000;
     private String processDefinition;
     private String processDefinitionId;
     private ProcessInstance processInstance;
@@ -80,45 +84,41 @@ public class InvitationProcess {
         } else {
             startProcess();
         }
+        this.setVariable(DATABASE_LOGIN_UID, PersistenceService.getSessionValue("uid"));
     }
 
     public void startProcess() {
 
-            try {
+        try {
 
-                /*
-                 * do this in an transaction to allow operations on process after start
-                 */
+            setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
 
-
-                setProcessInstance(Services.getRuntimeService().startProcessInstanceByKey(processDefinition));
-
-                processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
-                //Progress wird verwendet um den Status des Prozesses zu kontrollieren
-                processHolder.setProgress(10);
-                // nur bei Hauptprozess
-                if (processDefinition.equals(PROCESSES[0])) {
-                    setVariable(ACTIVITI_INVITATION_STARTED, false);
-                    PersistenceService.save(BmwEventController.class, processHolder);
-                }
-
-                if (processHolder instanceof BmwEvent) {
-                    BmwEvent event = (BmwEvent) processHolder;
-                    setVariable(DATABASE_EVENTID, processHolder.getId());
-                    setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate(event.getEndEventdate().getTime() + getDaysInMilliSeconds(event.getSendFollowup())));
-                } else if (processHolder instanceof BmwParticipants) {
-                    setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
-                }
-
-                setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
-
-                System.out.println("Process Instance # " + processHolder.getProcessId() + " started");
-
-            } catch (Exception ex) {
-                Logger.getLogger(InvitationProcess.class.getName()).log(Level.SEVERE, null, ex);
-
-                System.err.println("Process could not be started; supposed processHolder: " + processHolder);
+            processHolder.setProcessId(Integer.valueOf(getProcessInstance().getProcessInstanceId()));
+            //Progress wird verwendet um den Status des Prozesses zu kontrollieren
+            processHolder.setProgress(10);
+            // nur bei Hauptprozess
+            if (processDefinition.equals(PROCESSES[0])) {
+                setVariable(ACTIVITI_INVITATION_STARTED, false);
+                PersistenceService.save(BmwEventController.class, processHolder);
             }
+
+            if (processHolder instanceof BmwEvent) {
+                BmwEvent event = (BmwEvent) processHolder;
+                setVariable(DATABASE_EVENTID, processHolder.getId());
+                setVariable(ACTIVITI_FOLLOW_UP_TIME, formatActivitiDate(event.getEndEventdate().getTime() + getDaysInMilliSeconds(event.getSendFollowup())));
+            } else if (processHolder instanceof BmwParticipants) {
+                setVariable(DATABASE_PARTICIPANTID, processHolder.getId());
+            }
+
+            setProcessDefinitionId(getProcessInstance().getProcessDefinitionId());
+
+            System.out.println("Process Instance # " + processHolder.getProcessId() + " started");
+
+        } catch (Exception ex) {
+            Logger.getLogger(InvitationProcess.class.getName()).log(Level.SEVERE, null, ex);
+
+            System.err.println("Process could not be started; supposed processHolder: " + processHolder);
+        }
 
 
     }
@@ -160,20 +160,38 @@ public class InvitationProcess {
     }
 
     public boolean resumeProcess(String activityId) {
-        try {
 
-            System.out.println("Resume Process with Id " + processHolder.getProcessId());
-            Execution execution = Services.getRuntimeService().createExecutionQuery().processInstanceId(String.valueOf(processHolder.getProcessId())).activityId(activityId).singleResult();
-            Services.getRuntimeService().signal(execution.getId());
+        int failures = 0;
+        while (true) {
+            try {
 
-            return true;
+                System.out.println("Resume Process with Id " + processHolder.getProcessId() + " at activity " + activityId);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            MessageService.showError(null, "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId);
+                Execution execution = Services.getRuntimeService().createExecutionQuery().processInstanceId(String.valueOf(processHolder.getProcessId())).activityId(activityId).singleResult();
+                Services.getRuntimeService().signal(execution.getId());
+
+                return true;
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                
+                failures++;
+                if (failures >= RESUME_MAX_FAILURES) {
+                    MessageService.showError(null, "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId);
+
+                    return false;
+                } else {
+                    try {
+                        Thread.sleep(failures*RESUME_BREAK_DURATION);
+                        
+                        MessageService.showError(null, "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId + "\n try again in "+(failures*RESUME_BREAK_DURATION)+" ms");
+                    } catch (InterruptedException ex1) {
+                        Logger.getLogger(InvitationProcess.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
+                }
+            }
         }
-
-        return false;
+        
     }
 
     public boolean processStarted() {
@@ -229,12 +247,14 @@ public class InvitationProcess {
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
 
-        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, new Date());
+        // @todo uncommented for testing only
+        //process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, new Date());
+        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, formatActivitiDate(new Date().getTime() + (3600 * 1000 / 10 / 3)));
         process.setVariable(ACTIVITI_INVITATION_SENT, false);
 
         participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));
         PersistenceService.save(BmwParticipantsController.class, participant);
-        
+
         // works only after a period of time, probably the execution of the process is not persistent straight after creation
         new SignalProcessThread(process.getProcessInstance(), ACTIVITI_SIGNAL_VARIABLES_DEFINED).start();
 
@@ -288,8 +308,8 @@ public class InvitationProcess {
         return dueTime;
     }
 
-    public static int getDaysInMilliSeconds(int days) {
-        return days * 24 * 3600 * 1000;
+    public static long getDaysInMilliSeconds(double days) {
+        return Math.round(days * 24 * 3600 * 1000);
     }
 
     public static String formatActivitiDate(Long time) {
@@ -300,10 +320,10 @@ public class InvitationProcess {
 
         EntityManager em = ((BmwParticipantsFacade) PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).getFacade()).getEntityManager();
 
-        Query userQuery = em.createQuery("select u from BmwUser ORDER BY u.rating DESC");
-        userQuery.setParameter("eventId", event.getId());
+        Query userQuery = em.createQuery("SELECT u FROM BmwUser u ORDER BY u.rating DESC");
 
         Query participantsQuery = em.createNamedQuery("BmwParticipants.findByEventId");
+        participantsQuery.setParameter("id", event);
         List<BmwParticipants> participantsList = participantsQuery.getResultList();
 
         Iterator iter = userQuery.getResultList().iterator();

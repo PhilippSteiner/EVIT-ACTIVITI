@@ -60,6 +60,9 @@
                     <h:outputText value="#{item.pwd}"/>
                 </p:column>
     
+                 <p:column style="width:4%">
+                     <p:commandButton id="loginAsReisebuero" value="Anmelden" action="#{login.loginAsReisebuero(item.uid)}" update=":growl"></p:commandButton>
+                </p:column>
                 
 
                 

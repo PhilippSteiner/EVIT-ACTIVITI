@@ -113,7 +113,7 @@
         </sequenceFlow>
         <exclusiveGateway id="kindOfRejection" name="kindOfRejection"></exclusiveGateway>
         <sequenceFlow id="flow15" name="keine Vertretung" sourceRef="kindOfRejection" targetRef="evaluateEventStatus">
-            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == false}]]></conditionExpression>
         </sequenceFlow>
         <sequenceFlow id="flow19" name="Vertretung" sourceRef="kindOfRejection" targetRef="notifyForManualInvitation">
             <conditionExpression xsi:type="tFormalExpression"><![CDATA[${willBeSubstituted == true}]]></conditionExpression>

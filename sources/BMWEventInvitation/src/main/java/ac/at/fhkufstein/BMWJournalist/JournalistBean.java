@@ -13,6 +13,7 @@ import ac.at.fhkufstein.login.doLogin;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +28,7 @@ import org.primefaces.model.StreamedContent;
 
 @ManagedBean(name = "JournalistBean")
 @SessionScoped
-public class JournalistBean {
+public class JournalistBean implements Serializable {
 
     private BmwUserController bmwUserController;
     private BmwParticipantsController bmwParticipantsController;

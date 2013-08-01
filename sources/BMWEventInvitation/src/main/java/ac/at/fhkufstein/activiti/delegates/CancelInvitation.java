@@ -15,10 +15,6 @@ import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
-import java.util.Date;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
@@ -53,7 +49,7 @@ public class CancelInvitation implements JavaDelegate {
                 .setParameter("type", emailType)
                 .getSingleResult();
 
-        NotificationService.parseTemplate(participant.getUserId(), mailTemplate);
+        NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
 
 

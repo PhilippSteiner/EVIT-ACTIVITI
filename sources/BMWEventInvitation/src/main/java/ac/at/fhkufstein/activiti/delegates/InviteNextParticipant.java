@@ -7,17 +7,21 @@ package ac.at.fhkufstein.activiti.delegates;
 import ac.at.fhkufstein.activiti.InvitationProcess;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
+import ac.at.fhkufstein.bean.process.ProcessBmwEventController;
+import ac.at.fhkufstein.bean.process.ProcessParticipants;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
-import ac.at.fhkufstein.mailing.MailService;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import ac.at.fhkufstein.session.BmwParticipantsFacade;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
-import javax.persistence.Persistence;
+import javax.naming.InitialContext;
+import javax.persistence.EntityManager;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
 
@@ -46,13 +50,26 @@ public class InviteNextParticipant implements JavaDelegate {
         } else {
 
             // save next Participant
-            BmwParticipants participant = PersistenceService.getManagedBeanInstance(BmwParticipantsController.class).prepareCreate(null);
+            BmwParticipantsController participantController = PersistenceService.getManagedBeanInstance(BmwParticipantsController.class);
+            BmwParticipants participant = participantController.prepareCreate(null);
             participant.setEventId(event);
             participant.setUserId(user);
-            participant.setPState("invited");
+            participant.setPState(ProcessParticipants.DATABASE_INVITED_STATE);
 
 
-            PersistenceService.save(BmwParticipantsController.class, participant);
+            UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
+            if (transaction.getStatus() == Status.STATUS_NO_TRANSACTION) {
+                transaction.begin();
+            }
+
+            try {
+                EntityManager em = ((BmwParticipantsFacade) participantController.getFacade()).getEntityManager();
+                em.persist(participantController.getSelected());
+                transaction.commit();
+            } catch (Exception ex) {
+                Logger.getLogger(ProcessBmwEventController.class.getName()).log(Level.SEVERE, null, ex);
+                transaction.rollback();
+            }
 
             // start new process
             InvitationProcess.startSingleProcess(event, participant);

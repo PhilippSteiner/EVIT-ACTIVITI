@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "MailConfig")
 @XmlAccessorType(XmlAccessType.FIELD)
 @ApplicationScoped
-@ManagedBean
+@ManagedBean(name = "MailConfig")
 public class MailConfig {
 
     @XmlElement(name = "hostname")

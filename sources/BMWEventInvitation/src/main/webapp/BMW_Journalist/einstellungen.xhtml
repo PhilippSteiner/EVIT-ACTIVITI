@@ -34,7 +34,7 @@
                         <p:inputText id="newpwb" value="#{journalisteinstellungen.newpwb}" required="true"/>
                         
                     </p:panelGrid>
-                    <p:commandButton style="margin-top: 10px" id="submit" value="Bestätigen" actionListener="#{journalisteinstellungen.changePassword()}" update="growl"/>
+                    <p:commandButton style="margin-top: 10px" id="submit" value="Bestätigen" action="#{journalisteinstellungen.changePassword}" update="growl"/>
                     
 
                 </p:panel>
@@ -43,7 +43,7 @@
 					  <p:growl id="growl" showDetail="true"/>
             <p:panelGrid columns="2">	
                 <h:outputText value="Eingeloggt als: #{login.uid}"/>
-                <p:commandButton id="welcome" value="Abmelden" action="#{login.logout()}" update="growl"></p:commandButton>
+                <p:commandButton id="welcome" value="Abmelden" action="#{login.logout}" update="growl"></p:commandButton>
             </p:panelGrid>
       </h:form>
         </ui:define>

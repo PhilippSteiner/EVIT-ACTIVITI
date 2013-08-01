@@ -11,6 +11,7 @@ import ac.at.fhkufstein.entity.BmwUser;
 import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.PersistenceService;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -36,14 +37,19 @@ public class ForgotPassword {
      * Creates a new instance of ForgotPassword
      */
     public ForgotPassword() {
-
-        userController = PersistenceService.getManagedBeanInstance(BmwUserController.class);
-        list = userController.getItems();
-        templateController = PersistenceService.getManagedBeanInstance(BmwEmailTemplatesController.class);
-        forgotTemplate = templateController.getItems().get(2);
+ 
     }
 
     public void send() {
+        
+        if(list == null) {
+            userController = PersistenceService.getManagedBeanInstance(BmwUserController.class);
+            list = userController.getItems();
+        }
+        if(forgotTemplate == null) {
+            templateController = PersistenceService.getManagedBeanInstance(BmwEmailTemplatesController.class);
+            forgotTemplate = templateController.getItems().get(2);
+        }
         FacesContext facesContext = FacesContext.getCurrentInstance();
         for (BmwUser a : list) {
             if (a.getPersonenID().getEMail1().equals(email)) {

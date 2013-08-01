@@ -66,7 +66,7 @@ public class MailService {
      * @param message
      * @return if success it returns true otherwise false
      */
-    public static boolean sendMail(String to, String subject, String message, String mailType) {
+    public static boolean sendMail(String to, String subject, String message, String mailType, Object loggedInUID) {
         try {
             Email mail = initMail();
 
@@ -81,7 +81,7 @@ public class MailService {
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "E-Mail", "E-mail erfolgreich versendet.");
 
-            saveMailInHistory(mail, message, mailType);
+            saveMailInHistory(mail, message, mailType, loggedInUID);
 
             return true;
         } catch (EmailException ex) {
@@ -94,7 +94,7 @@ public class MailService {
 
     }
 
-    public synchronized static void saveMailInHistory(Email mail, String content, String mailType) {
+    public synchronized static void saveMailInHistory(Email mail, String content, String mailType, Object loggedInUID) {
 
         try {
 
@@ -103,9 +103,8 @@ public class MailService {
 
 
             try {
-                Object uid = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("uid");
-                if (uid != null) {
-                    emailHistory.setUserFrom((Integer) uid);
+                if (loggedInUID != null) {
+                    emailHistory.setUserFrom((Integer) loggedInUID);
                 }
             } catch (java.lang.ClassCastException ex) {
                 ex.printStackTrace();

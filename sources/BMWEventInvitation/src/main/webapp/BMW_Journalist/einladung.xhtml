@@ -10,7 +10,7 @@
 
         <p:growl id="growl" showDetail="true" sticky="true" /> 
 
-        <p:commandButton value="Auswählen" actionListener="#{ResponseBean.beantworten()}" update=":formEDF:formED:mywizard , growl"></p:commandButton>
+        <p:commandButton value="Auswählen" action="#{ResponseBean.beantworten}" update=":formEDF:formED:mywizard , growl"></p:commandButton>
 
     </h:body>
 </html>

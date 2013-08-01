@@ -15,7 +15,7 @@
 
                 <p:inputTextarea rows="6" cols="40" value="#{ResponseBean.kommentar}"/>
 
-                <p:commandButton value="Bestätigen" onclick="#{ResponseBean.vertretungAngeben()}" update=":formEDF:formED:mywizard"></p:commandButton>
+                <p:commandButton value="Bestätigen" action="#{ResponseBean.vertretungAngeben}" update=":formEDF:formED:mywizard"></p:commandButton>
 
             </h:panelGrid>
         </h:form>

@@ -54,7 +54,7 @@
 
                                 <p:inputTextarea rows="6" cols="40" value="#{ResponseBean.kommentar}"/>
 
-                                <p:commandButton value="Auswählen" actionListener="#{ResponseBean.flugauswaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
+                                <p:commandButton value="Auswählen" action="#{ResponseBean.flugauswaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
 
                             </h:panelGrid>
 
@@ -68,7 +68,7 @@
 
                             </h:panelGrid>
 
-                            <p:commandButton value="Auswählen" actionListener="#{ResponseBean.selbstanreisewaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
+                            <p:commandButton value="Auswählen" action="#{ResponseBean.selbstanreisewaehlen}" update=":formEDF:formED:mywizard"></p:commandButton>
 
                         </p:tab> 
 
@@ -105,7 +105,7 @@
         <p:panel header="Eventdokumente">
 
             <h:form>  
-                <p:dataTable var="File" value="#{JournalistData.getEventFolder()}">  
+                <p:dataTable var="File" value="#{JournalistData.eventFolder}">  
                     <p:column headerText="Files">  
                         <h:outputText value="#{File.name}" />
                     </p:column>

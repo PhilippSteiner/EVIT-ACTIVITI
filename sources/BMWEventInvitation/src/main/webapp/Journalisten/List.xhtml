@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <h:form id="BmwUserListForm">
-<p:growl id="growl" showDetail="true"/>
+        <p:growl id="growl" showDetail="true"/>
         <p:panel header="Journalisten">
 
             <p:dataTable id="datalist" value="#{bmwUserController.items}" var="item"
@@ -21,41 +21,41 @@
                 <p:ajax event="rowSelect"   update="viewButton editButton"/>
                 <p:ajax event="rowUnselect" update="viewButton editButton"/>
 
-               
+
                 <p:column sortBy="#{item.personenID.vorname}" filterBy="#{item.personenID.vorname}">
                     <f:facet name="header">
                         <h:outputText value="Vorname"/>
                     </f:facet>
                     <h:outputText value="#{item.personenID.vorname}"/>
                 </p:column>
-				
+
                 <p:column sortBy="#{item.personenID.nachname}" filterBy="#{item.personenID.nachname}">
                     <f:facet name="header">
                         <h:outputText value="Nachname"/>
                     </f:facet>
                     <h:outputText value="#{item.personenID.nachname}"/>
                 </p:column>
-				 <p:column sortBy="#{item.personenID.firma}" filterBy="#{item.personenID.firma}">
+                <p:column sortBy="#{item.personenID.firma}" filterBy="#{item.personenID.firma}">
                     <f:facet name="header">
                         <h:outputText value="Firma"/>
                     </f:facet>
                     <h:outputText value="#{item.personenID.firma}"/>
                 </p:column>
-				 <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
+                <p:column sortBy="#{item.rating}" filterBy="#{item.rating}">
                     <f:facet name="header">
                         <h:outputText value="Rating"/>
                     </f:facet>
                     <h:outputText value="#{item.rating}"/>
                 </p:column>
-				 <p:column style="width:4%">
-                     <p:commandButton id="welcome" value="Anmelden" action="#{login.loginAsJournalist(item.uid)}" update=":growl"></p:commandButton>
+                <p:column style="width:4%">
+                    <p:commandButton id="loginAsJournalist" value="Anmelden" action="#{login.loginAsJournalist(item.uid)}" update=":growl"></p:commandButton>
                 </p:column>
-               
+
                 <f:facet name="footer">
                     <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty bmwUserController.selected}"/>
-					<p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty bmwUserController.selected}"/>
-                    
-				</f:facet>
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty bmwUserController.selected}"/>
+
+                </f:facet>
 
             </p:dataTable>
 
