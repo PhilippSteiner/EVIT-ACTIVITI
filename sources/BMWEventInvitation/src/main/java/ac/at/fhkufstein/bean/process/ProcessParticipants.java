@@ -33,8 +33,6 @@ import javax.transaction.UserTransaction;
 @ManagedBean(name = "processParticipants")
 @ViewScoped
 public class ProcessParticipants implements Serializable {
-    
-    public static final String DATABASE_INVITED_STATE = "eingeladen";
 
     private final String ACTIVITI_ADD_ACTIVITY = "addJournalists";
     private final String ACTIVITI_ADD_ANOTHER_ACTIVITY = "releaseEvent";

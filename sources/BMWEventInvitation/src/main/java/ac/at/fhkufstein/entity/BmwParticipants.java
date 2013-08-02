@@ -96,8 +96,10 @@ public class BmwParticipants implements Serializable, ActivitiProcessHolder {
         return pState;
     }
 
-    public void setPState(String pState) {
-        this.pState = pState;
+    public void setPState(ParticipantStatus pState) {
+        if(pState != null) { 
+            this.pState = pState.toString();
+        }
     }
 
     public Integer getRepId() {

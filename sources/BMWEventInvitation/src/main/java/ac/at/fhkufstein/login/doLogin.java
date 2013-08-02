@@ -43,9 +43,6 @@ public class doLogin implements Serializable {
 
     public String login() {
 
-        for (Execution exec : Services.getRuntimeService().createExecutionQuery().processInstanceId("11605").list()) {
-            System.out.println("-----------  current Activity: " + exec.getActivityId());
-        }
         FacesContext context = FacesContext.getCurrentInstance();
         //instanciate controllers
         bmwUserController = PersistenceService.getManagedBeanInstance(BmwUserController.class);

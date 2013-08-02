@@ -12,6 +12,7 @@ import ac.at.fhkufstein.bean.process.ProcessParticipants;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
@@ -54,7 +55,7 @@ public class InviteNextParticipant implements JavaDelegate {
             BmwParticipants participant = participantController.prepareCreate(null);
             participant.setEventId(event);
             participant.setUserId(user);
-            participant.setPState(ProcessParticipants.DATABASE_INVITED_STATE);
+            participant.setPState(ParticipantStatus.INVITED);
 
 
             UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");

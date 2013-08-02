@@ -5,6 +5,7 @@
 package ac.at.fhkufstein.activiti.delegates;
 
 import ac.at.fhkufstein.activiti.InvitationProcess;
+import ac.at.fhkufstein.activiti.Services;
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.bean.EmailTemplatesController;
@@ -35,8 +36,12 @@ public class CancelInvitation implements JavaDelegate {
         BmwParticipants participant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
-
-        participant.setPState(ParticipantStatus.CANCELED);
+        // make sure that the state has not changed
+        if(!participant.getPState().equals(ParticipantStatus.INVITED.toString())) {
+            return;
+        }
+        
+        participant.setPState(ParticipantStatus.REFUSED);
         PersistenceService.save(BmwParticipantsController.class, participant);
 
 

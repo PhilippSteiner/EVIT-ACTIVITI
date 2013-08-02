@@ -28,6 +28,7 @@ import ac.at.fhkufstein.entity.BmwFlight;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwTravel;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.login.doLogin;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwFlightFacade;
@@ -357,7 +358,7 @@ public class ResponseBean implements Serializable {
 
             this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-            currentPartipantsStati.setPState("zugesagt");
+            currentPartipantsStati.setPState(ParticipantStatus.ACCEPTED);
             this.bmwParticipantsController.save(null);
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
@@ -395,7 +396,7 @@ public class ResponseBean implements Serializable {
 
             this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-            currentPartipantsStati.setPState("abgesagt");
+            currentPartipantsStati.setPState(ParticipantStatus.REFUSED);
             this.bmwParticipantsController.save(null);
 
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
@@ -449,7 +450,7 @@ public class ResponseBean implements Serializable {
 
             this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-            currentPartipantsStati.setPState("flugausgewaehlt");
+            currentPartipantsStati.setPState(ParticipantStatus.FLIGHT_SELECTED);
             this.bmwParticipantsController.save(null);
 
             System.out.print("##############State saved to: " + currentPartipantsStati.getPState());
@@ -581,7 +582,7 @@ public class ResponseBean implements Serializable {
 
         this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-        currentPartipantsStati.setPState("selbstanreise");
+        currentPartipantsStati.setPState(ParticipantStatus.ARRIVAL_ON_ONES_OWN);
         this.bmwParticipantsController.save(null);
 
         System.out.print("State saved to: " + currentPartipantsStati.getPState());
@@ -634,7 +635,7 @@ public class ResponseBean implements Serializable {
 
         this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-        currentPartipantsStati.setPState("vertretung");
+        currentPartipantsStati.setPState(ParticipantStatus.SUBSTITUTE);
         currentPartipantsStati.setRepComment(vertretungsString);
         this.bmwParticipantsController.save(null);
 

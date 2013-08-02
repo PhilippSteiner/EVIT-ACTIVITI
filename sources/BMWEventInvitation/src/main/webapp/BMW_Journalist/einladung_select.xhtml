@@ -10,7 +10,7 @@
 
 
         <h4>Bitte Daten der Vertretung wählen</h4>
-        <h:form>
+        
             <h:panelGrid columns="2">
 
                 <p:inputTextarea rows="6" cols="40" value="#{ResponseBean.kommentar}"/>
@@ -18,7 +18,7 @@
                 <p:commandButton value="Bestätigen" action="#{ResponseBean.vertretungAngeben}" update=":formEDF:formED:mywizard"></p:commandButton>
 
             </h:panelGrid>
-        </h:form>
+        
     </h:body>
 
 </html>

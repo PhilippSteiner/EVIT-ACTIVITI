@@ -12,6 +12,7 @@ import ac.at.fhkufstein.bean.process.ProcessParticipants;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.BmwUser;
+import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.entity.Personen;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwParticipantsFacade;
@@ -48,7 +49,7 @@ public class Participants implements Serializable {
     private BmwParticipants selectedPart;
     private String rep;
     private BmwParticipants pc;//current Participant
-    private String pcState;//Current Participant State
+    private ParticipantStatus pcState;//Current Participant State
     //	public EntityManager em;
 
     /**
@@ -170,17 +171,18 @@ public class Participants implements Serializable {
                 pc = bmwParticipantsController.prepareCreate(null);
                 pc.setUserId(newuser);
                 pc.setEventId(current);
-                pc.setPState("eingeladen");//Set state to eingeladen. This is the initial State
+                pc.setPState(ParticipantStatus.INVITED);//Set state to eingeladen. This is the initial State
                 System.out.println("Added:" + newuser.getPersonenID().getNameVollstaendig() + " to event" + current.getName() + "with old user" + selectedPart.getUserId().getPersonenID().getNameVollstaendig());
                 bmwParticipantsController.setSelected(pc);
                 bmwParticipantsController.saveNew(null);//save to database
                 System.out.println("changin old participant state to rep_set");
-                selectedPart.setPState("vertretung_gewaehlt");
+                selectedPart.setPState(ParticipantStatus.SUBSTITUTE_SELECTED);
                 bmwParticipantsController.setSelected(selectedPart);
-                bmwParticipantsController.save(null);
+        PersistenceService.getManagedBeanInstance(ProcessParticipants.class).saveNow(bmwParticipantsController);
 
                 context.addMessage(null, new FacesMessage("Vertretung hinzugefügt", "Die gewählte Vertretung wurde hinzugefügt.")); //Send message
 
+        PersistenceService.getManagedBeanInstance(ProcessParticipants.class).confirmSelectiveInvitation(selectedPart, pc);
             }
         } else {
             pc = selectedPart;//Change state of selectet part
@@ -188,11 +190,10 @@ public class Participants implements Serializable {
         System.out.println("changing state to" + pcState);
         pc.setPState(pcState);
         bmwParticipantsController.setSelected(pc);
-        bmwParticipantsController.save(null);
-
+                bmwParticipantsController.save(null);
+        
         context.addMessage(null, new FacesMessage("Status gesetzt", "Status wurde gesetzt")); //Send message
 
-        PersistenceService.getManagedBeanInstance(ProcessParticipants.class).confirmSelectiveInvitation(selectedPart, pc);
 
     }
 
@@ -241,7 +242,7 @@ public class Participants implements Serializable {
                 BmwParticipants pc = bmwParticipantsController.prepareCreate(null);
                 pc.setUserId(b);
                 pc.setEventId(current);
-                pc.setPState("eingeladen");//Set state to eingeladen. This is the initial State
+                pc.setPState(ParticipantStatus.INVITED);//Set state to eingeladen. This is the initial State
                 System.out.println("Added: " + b.getPersonenID().getNameVollstaendig());
                 bmwParticipantsController.setSelected(pc);
                 PersistenceService.getManagedBeanInstance(ProcessParticipants.class).saveNow(bmwParticipantsController);
@@ -318,10 +319,13 @@ public class Participants implements Serializable {
     }
 
     public String getPcState() {
-        return pcState;
+        if(pcState==null) {
+            return null;
+        }
+        return pcState.toString();
     }
 
     public void setPcState(String pcState) {
-        this.pcState = pcState;
+        this.pcState = ParticipantStatus.getStatus(pcState);
     }
 }

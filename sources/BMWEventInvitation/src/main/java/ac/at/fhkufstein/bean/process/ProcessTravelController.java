@@ -9,6 +9,7 @@ import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
+import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
 import ac.at.fhkufstein.session.BmwEventFacade;
@@ -47,7 +48,7 @@ public class ProcessTravelController implements Serializable {
 
         InvitationProcess process = new InvitationProcess(participant, InvitationProcess.PROCESSES[1]);
 
-        participant.setPState("ticket");
+        participant.setPState(ParticipantStatus.TICKET);
         PersistenceService.save(BmwParticipantsController.class, participant);
 
         if (process.resumeProcess(ACTIVITI_FLIGHTDATA_ACTIVITY)) {
