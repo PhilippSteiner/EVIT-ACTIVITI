@@ -78,7 +78,6 @@ public class ResponseBean implements Serializable {
     private String kommentar;
     private String noresponsemessage;
     private String responseview;
-    private FacesContext context;
 
     public ResponseBean() {
 
@@ -89,8 +88,6 @@ public class ResponseBean implements Serializable {
 
         auswahlmoeglichkeiten = new ArrayList<SelectItem>();
         verfuegbareFluege = new ArrayList<SelectItem>();
-
-        this.context = FacesContext.getCurrentInstance();
 
         this.auswahl = "nix";
 

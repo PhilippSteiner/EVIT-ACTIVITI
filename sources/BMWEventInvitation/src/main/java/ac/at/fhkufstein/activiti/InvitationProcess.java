@@ -176,15 +176,16 @@ public class InvitationProcess {
                 ex.printStackTrace();
                 
                 failures++;
+                String errorMessage = "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId + " (current: " + getCurrentActivity() + ")";
                 if (failures >= RESUME_MAX_FAILURES) {
-                    MessageService.showError(null, "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId);
+                    MessageService.showError(null, errorMessage);
 
                     return false;
                 } else {
                     try {
                         Thread.sleep(failures*RESUME_BREAK_DURATION);
                         
-                        MessageService.showError(null, "Process with Id " + processHolder.getProcessId() + " could not be resumed at activity " + activityId + "\n try again in "+(failures*RESUME_BREAK_DURATION)+" ms");
+                        MessageService.showError(null, errorMessage + "\n try again in "+(failures*RESUME_BREAK_DURATION)+" ms");
                     } catch (InterruptedException ex1) {
                         Logger.getLogger(InvitationProcess.class.getName()).log(Level.SEVERE, null, ex1);
                     }

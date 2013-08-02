@@ -28,8 +28,8 @@ public class Services {
         instantiateProcessEngine();
     }
 
-    private static void instantiateProcessEngine() {
-        processEngine = ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault().buildProcessEngine();
+    private synchronized static void instantiateProcessEngine() {
+        setProcessEngine(ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault().buildProcessEngine());
 
         for (String process : InvitationProcess.PROCESSES) {
 
@@ -59,7 +59,7 @@ public class Services {
         }
     }
 
-    public static void deployProcess(String processDefinition) {
+    public synchronized static void deployProcess(String processDefinition) {
         getRepositoryService().createDeployment()
                 .addClasspathResource(InvitationProcess.PROCESS_FILE_LOCATION + processDefinition + InvitationProcess.SUFFIX)
                 .name(processDefinition)
@@ -68,31 +68,45 @@ public class Services {
         System.out.println("Deployment " + processDefinition + " created");
     }
 
-    public static RuntimeService getRuntimeService() {
-        if (processEngine == null) {
+    public synchronized static RuntimeService getRuntimeService() {
+        if (getProcessEngine() == null) {
             instantiateProcessEngine();
         }
-        return processEngine.getRuntimeService();
+        return getProcessEngine().getRuntimeService();
     }
 
-    public static RepositoryService getRepositoryService() {
-        if (processEngine == null) {
+    public synchronized static RepositoryService getRepositoryService() {
+        if (getProcessEngine() == null) {
             instantiateProcessEngine();
         }
-        return processEngine.getRepositoryService();
+        return getProcessEngine().getRepositoryService();
     }
 
-    public static TaskService getTaskService() {
-        if (processEngine == null) {
+    public synchronized static TaskService getTaskService() {
+        if (getProcessEngine() == null) {
             instantiateProcessEngine();
         }
-        return processEngine.getTaskService();
+        return getProcessEngine().getTaskService();
     }
 
-    public static FormService getFormService() {
-        if (processEngine == null) {
+    public synchronized static FormService getFormService() {
+        if (getProcessEngine() == null) {
             instantiateProcessEngine();
         }
-        return processEngine.getFormService();
+        return getProcessEngine().getFormService();
+    }
+
+    /**
+     * @return the processEngine
+     */
+    public synchronized static ProcessEngine getProcessEngine() {
+        return processEngine;
+    }
+
+    /**
+     * @param aProcessEngine the processEngine to set
+     */
+    public synchronized static void setProcessEngine(ProcessEngine aProcessEngine) {
+        processEngine = aProcessEngine;
     }
 }

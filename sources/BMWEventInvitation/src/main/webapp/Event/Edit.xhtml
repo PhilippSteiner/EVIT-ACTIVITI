@@ -47,7 +47,7 @@
                                 <p:inputText id="bmwParticipants" value="#{Event.current.bmwParticipants}" title="#{bundle.EditBmwEventTitle_bmwParticipants}" />
 
                                 <p:outputLabel value="#{bundle.EditBmwEventLabel_travelAgency}" for="travelAgency" />
-                                <p:selectOneMenu id="travelAgency" value="#{bmwEventController.selected.travelAgency}" required="true" requiredMessage="#{bundle.EditBmwTravelRequiredMessage_travelAgency}">
+                                <p:selectOneMenu id="travelAgency" value="#{Event.current.travelAgency}" required="true" requiredMessage="#{bundle.EditBmwTravelRequiredMessage_travelAgency}">
                                     <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                                     <f:selectItems value="#{bmwTravelagencyController.items}"
                                                    var="userItem"
