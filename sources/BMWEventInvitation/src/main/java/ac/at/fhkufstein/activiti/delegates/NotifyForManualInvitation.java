@@ -50,6 +50,5 @@ public class NotifyForManualInvitation implements JavaDelegate {
 
         MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
 
-
     }
 }

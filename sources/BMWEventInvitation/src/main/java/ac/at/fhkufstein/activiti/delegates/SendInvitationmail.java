@@ -37,6 +37,8 @@ public class SendInvitationmail implements JavaDelegate {
 
         if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
 
+            
+            
             //erstmalige Einladung
 
             // send invitation mail
@@ -46,6 +48,9 @@ public class SendInvitationmail implements JavaDelegate {
                     .setParameter("eventId", event)
                     .setParameter("type", emailType)
                     .getSingleResult();
+
+            
+            
 
             NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
@@ -78,6 +83,7 @@ public class SendInvitationmail implements JavaDelegate {
                     .getSingleResult();
 
             NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
+
 
 
 

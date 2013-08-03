@@ -83,8 +83,9 @@
                     </p:panel>
                 </p:layoutUnit >
                 <p:layoutUnit position="center" style="border-style: none">
-                    <p:panel header="Status" style="text-align: center">
 
+                    <p:panel id="statuspanel" header="Status" style="text-align: center">
+                
                         <h3>Status Event</h3>
                         <p:progressBar id="status" labelTemplate="{value}%" value="#{Event.current.progress}" ></p:progressBar>
 
@@ -97,7 +98,7 @@
                                 <p:button value="Journalisten hinzugefügt" rendered="#{!status.created}" disabled="true"/>
                             </p:column>
                             <p:column>
-                                <p:commandButton value="Event freigeben" update="statusgrid" rendered="#{status.invited}" actionListener="#{processBmwEventController.release(Event.current)}" styleClass="ui-priority-primary"/>
+                                <p:commandButton id="releaseEvent" value="Event freigeben" update="statusgrid" rendered="#{status.invited}" actionListener="#{processBmwEventController.release(Event.current)}" styleClass="ui-priority-primary"/>
                                 <p:commandButton value="Event freigegeben" rendered="#{!status.invited}" disabled="true"/>
                             </p:column>
                             <p:column>
@@ -108,7 +109,14 @@
                                 <p:commandButton value="Event abgeschlossen" update="statusgrid"  disabled="true"/>
                             </p:column>
                         </p:panelGrid>
-                    </p:panel>
+
+                       </p:panel>
+                    
+                    <p:blockUI id="panelblock" block="statuspanel" trigger="releaseEvent">
+                        <h:outputText value="Bitte warten... Einladungen werden versendet...."></h:outputText>
+                        <p:graphicImage value="/resources/img/ajax-loader.gif"/>
+                    </p:blockUI>
+
                 </p:layoutUnit>
             </p:layout>
         </h:form>

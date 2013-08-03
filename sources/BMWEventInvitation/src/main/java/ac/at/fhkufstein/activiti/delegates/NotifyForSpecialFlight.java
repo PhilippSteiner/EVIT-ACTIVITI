@@ -36,7 +36,6 @@ public class NotifyForSpecialFlight implements JavaDelegate {
 
 
         // send notification for special flight
-
         String emailType = "special";
 
         EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
@@ -49,8 +48,10 @@ public class NotifyForSpecialFlight implements JavaDelegate {
 
         String mailSentMessage = "Es wurde eine Notification über eine Spezialflug des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " an den Mitarbeiter " + event.getResponsibleUser() + " gesendet.";
 
+
         MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
 
 
     }
+
 }

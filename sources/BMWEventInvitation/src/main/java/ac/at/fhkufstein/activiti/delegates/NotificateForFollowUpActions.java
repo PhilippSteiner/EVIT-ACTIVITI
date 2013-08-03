@@ -31,8 +31,7 @@ public class NotificateForFollowUpActions implements JavaDelegate {
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
         // send notification mail for follow up actions
-
-        String emailType = "followup";
+ String emailType = "followup";
 
         EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
                 .setParameter("eventId", event)
@@ -41,9 +40,10 @@ public class NotificateForFollowUpActions implements JavaDelegate {
 
         NotificationService.parseTemplateByMailAddress(event.getResponsibleUser(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
-
         String mailSentMessage = "Notification für FollowUp Actions wurde an den Mitarbeiter " + event.getResponsibleUser() + " gesendet.";
 
         MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
+
     }
+
 }

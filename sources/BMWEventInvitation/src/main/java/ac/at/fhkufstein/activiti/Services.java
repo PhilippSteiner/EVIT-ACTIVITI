@@ -67,6 +67,12 @@ public class Services {
 
         System.out.println("Deployment " + processDefinition + " created");
     }
+    
+    public static void testProcess() {
+        Services.getRuntimeService().createProcessInstanceQuery().processInstanceId("83923").singleResult();
+        
+        System.out.println("Process tested");
+    }
 
     public synchronized static RuntimeService getRuntimeService() {
         if (getProcessEngine() == null) {

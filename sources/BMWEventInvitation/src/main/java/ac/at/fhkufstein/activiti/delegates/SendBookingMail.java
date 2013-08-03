@@ -32,7 +32,7 @@ public class SendBookingMail implements JavaDelegate {
 
         // send notification for manual invitation
 
-        String emailType = "booking";
+         String emailType = "booking";
 
         EmailTemplates mailTemplate = (EmailTemplates) PersistenceService.getManagedBeanInstance(EmailTemplatesController.class).getFacade().getEntityManager().createNamedQuery("EmailTemplates.findByEventIdAndType")
                 .setParameter("eventId", event)
@@ -42,8 +42,10 @@ public class SendBookingMail implements JavaDelegate {
         NotificationService.parseTemplateNonJournalist(event.getTravelAgency(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
 
+
         String mailSentMessage = "Email wurde an das Reisebüro " + event.getTravelAgency().getCompanyName() + " gesendet.";
 
         MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
     }
+
 }

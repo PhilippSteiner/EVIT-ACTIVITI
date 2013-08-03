@@ -51,4 +51,5 @@ public class SendTicketNotification implements JavaDelegate {
 
         MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
     }
+
 }

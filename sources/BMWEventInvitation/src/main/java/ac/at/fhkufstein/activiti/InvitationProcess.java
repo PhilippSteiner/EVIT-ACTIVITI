@@ -62,6 +62,7 @@ public class InvitationProcess {
         this.processDefinition = processDefinition;
 
         if (processHolder.getProcessId() != null) {
+
             //Problem returns null: aus irgendwelchem Grund wird der Eventprozess an einem Punkt beendet und deshalb
             //wird hier bei einer Abfrage null zurückgegeben da der Prozess nicht mehr aktiv ist!
 

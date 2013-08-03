@@ -45,7 +45,7 @@ public class CancelInvitation implements JavaDelegate {
         PersistenceService.save(BmwParticipantsController.class, participant);
 
 
-        // send cancel mail
+        // send cancel mail<
 
         String emailType = "storno";
 
@@ -57,11 +57,10 @@ public class CancelInvitation implements JavaDelegate {
         NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
 
-
-
         String mailSentMessage = "Es wurde Die Einladung des Teilnehmers " + participant.getUserId().getPersonenID().getVorname() + " " + participant.getUserId().getPersonenID().getNachname() + " storniert.";
 
         MessageService.showInfo(FacesContext.getCurrentInstance(), mailSentMessage);
 
     }
+
 }

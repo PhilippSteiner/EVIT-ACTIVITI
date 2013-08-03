@@ -65,6 +65,7 @@
                         -->
 
                         <p:inputText id="responsibleUser" value="#{bmwEventController.selected.responsibleUser}" title="#{bundle.CreateBmwEventTitle_bmwParticipants}" />
+
                         <p:outputLabel value="#{bundle.CreateBmwEventLabel_Embargo}" for="embargo" />
                         <p:selectBooleanCheckbox id="embargo" value="#{bmwEventController.selected.embargo}">
                             <p:ajax event="change" update=":BmwEventCreateForm" />
