@@ -40,8 +40,6 @@ public class ProcessParticipants implements Serializable {
 
     public void confirmInvitedParticipants(BmwEvent event) {
 
-        // @todo Invite Participants which have been invited after Start
-
         InvitationProcess process = new InvitationProcess(event, InvitationProcess.PROCESSES[0]);
 
         if (!Services.getRuntimeService().createExecutionQuery().processInstanceId(String.valueOf(event.getProcessId())).activityId(ACTIVITI_ADD_ACTIVITY).list().isEmpty()) {

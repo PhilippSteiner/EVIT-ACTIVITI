@@ -11,6 +11,7 @@ import ac.at.fhkufstein.bean.EmailTemplatesController;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
 import ac.at.fhkufstein.entity.EmailTemplates;
+import ac.at.fhkufstein.entity.ParticipantStatus;
 import ac.at.fhkufstein.mailing.NotificationService;
 import ac.at.fhkufstein.service.MessageService;
 import ac.at.fhkufstein.service.PersistenceService;
@@ -37,8 +38,8 @@ public class SendInvitationmail implements JavaDelegate {
 
         if ((Boolean) execution.getVariable(InvitationProcess.ACTIVITI_INVITATION_SENT) == false) {
 
-            
-            
+
+
             //erstmalige Einladung
 
             // send invitation mail
@@ -49,8 +50,8 @@ public class SendInvitationmail implements JavaDelegate {
                     .setParameter("type", emailType)
                     .getSingleResult();
 
-            
-            
+
+
 
             NotificationService.parseTemplate(participant.getUserId(), mailTemplate, execution.getVariable(InvitationProcess.DATABASE_LOGIN_UID));
 
@@ -73,6 +74,13 @@ public class SendInvitationmail implements JavaDelegate {
         } else {
 
             // Urgenzmail
+
+
+            // make sure that the state has not changed
+            if (!participant.getPState().equals(ParticipantStatus.INVITED.toString())) {
+                MessageService.showInfo(FacesContext.getCurrentInstance(), "Participant has not state invited, so no reminder will be sent");
+                return;
+            }
 
             // send urgenz mail
             String emailType = "urgenz";

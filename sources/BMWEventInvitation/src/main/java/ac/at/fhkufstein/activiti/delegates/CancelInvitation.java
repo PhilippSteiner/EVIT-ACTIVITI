@@ -38,6 +38,7 @@ public class CancelInvitation implements JavaDelegate {
 
         // make sure that the state has not changed
         if(!participant.getPState().equals(ParticipantStatus.INVITED.toString())) {
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Participant has not state invited, so no invitation will be cancelled");
             return;
         }
         

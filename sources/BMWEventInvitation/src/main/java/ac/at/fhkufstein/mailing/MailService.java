@@ -84,7 +84,7 @@ public class MailService {
             saveMailInHistory(mail, message, mailType, loggedInUID);
 
             return true;
-        } catch (EmailException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MailService.class.getName()).log(Level.SEVERE, null, ex);
 
             MessageService.showError(FacesContext.getCurrentInstance(), "Die Mail konnte nicht gesendet werden.");

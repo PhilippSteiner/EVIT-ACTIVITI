@@ -20,6 +20,7 @@ public enum ParticipantStatus {
     SUBSTITUTE_SELECTED("vertretung_gewaehlt"),
     ARRIVAL_ON_ONES_OWN("selbstanreise"),
     FLIGHT_SELECTED("flugausgewaehlt"),
+    SPECIAL_FLIGHT("spezialflug"),
     TICKET("ticket");
     
     private final String name;
@@ -42,6 +43,7 @@ public enum ParticipantStatus {
         stati.add(SUBSTITUTE);
         stati.add(SUBSTITUTE_SELECTED);
         stati.add(FLIGHT_SELECTED);
+        stati.add(SPECIAL_FLIGHT);
         stati.add(ARRIVAL_ON_ONES_OWN);
         stati.add(TICKET);
         

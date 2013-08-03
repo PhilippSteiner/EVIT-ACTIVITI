@@ -61,7 +61,7 @@ public class BmwEvent implements Serializable, ActivitiProcessHolder {
     @Column(name = "released")
     private Boolean released = false;
     @Column(name = "sendFollowup")
-    private Integer sendFollowup = 3;
+    private Integer sendFollowup;
     @Column(name = "bmwParticipants")
     private Integer bmwParticipants;
     @Size(max = 255)
@@ -71,11 +71,11 @@ public class BmwEvent implements Serializable, ActivitiProcessHolder {
     private Boolean embargo;
     @Size(max = 50)
     @Column(name = "responsibleUser")
-    private String responsibleUser = "stud.michael.dabernig@fh-kufstein.ac.at";
+    private String responsibleUser;
     @Column(name = "sendReminder")
-    private Integer sendReminder = 14;
+    private Integer sendReminder;
     @Column(name = "cancelInvitation")
-    private Integer cancelInvitation = 14;
+    private Integer cancelInvitation;
     @Column(name = "closeInvitation")
     @Temporal(TemporalType.TIMESTAMP)
     private Date closeInvitation;
@@ -98,7 +98,7 @@ public class BmwEvent implements Serializable, ActivitiProcessHolder {
     @NotNull
     @Size(min = 1, max = 250)
     @Column(name = "Name")
-    private String name = "Full Process";
+    private String name;
     @Basic(optional = false)
     @NotNull
     @Column(name = "start_eventdate")

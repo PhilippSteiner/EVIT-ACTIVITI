@@ -2,7 +2,6 @@ package ac.at.fhkufstein.activiti;
 
 import ac.at.fhkufstein.bean.BmwEventController;
 import ac.at.fhkufstein.bean.BmwParticipantsController;
-import ac.at.fhkufstein.bean.process.ProcessParticipants;
 import ac.at.fhkufstein.entity.ActivitiProcessHolder;
 import ac.at.fhkufstein.entity.BmwEvent;
 import ac.at.fhkufstein.entity.BmwParticipants;
@@ -15,19 +14,10 @@ import java.util.logging.Logger;
 import org.activiti.engine.runtime.ProcessInstance;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.annotation.Resource;
-import javax.faces.application.FacesMessage;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.Status;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import org.activiti.engine.runtime.Execution;
 
 public class InvitationProcess {
@@ -251,7 +241,7 @@ public class InvitationProcess {
 
         // @todo uncommented for testing only
         //process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, new Date());
-        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, formatActivitiDate(new Date().getTime() + (3600 * 1000 / 10 / 3)));
+        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, formatActivitiDate(new Date().getTime() + (3600 * 1000 / 10 / 3 * 5)));
         process.setVariable(ACTIVITI_INVITATION_SENT, false);
 
         participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));

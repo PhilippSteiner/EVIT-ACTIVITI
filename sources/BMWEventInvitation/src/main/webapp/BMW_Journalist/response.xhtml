@@ -46,6 +46,7 @@
                                 <p:selectOneMenu id="states" value="#{ResponseBean.flugauswahl}"
                                                  valueChangeListener="#{ResponseBean.stateFlugChangeListener}" style="width: 150px;">
                                     <f:selectItem itemLabel="Bitte wählen" itemValue=""/>
+                                    <f:selectItem itemLabel="Kein passender Flug, BMW kontaktieren (gewünschte Details in Kommentar)" itemValue="specialFlight"/>
                                     <f:selectItems value="#{ResponseBean.allFlightsForEvent}"/>
                                     <p:ajax event="change"/>
                                 </p:selectOneMenu>

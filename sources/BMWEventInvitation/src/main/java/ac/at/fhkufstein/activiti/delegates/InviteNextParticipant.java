@@ -38,8 +38,14 @@ public class InviteNextParticipant implements JavaDelegate {
 
         System.out.println("################# invite next participant #################");
 
-
-        execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID);
+        BmwParticipants currentParticipant = (BmwParticipants) PersistenceService.loadByInteger(BmwParticipantsController.class, execution.getVariable(InvitationProcess.DATABASE_PARTICIPANTID));
+      
+        // if the participant is not refused, there will no additional participant be invited
+        if(!currentParticipant.getPState().equals(ParticipantStatus.REFUSED.toString())) {
+            MessageService.showInfo(FacesContext.getCurrentInstance(), "Participant has not state refused, so no next participant will be invited");
+            return;
+        }
+        
         BmwEvent event = (BmwEvent) PersistenceService.loadByInteger(BmwEventController.class, execution.getVariable(InvitationProcess.DATABASE_EVENTID));
 
         BmwUser user = InvitationProcess.getNextParticipant(event);

@@ -364,10 +364,10 @@ public class ResponseBean implements Serializable {
             System.out.print("State saved to: " + currentPartipantsStati.getPState());
 
 
-        // Prozess weiterführen
-        PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, true, false);
+            // Prozess weiterführen
+            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).answerInvitation(currentPartipantsStati, true, false);
 
-           // context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Zugesagt"));
+            // context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Zugesagt"));
 
             return "do nothing";
 
@@ -408,7 +408,7 @@ public class ResponseBean implements Serializable {
 
             this.eventdetailview = "eventoutcome";
 
-           // context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Abgesagt"));
+            // context.addMessage(null, new FacesMessage(currentPartipantsStati.getEventId().getName(), "Abgesagt"));
 
             return "eventoutcome";
 
@@ -428,6 +428,13 @@ public class ResponseBean implements Serializable {
             System.out.println("Keine Fluege, nix ausgewählt");
 
         } else {
+
+            ParticipantStatus state;
+            if (this.getFlugauswahl().equals("specialFlight")) {
+                state = ParticipantStatus.SPECIAL_FLIGHT;
+            } else {
+                state = ParticipantStatus.FLIGHT_SELECTED;
+            }
 
             JournalistBean currentJournalistBean = PersistenceService.getManagedBeanInstance(JournalistBean.class);
 
@@ -450,7 +457,7 @@ public class ResponseBean implements Serializable {
 
             this.bmwParticipantsController.setSelected(currentPartipantsStati);
 
-            currentPartipantsStati.setPState(ParticipantStatus.FLIGHT_SELECTED);
+            currentPartipantsStati.setPState(state);
             this.bmwParticipantsController.save(null);
 
             System.out.print("##############State saved to: " + currentPartipantsStati.getPState());
@@ -463,7 +470,7 @@ public class ResponseBean implements Serializable {
 
                 System.out.print("Flug noch null");
 
-            } else {
+            } else if (state.equals(ParticipantStatus.FLIGHT_SELECTED)) {
 
                 System.out.print("Flug nicht mehr null");
 
@@ -480,8 +487,9 @@ public class ResponseBean implements Serializable {
 
                 EntityManager flugem = ((BmwFlightFacade) this.bmwFlightController.getFacade()).getEntityManager();
 
-                BmwFlight myflight = (BmwFlight) flugem.createNamedQuery("BmwFlight.findByFlightNumber")
+                BmwFlight myflight = (BmwFlight) flugem.createNamedQuery("BmwFlight.findByFlightNumberAndEventId")
                         .setParameter("flightNumber", flightnumber)
+                        .setParameter("eventId", currentPartipantsStati.getEventId())
                         .getSingleResult();
 
                 System.out.print("Got Flight" + myflight.getDepartureLocation() + "from Flightnumber: " + flightnumber);
@@ -548,11 +556,52 @@ public class ResponseBean implements Serializable {
                 this.bmwParticipantsController.save(null);
 
 
-            // Prozess weiterführen
-            PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(toChangeParticipant, true, true);
+                // Prozess weiterführen
+                PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(toChangeParticipant, true, true);
 
 
                 this.step = "wiz3";
+
+            } else if (state.equals(ParticipantStatus.SPECIAL_FLIGHT)) {
+
+
+                System.out.print("Spezialflug");
+
+
+                System.out.print("Kommentar: " + this.getKommentar());
+
+                this.bmwFlightController = FacesContext.getCurrentInstance().getApplication().evaluateExpressionGet(FacesContext.getCurrentInstance(), "#{bmwFlightController}", BmwFlightController.class);
+
+                // @todo not sure about this
+                BmwTravel mytravel = new BmwTravel();
+                //@todo flightid must be set
+                mytravel.setFlightId(null);
+                mytravel.setComment(this.getKommentar());
+                mytravel.setType("typeFlug");
+
+                this.bmwTravelController.setSelected(mytravel);
+                // @todo save after flightid is set
+//                this.bmwTravelController.save(null);
+
+
+
+                System.out.print("Name: " + currentPartipantsStati.getUserId().getUsername());
+                System.out.print("Status:" + currentPartipantsStati.getPState());
+
+                this.bmwParticipantsController.setSelected(currentPartipantsStati);
+
+                // @todo must be set after flightid is set
+//                currentPartipantsStati.setTravelId(mytravel);
+
+                this.bmwParticipantsController.save(null);
+
+
+                // Prozess weiterführen
+                PersistenceService.getManagedBeanInstance(ProcessJournalist.class).supplyTravelInfos(currentPartipantsStati, true, false);
+
+
+                this.step = "wiz3";
+
 
             }
 

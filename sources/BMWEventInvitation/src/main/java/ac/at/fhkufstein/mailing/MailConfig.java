@@ -1,12 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ac.at.fhkufstein.mailing;
 
+import ac.at.fhkufstein.activiti.delegates.SendInvitationmail;
+import ac.at.fhkufstein.bean.PersonenController;
 import ac.at.fhkufstein.service.PersistenceService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.naming.NamingException;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -33,6 +37,9 @@ public class MailConfig {
      * Creates a new instance of MailConfig
      */
     public MailConfig() {
+    }
+
+    static {
         MailConfigController.unmarshalConfig();
     }
 
