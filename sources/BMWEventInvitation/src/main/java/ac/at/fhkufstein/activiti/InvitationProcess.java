@@ -239,9 +239,7 @@ public class InvitationProcess {
         process.setVariable(InvitationProcess.ACTIVITI_REMINDER_SENT, false);
         process.setVariable(InvitationProcess.ACTIVITI_EVENT_IS_OPEN, true);
 
-        // @todo uncommented for testing only
-        //process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, new Date());
-        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, formatActivitiDate(new Date().getTime() + (3600 * 1000 / 10 / 3 * 5)));
+        process.setVariable(ACTIVITI_CANCEL_INVITATION_TIME, new Date());
         process.setVariable(ACTIVITI_INVITATION_SENT, false);
 
         participant.setProcessId(Integer.valueOf(process.getProcessInstance().getProcessInstanceId()));

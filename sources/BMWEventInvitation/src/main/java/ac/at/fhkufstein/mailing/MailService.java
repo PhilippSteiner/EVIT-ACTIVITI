@@ -76,8 +76,7 @@ public class MailService {
             //mail.setMsg(message);
             mail.setContent(message, "text/html; charset=utf-8");//Für HTML und Textemails
 
-            // @todo uncomment for real use, uncommented for testing
-//            mail.send();
+            mail.send();
 
             MessageService.showInfo(FacesContext.getCurrentInstance(), "E-Mail", "E-mail erfolgreich versendet.");
 
