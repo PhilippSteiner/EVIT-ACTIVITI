@@ -147,10 +147,10 @@
                 <omgdc:Bounds height="81.0" width="127.0" x="-23.0" y="460.0"></omgdc:Bounds>
             </bpmndi:BPMNShape>
             <bpmndi:BPMNShape bpmnElement="invitationProcessPool" id="BPMNShape_invitationProcessPool">
-                <omgdc:Bounds height="201.0" width="1269.0" x="-130.0" y="186.0"></omgdc:Bounds>
+                <omgdc:Bounds height="201.0" width="1369.0" x="-130.0" y="186.0"></omgdc:Bounds>
             </bpmndi:BPMNShape>
             <bpmndi:BPMNShape bpmnElement="eventLane" id="BPMNShape_eventLane">
-                <omgdc:Bounds height="201.0" width="1249.0" x="-110.0" y="186.0"></omgdc:Bounds>
+                <omgdc:Bounds height="201.0" width="1349.0" x="-110.0" y="186.0"></omgdc:Bounds>
             </bpmndi:BPMNShape>
             <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
                 <omgdi:waypoint x="-7.0" y="283.0"></omgdi:waypoint>

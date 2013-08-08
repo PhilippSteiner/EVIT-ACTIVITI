@@ -13,27 +13,27 @@
             <h:form id="BmwUserCreateForm">
 
                 <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{reisebuero.selected != null}">
+                    <p:panelGrid columns="2" rendered="#{mitarbeiter.selected != null}">
 
                         <p:outputLabel value="#{bundle.CreateBmwUserLabel_companyName}" for="companyName" />
-                        <p:inputText id="companyName" value="#{reisebuero.companyName}" title="#{bundle.CreateBmwUserTitle_companyName}" required="true"/>
+                        <p:inputText id="companyName" value="#{mitarbeiter.companyName}" title="#{bundle.CreateBmwUserTitle_companyName}"/>
                 
                         <p:outputLabel value="#{bundle.CreateBmwUserLabel_firstName}" for="firstName" />
-                        <p:inputText id="firstName" value="#{reisebuero.firstName}" title="#{bundle.CreateBmwUserTitle_firstName}" required="true"/>
+                        <p:inputText id="firstName" value="#{mitarbeiter.firstName}" title="#{bundle.CreateBmwUserTitle_firstName}" required="true"/>
                 
                         <p:outputLabel value="#{bundle.CreateBmwUserLabel_lastName}" for="lastName" />
-                        <p:inputText id="lastName" value="#{reisebuero.lastName}" title="#{bundle.CreateBmwUserTitle_lastName}" required="true"/>
+                        <p:inputText id="lastName" value="#{mitarbeiter.lastName}" title="#{bundle.CreateBmwUserTitle_lastName}" required="true"/>
                 
                         <p:outputLabel value="#{bundle.CreateBmwUserLabel_username}" for="username" />
-                        <p:inputText id="username" value="#{reisebuero.username}" title="#{bundle.CreateBmwUserTitle_username}" required="true"/>
+                        <p:inputText id="username" value="#{mitarbeiter.username}" title="#{bundle.CreateBmwUserTitle_username}" required="true"/>
 
                         <p:outputLabel value="#{bundle.CreateBmwUserLabel_email}" for="email" />
-                        <p:inputText id="email" value="#{reisebuero.email}" title="#{bundle.CreateBmwUserTitle_email}" required="true"/>
+                        <p:inputText id="email" value="#{mitarbeiter.email}" title="#{bundle.CreateBmwUserTitle_email}" required="true"/>
 
              
                       
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{reisebuero.saveNew()}" value="#{bundle.Save}" update="display,:BmwUserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
+                    <p:commandButton actionListener="#{mitarbeiter.saveNew()}" value="#{bundle.Save}" update="display,:BmwUserListForm:datalist,:growl" oncomplete="handleSubmit(xhr,status,args,BmwUserCreateDialog);"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="BmwUserCreateDialog.hide()"/>
                 </h:panelGroup>
 

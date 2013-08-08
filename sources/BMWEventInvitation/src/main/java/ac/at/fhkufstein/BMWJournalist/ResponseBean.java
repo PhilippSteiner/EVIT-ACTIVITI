@@ -116,41 +116,41 @@ public class ResponseBean implements Serializable {
 
         System.out.println("Check state in Constructor: " + prestatus);
 
-        if (prestatus.equals("eingeladen")) {
+        if (prestatus.equals(ParticipantStatus.INVITED)) {
 
             this.step = "wiz1";
 
             this.responseview = "response";
         }
 
-        if (prestatus.equals("zugesagt")) {
+        if (prestatus.equals(ParticipantStatus.ACCEPTED)) {
 
             this.step = "wiz2";
 
             this.responseview = "response";
         }
 
-        if (prestatus.equals("selbstanreise")) {
+        if (prestatus.equals(ParticipantStatus.ARRIVAL_ON_ONES_OWN)) {
 
             this.step = "wiz3";
 
             this.responseview = "response";
         }
 
-        if (prestatus.equals("flugausgewaehlt")) {
+        if (prestatus.equals(ParticipantStatus.FLIGHT_SELECTED)) {
 
             this.step = "wiz3";
 
             this.responseview = "response";
         }
 
-        if (prestatus.equals("vertreten")) {
+        if (prestatus.equals(ParticipantStatus.SUBSTITUTE)) {
 
             this.noresponsemessage = "  Sie haben eine Vertretung für diesen Event angegeben";
             this.responseview = "noresponse";
         }
 
-        if (prestatus.equals("abgesagt")) {
+        if (prestatus.equals(ParticipantStatus.REFUSED)) {
 
             this.noresponsemessage = "  Sie haben für diesen Event abgesagt";
             this.responseview = "noresponse";

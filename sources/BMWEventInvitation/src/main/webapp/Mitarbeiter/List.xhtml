@@ -8,10 +8,10 @@
 
     <h:form id="BmwUserListForm">
 
-        <p:panel header="Reisebüros verwalten">
+        <p:panel header="Mitarbeiter verwalten">
 
-            <p:dataTable id="datalist" value="#{reisebuero.roleUser}" var="item"
-                         selectionMode="single" selection="#{reisebuero.selected}"
+            <p:dataTable id="datalist" value="#{mitarbeiter.roleUser}" var="item"
+                         selectionMode="single" selection="#{mitarbeiter.selected}"
                          rowKey="#{item.uid}"
                          paginator="true"
                          rows="10"
@@ -64,10 +64,10 @@
 
                 
                 <f:facet name="footer">
-                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{reisebuero.prepareCreate}" update=":BmwUserCreateForm" oncomplete="BmwUserCreateDialog.show()"/>
-                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty reisebuero.selected}"/>
-                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty reisebuero.selected}"/>
-                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{reisebuero.delete}" update=":growl,datalist" disabled="#{empty reisebuero.selected}"/>
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{mitarbeiter.prepareCreate}" update=":BmwUserCreateForm" oncomplete="BmwUserCreateDialog.show()"/>
+                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":BmwUserViewForm" oncomplete="BmwUserViewDialog.show()" disabled="#{empty mitarbeiter.selected}"/>
+                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":BmwUserEditForm" oncomplete="BmwUserEditDialog.show()" disabled="#{empty mitarbeiter.selected}"/>
+                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{mitarbeiter.delete}" update=":growl,datalist" disabled="#{empty mitarbeiter.selected}"/>
                 </f:facet>
 
             </p:dataTable>
